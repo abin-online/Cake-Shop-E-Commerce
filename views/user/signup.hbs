@@ -1,0 +1,220 @@
+<main class="main">
+    <div class="page-header breadcrumb-wrap">
+        <div class="container">
+            <div class="breadcrumb">
+                <a href="index.html" rel="nofollow">Home</a>
+                {{!-- <span></span> Pages --}}
+                <span></span> Register
+            </div>
+        </div>
+    </div>
+    <section class="pt-150 pb-150">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-10 m-auto">
+                    <div class="row">
+                        <div class="col-lg-6 m-auto">
+                            <div class="login_wrap widget-taber-content p-30 background-white border-radius-5">
+                                <div class="padding_eight_all bg-white">
+                                    <div class="heading_s1">
+                                        <h3 class="mb-30">Create an Account</h3>
+                                    </div>
+                                    <form method="post" action="/signup" onsubmit="return Validation()">
+
+                                        <div class="form-floating mb-3 input-control">
+                                            <input type="text" class="form-control"
+                                                id="name" name="name" placeholder="name">
+                                            <label for="floatingInputUsername">Username</label>
+                                            <div class="error" id="usernameError" style="color: red;"></div>
+
+                                        </div>
+                                        <div class="form-floating mb-3 input-control">
+                                            <input type="email" class="form-control" onchange="validate_email()"
+                                                id="email" placeholder="name@example.com" name="email">
+                                            <label for="email">Email</label>
+                                            <div class="error" style="color: red;" id="emailError"></div>
+                                        </div>
+
+                                        <div class="form-floating mb-3 input-control">
+                                            <input type="tel" class="form-control" onchange="validatePhoneNumber()"
+                                                id="phone" placeholder="Phone" name="phone">
+                                            <label for="phone">Phone</label>
+                                            <div class="error" style="color: red;" id="phonenoError"></div>
+                                        </div>
+                                        <div class="form-floating mb-3 input-control">
+                                            <input type="password" class="form-control" onchange="validatePassword()"
+                                                id="password" placeholder="Password" id="password" name="password">
+                                            <label for="Password">Password</label>
+                                            <div class="error" style="color: red;" id="passwordError"></div>
+                                        </div>
+                                        <div class="login_footer form-group">
+                                            <div class="chek-form">
+                                                <div class="custome-checkbox">
+                                                    <input class="form-check-input" type="checkbox" name="showPassword"
+                                                        id="showPasswordCheckbox" onchange="togglePasswordVisibility()">
+                                                    <label class="form-check-label"
+                                                        for="showPasswordCheckbox"><span>Show Password</span></label>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="form-floating mb-3 input-control">
+                                            <input type="password" class="form-control"
+                                                onchange="validateConfirmPassword()" id="confirmPassword"
+                                                placeholder="Password" name="confirmPassword">
+                                            <label for="confirmPassword">Confirm password</label>
+                                            <div class="error" style="color: red;" id="confirmpasswordError"></div>
+                                        </div>
+                                        <div class="login_footer form-group">
+                                            <div class="chek-form">
+                                                <div class="custome-checkbox">
+                                                    <input class="form-check-input" type="checkbox" name="showPassword2"
+                                                        id="showPasswordCheckbox2"
+                                                        onchange="togglePasswordVisibility2()">
+                                                    <label class="form-check-label"
+                                                        for="showPasswordCheckbox2"><span>Show Password</span></label>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="form-group text-center">
+                                            <button type="submit" class="btn btn-fill-out btn-block hover-up"
+                                                name="login">Submit &amp; Register</button>
+                                        </div>
+                                    </form>
+                                    <div class="divider-text-center mt-15 mb-15">
+                                        <span> or</span>
+                                    </div>
+                                    {{!-- <ul class="btn-login list_none text-center mb-15"> --}}
+                                        
+                                        {{!-- <li><a href="/auth/google" class="btn btn-google hover-up">Login With Google</a></li> --}}
+
+                                        <ul class=" text-center">
+                                        
+                                        <li><a href="/auth/google" class="btn btn-fill-out btn-block hover-up" style="width: 60%;">  <svg aria-hidden="true" class="icon-svg" width="20" height="20" viewBox="0 0 20 20">
+                                                        <path d="M16.51 8H8.98v3h4.3c-.18 1-.74 1.48-1.6 2.04v2.01h2.6a7.8 7.8 0 002.38-5.88c0-.57-.05-.66-.15-1.18z" fill="#4285F4"></path>
+                                                        <path d="M8.98 17c2.16 0 3.97-.72 5.3-1.94l-2.6-2a4.8 4.8 0 01-7.18-2.54H1.83v2.07A8 8 0 008.98 17z" fill="#34A853"></path>
+                                                        <path d="M4.5 10.52a4.8 4.8 0 010-3.04V5.41H1.83a8 8 0 000 7.18l2.67-2.07z" fill="#FBBC05"></path>
+                                                        <path d="M8.98 4.18c1.17 0 2.23.4 3.06 1.2l2.3-2.3A8 8 0 001.83 5.4L4.5 7.49a4.77 4.77 0 014.48-3.3z" fill="#EA4335"></path>
+                                                    </svg> Signin With Google</a></li>
+                                    </ul>
+                                    {{!-- </ul> --}}
+                                    <div class="text-muted text-center">Already have an account? <a href="/login">Sign
+                                            in now</a></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+
+
+
+
+<script>
+    
+
+    function Validation() {
+        let errors=[]
+        var username = document.getElementById('name').value;
+        var email = document.getElementById('email').value;
+        var password = document.getElementById('password').value;
+        var confirmPassword = document.getElementById('confirmPassword').value;
+        var phoneNumber = document.getElementById('phone').value;
+
+
+
+
+
+        var usernameerror=document.getElementById('usernameError')
+        var emailerror=document.getElementById('emailError')
+        var passworderror=document.getElementById('passwordError')
+        var confirmpassworderror=document.getElementById('confirmpasswordError')
+        var phonenoerror=document.getElementById('phonenoError')
+
+
+        var userPattern = /^[a-zA-Z0-9]{3,}$/;
+        var emailPattern = /^\S+@\S+\.\S+$/;
+        var passwordPattern = /^.{8,}$/;
+        
+        var phonePattern = /^\d{10}$/;
+
+        
+
+
+
+
+
+
+
+        if (!username.match(userPattern)) {
+            errors.push("Required username")
+        }
+
+        if (!email.match(emailPattern)) {
+            errors.push("Required email")
+        }
+       
+
+        if (!password.match(passwordPattern)) {
+            errors.push("Required password")
+        }
+
+        if (confirmPassword !== password) {
+           errors.push("Required confirm password")
+        }
+
+        if (!phoneNumber.match(phonePattern)) {
+            errors.push("Required phone number")
+        }
+
+        
+    
+
+
+    // Display all error messages
+    if (errors.length > 0) {
+    usernameerror.innerHTML = errors.includes("Required username") ? "Required username" : "";
+    emailerror.innerHTML = errors.includes("Required email") ? "Required email" : "";
+    passworderror.innerHTML = errors.includes("Required password") ? "Required password" : "";
+    confirmpassworderror.innerHTML = errors.includes("Required confirm password") ? "Required confirm password" : "";
+    phonenoerror.innerHTML = errors.includes("Required phone number") ? "Required phone number" : "";
+    
+
+        return false; // Prevent form submission
+    }
+
+    return true; // Allow form submission if no errors
+
+    }
+
+
+
+
+    function togglePasswordVisibility() {
+        var passwordInput = document.getElementById('password');
+        var checkbox = document.getElementById('showPasswordCheckbox');
+
+        if (checkbox.checked) {
+            passwordInput.type = "text";
+        } else {
+            passwordInput.type = "password";
+        }
+    }
+
+    function togglePasswordVisibility2() {
+        var confirmPasswordInput = document.getElementById('confirmPassword');
+        var checkbox = document.getElementById('showPasswordCheckbox2');
+
+        if (checkbox.checked) {
+            confirmPasswordInput.type = "text";
+        } else {
+            confirmPasswordInput.type = "password";
+        }
+    }
+</script>

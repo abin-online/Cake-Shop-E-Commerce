@@ -1,0 +1,541 @@
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cropperjs/dist/cropper.min.css">
+</head>
+
+
+
+
+<aside class="navbar-aside" id="offcanvas_aside">
+    <div class="aside-top">
+        <a href="/admin/home" class="brand-wrap">
+            <img src="/assetsAdmin/imgs/theme/logo.svg" class="logo" alt="Evara Dashboard">
+        </a>
+        <div>
+            <button class="btn btn-icon btn-aside-minimize"> <i class="text-muted material-icons md-menu_open"></i>
+            </button>
+        </div>
+    </div>
+    <nav>
+        <ul class="menu-aside">
+            <li class="menu-item ">
+                <a class="menu-link" href="/admin/home"> <i class="icon material-icons md-home"></i>
+                    <span class="text">Dashboard</span>
+                </a>
+            </li>
+            <li class="menu-item active">
+                <a class="menu-link" href="/admin/product"> <i class="icon material-icons md-shopping_bag"></i>
+                    <span class="text">Products</span>
+                </a>
+
+            </li>
+            <li class="menu-item ">
+                <a class="menu-link" href="/admin/orders"> <i class="icon material-icons md-shopping_cart"></i>
+                    <span class="text">Orders</span>
+                </a>
+
+            </li>
+            {{!-- <li class="menu-item has-submenu">
+                <a class="menu-link" href="page-sellers-cards.html"> <i class="icon material-icons md-store"></i>
+                    <span class="text">Sellers</span>
+                </a>
+                <div class="submenu">
+                    <a href="page-sellers-cards.html">Sellers cards</a>
+                    <a href="page-sellers-list.html">Sellers list</a>
+                    <a href="page-seller-detail.html">Seller profile</a>
+                </div>
+            </li> --}}
+            {{!-- <li class="menu-item has-submenu">
+                <a class="menu-link" href="page-form-product-1.html"> <i class="icon material-icons md-add_box"></i>
+                    <span class="text">Add product</span>
+                </a>
+                <div class="submenu">
+                    <a href="page-form-product-1.html">Add product 1</a>
+                    <a href="page-form-product-2.html">Add product 2</a>
+                    <a href="page-form-product-3.html">Add product 3</a>
+                    <a href="page-form-product-4.html">Add product 4</a>
+                </div>
+            </li> --}}
+            <li class="menu-item ">
+                <a class="menu-link" href="/admin/category"> <i class="icon material-icons md-category"></i>
+                    <span class="text">Category</span>
+                </a>
+
+            </li>
+            
+
+             <li class="menu-item ">
+                    <a class="menu-link" href="/admin/coupons"><i class="icon fa-solid fa-ticket"></i>
+                        <span class="text">Coupons</span>
+                    </a>
+      </li>
+            <li class="menu-item">
+                <a class="menu-link" href="/admin/manage_users"> <i class="icon material-icons md-person"></i>
+                    <span class="text">Users</span>
+                </a>
+
+            </li>
+            {{!-- <li class="menu-item">
+                <a class="menu-link" href="page-reviews.html"> <i class="icon material-icons md-comment"></i>
+                    <span class="text">Reviews</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a class="menu-link" href="page-brands.html"> <i class="icon material-icons md-stars"></i>
+                    <span class="text">Brands</span> </a>
+            </li>
+            <li class="menu-item">
+                <a class="menu-link" disabled href="#"> <i class="icon material-icons md-pie_chart"></i>
+                    <span class="text">Statistics</span>
+                </a>
+            </li> --}}
+        </ul>
+        <hr>
+        <ul class="menu-aside">
+            <li class="menu-item ">
+                <a class="menu-link" href="#"> <i class="icon material-icons md-settings"></i>
+                    <span class="text">Settings</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a class="menu-link btn btn-primary" href="/admin/logout"> <i
+                        class="icon material-icons md-exit_to_app"></i>
+                    Logout
+                </a>
+            </li>
+        </ul>
+        <br>
+        <br>
+    </nav>
+</aside>
+<main class="main-wrap">
+    <section class="content-main">
+        <div class="row">
+            <div class="col-9">
+                <div class="content-header">
+                    <h2 class="content-title">Add New Product</h2>
+
+                </div>
+            </div>
+            <div class="col-lg-12">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h4>Basic</h4>
+                    </div>
+                    <div class="card-body">
+                        <form method="post" id="product_form" class="form-add-product" action="/admin/add_new_product"
+                            enctype="multipart/form-data" onsubmit="return submitform(this)">
+                            <div class="mb-4">
+                                <label for="product_name" class="form-label">Product Name</label>
+                                <input type="text" placeholder="Type here" name="name" class="form-control"
+                                    id="productName" onchange="validate_productName()" id="productName"
+                                    onchange="validate_productName()">
+                                <h6 class="alertAddProduct mt-1" style="color: red" id="productNameAlert"></h6>
+
+                            </div>
+                            <div class="mb-4">
+                                <label class="form-label">Full description</label>
+                                <textarea placeholder="Type here" name="description" id="longdescription"
+                                    id="longdescription" onchange="validate_description()" .0 class="form-control"
+                                    rows="5"></textarea>
+                                <h6 class="alertAddProduct mt-1" style="color: red" id="longAlert"></h6>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <div class="mb-4">
+                                        <label class="form-label">Price</label>
+                                        <div class="row gx-2">
+                                            <input placeholder="$" type="number" id="price" name="price"
+                                                class="form-control">
+                                        </div>
+                                        <h6 class="alertAddProduct mt-1" style="color: red" id="priceAlert"></h6>
+
+
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="mb-4">
+                                        <label class="form-label">Stock</label>
+                                        <input name="stock" class="form-control" placeholder="Quantity" type="number"
+                                            id="Qty">
+                                    </div>
+                                    <h6 class="alertAddProduct mt-1" style="color: red" id="qtyAlert"></h6>
+                                </div>
+                                <div class="col-lg-4">
+                                    <label class="form-label">Category:</label>
+                                    <select name="category" id="productCategory" class="form-select">
+                                        {{#each catogories}}
+                                        <option value="{{this._id}}">{{this.category}}</option>
+                                        {{/each}}
+                                    </select>
+                                </div>
+
+
+
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <div class="mb-4">
+                                        <label class="form-label">Image 1</label>
+                                        <div class="input-group">
+                                            <input class="form-control" type="file" name="image" id="input1"
+                                                accept="image/png, image/jpeg, image/jpg ,image/avif" 
+                                                onchange="viewImage1(event),viewImage(event, 1)"/>
+                                                <label for="input1" id="file-1-preview">
+                                            <img src="/assets/imgs/theme/upload.svg" alt="" id="imgView1">
+                                        </div>
+                                        <div class="image-cropper" style="display: none; width: 200px; height: 250px;">
+                                            <img src="" id="croppedImg1" alt="" />
+                                            <button type="button" id="saveButton1"
+                                                class="btn btn-primary">Save</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Repeat the above code for Image 2 to Image 5 with appropriate IDs -->
+                                                                <div class="col-lg-4">
+                                    <div class="mb-4">
+                                        <label class="form-label">Image 2</label>
+                                        <div class="input-group">
+                                            <input class="form-control" type="file" name="image" id="input2"
+                                                accept="image/png, image/jpeg, image/jpg ,image/avif"  
+                                                onchange="viewImage1(event),viewImage(event, 2)"/>
+                                                <label for="input1" id="file-2-preview">
+                                            <img src="/assets/imgs/theme/upload.svg" alt="" id="imgView2">
+                                        </div>
+                                        <div class="image-cropper" style="display: none; width: 200px; height: 250px;">
+                                            <img src="" id="croppedImg2" alt="" />
+                                            <button type="button" id="saveButton2"
+                                                class="btn btn-primary">Save</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Repeat the above code for Image 2 to Image 5 with appropriate IDs -->
+                                                                <div class="col-lg-4">
+                                    <div class="mb-4">
+                                        <label class="form-label">Image 3</label>
+                                        <div class="input-group">
+                                            <input class="form-control" type="file" name="image" id="input3"
+                                                accept="image/png, image/jpeg, image/jpg ,image/avif"  
+                                                onchange="viewImage1(event),viewImage(event, 3)"/>
+                                                <label for="input1" id="file-3-preview">
+                                            <img src="/assets/imgs/theme/upload.svg" alt="" id="imgView3">
+                                        </div>
+                                        <div class="image-cropper" style="display: none; width: 200px; height: 250px;">
+                                            <img src="" id="croppedImg3" alt="" />
+                                            <button type="button" id="saveButton3"
+                                                class="btn btn-primary">Save</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Repeat the above code for Image 2 to Image 5 with appropriate IDs -->
+                                                               <div class="col-lg-4">
+                                    <div class="mb-4">
+                                        <label class="form-label">Image 4</label>
+                                        <div class="input-group">
+                                            <input class="form-control" type="file" name="image" id="input4"
+                                                accept="image/png, image/jpeg, image/jpg ,image/avif"  
+                                                onchange="viewImage1(event),viewImage(event, 4)"/>
+                                                <label for="input1" id="file-4-preview">
+                                            <img src="/assets/imgs/theme/upload.svg" alt="" id="imgView4">
+                                        </div>
+                                        <div class="image-cropper" style="display: none; width: 200px; height: 250px;">
+                                            <img src="" id="croppedImg4" alt="" />
+                                            <button type="button" id="saveButton4"
+                                                class="btn btn-primary">Save</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Repeat the above code for Image 2 to Image 5 with appropriate IDs -->
+                                                                <div class="col-lg-4">
+                                    <div class="mb-4">
+                                        <label class="form-label">Image 5</label>
+                                        <div class="input-group">
+                                            <input class="form-control" type="file" name="image" id="input5"
+                                                accept="image/png, image/jpeg, image/jpg ,image/avif"  
+                                                onchange="viewImage1(event),viewImage(event, 5)"/>
+                                                <label for="input1" id="file-5-preview">
+                                            <img src="/assets/imgs/theme/upload.svg" alt="" id="imgView5">
+                                        </div>
+                                        <div class="image-cropper" style="display: none; width: 200px; height: 250px;">
+                                            <img src="" id="croppedImg5" alt="" />
+                                            <button type="button" id="saveButton5"
+                                                class="btn btn-primary">Save</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Repeat the above code for Image 2 to Image 5 with appropriate IDs -->
+
+                            </div>
+                            <h6 id="imgAlert" class=" mt-2" style="color: red;"></h6>
+
+
+                            <div class="d-flex g-2">
+                                <div class="m-2">
+                                    <button type="submit" class="btn btn-primary">Add Product</button>
+
+                                </div>
+                                <div class="m-2">
+                                    <a href="/admin/product" type="button" class="btn btn-primary"
+                                        id="backbutton">Back</a>
+
+                                </div>
+
+
+                            </div>
+                            {{!-- <div class="mb-4">
+                                <label class="form-label">Tax rate</label>
+                                <input type="text" placeholder="%" class="form-control" id="product_name">
+                            </div>
+                            <label class="form-check mb-4">
+                                <input class="form-check-input" type="checkbox" value="">
+                                <span class="form-check-label"> Make a template </span>
+                            </label> --}}
+                        </form>
+                    </div>
+                </div> <!-- card end// -->
+
+
+
+            </div>
+    </section> <!-- content-main end// -->
+    <footer class="main-footer font-xs">
+        <div class="row pb-30 pt-15">
+            <div class="col-sm-6">
+                <script>
+                    document.write(new Date().getFullYear())
+                </script> ©, Evara - HTML Ecommerce Template .
+            </div>
+            <div class="col-sm-6">
+                <div class="text-sm-end">
+                    All rights reserved
+                </div>
+            </div>
+        </div>
+    </footer>
+</main>
+
+
+<script src="https://cdn.jsdelivr.net/npm/cropperjs/dist/cropper.min.js"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+
+<script>
+
+   function viewImage1(event) {
+    let file = event.target.files[0];
+
+    // Check file size
+    const maxSize = 5 * 1024 * 1024; // 5MB in bytes
+    if (file.size > maxSize) {
+        alert("File size exceeds the maximum limit of 5MB.");
+        event.target.value = ""; // Clear the file input
+        return;
+    }
+
+       const allowedExtensions = /\.(jpg|jpeg|png|gif|avif)$/i;
+        if (!allowedExtensions.test(file.name)) {
+            alert('Please upload file having extensions .jpeg/.jpg/.png/.gif/.avif only.');
+             event.target.value = ""; // Clear the file input
+            return;
+        }
+        
+        let url = URL.createObjectURL(file);
+
+
+
+    document.getElementById('imgView1').src = URL.createObjectURL(file);
+}
+
+function viewImage(event, index) {
+    let input = event.target;
+    let file = input.files[0];
+
+    // Check file size
+    const maxSize = 5 * 1024 * 1024; // 5MB in bytes
+    if (file.size > maxSize) {
+        alert("File size exceeds the maximum limit of 5MB.");
+        input.value = ""; // Clear the file input
+        return;
+    }
+
+    let reader = new FileReader();
+
+    reader.onload = function () {
+        let dataURL = reader.result;
+        let image = document.getElementById('imgView' + index);
+        image.src = dataURL;
+
+        // Initialize Cropper.js on the image
+        let cropper = new Cropper(image, {
+            aspectRatio: 1 / 1, // Initial aspect ratio
+            viewMode: 1,
+            guides: true,
+            background: false,
+            autoCropArea: 1,
+            zoomable: true
+        });
+
+        // Show the image cropper container
+        let cropperContainer = document.querySelector('#croppedImg' + index).parentNode;
+        cropperContainer.style.display = 'block';
+
+        // Update the cropped image when the "Save" button is clicked
+        let saveButton = document.querySelector('#saveButton' + index);
+        saveButton.addEventListener('click', async function () {
+            let croppedCanvas = cropper.getCroppedCanvas();
+            let croppedImage = document.getElementById("croppedImg" + index);
+            croppedImage.src = croppedCanvas.toDataURL('image/jpeg', 1.0);
+
+            // Generate a unique name for the cropped image file based on the current timestamp
+            let timestamp = new Date().getTime();
+            let fileName = `cropped-img-${timestamp}-${index}.png`;
+
+            await croppedCanvas.toBlob(blob => {
+                let imgFile = new File([blob], fileName, { type: "image/png" });
+                const fileList = new DataTransfer();
+                fileList.items.add(imgFile);
+                input.files = fileList.files;
+            });
+            // cropperContainer.style.display = 'none';
+        });
+    };
+    reader.readAsDataURL(file);
+}
+
+
+
+
+    function Validation() {
+        var errors = []; // Array to store validation errors
+
+        var fileInput = document.getElementById('input1');
+
+        let productName = document.getElementById("productName").value;
+
+        let longdescription = document.getElementById("longdescription").value;
+        let Qty = document.getElementById("Qty").value;
+        let price = document.getElementById("price").value;
+
+
+
+        let productNameRegex = /^[a-zA-Z0-9\s'-]+$/;
+        let number = /^[1-9]\d*$/;
+        let descriptionRegex = /^(?!\s*$)[\s\S]{1,100}$/
+
+
+
+
+        let productNameAlert = document.getElementById("productNameAlert");
+        let qtyAlert = document.getElementById("qtyAlert");
+        let priceAlert = document.getElementById("priceAlert");
+
+
+        let longAlert = document.getElementById("longAlert");
+        let imgAlert = document.getElementById('imgAlert')
+
+       if (!productName.match(productNameRegex)) {
+        errors.push("Name Not Valid");
+    }
+
+    if (!Qty.match(number)) {
+        errors.push("Please Check Qty Again");
+    }
+
+    if (!price.match(number)) {
+        errors.push("Please Check Price Again");
+    }
+
+    if (!longdescription.match(descriptionRegex)) {
+        errors.push("Please Check about Again");
+    }
+    
+    if (fileInput.files.length === 0) {
+        errors.push("Please choose an image");
+    }
+
+
+
+
+    // Display all error messages
+    if (errors.length > 0) {
+        productNameAlert.innerHTML = errors.includes("Name Not Valid") ? "Name Not Valid" : "";
+        qtyAlert.innerHTML = errors.includes("Please Check Qty Again") ? "Please Check Qty Again" : "";
+        priceAlert.innerHTML = errors.includes("Please Check Price Again") ? "Please Check Price Again" : "";
+        longAlert.innerHTML = errors.includes("Please Check about Again") ? "Please Check about Again" : "";
+        imgAlert.innerHTML = errors.includes("Please choose an image") ? "Please choose an image" : "";
+
+        return false; // Prevent form submission
+    }
+
+    return true; // Allow form submission if no errors
+    }
+
+
+
+      ////////////back
+  
+
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+      $(document).ready(function () {
+        $('#backbutton').click(function (e) {
+            e.preventDefault();
+
+
+            Swal.fire({
+                title: "Leave the page?",
+                text: "The Data will not be saved",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#088178",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = "/admin/product";
+
+                }
+            });
+
+
+        });
+    });
+
+        ////add products form submit
+    function submitform(form) {
+        event.preventDefault(); // Prevent default form submission action
+        if (Validation(form)) {
+            Swal.fire({
+                title: "Are you sure?",
+                text: "Do you want to save ?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#088178",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit(); // Submit the form if user clicks "Yes"
+                }
+            }).then(() => {
+                // Show success message after form submission
+                Swal.fire({
+                    title: "Saved",
+                    text: "The Data has been saved",
+                    icon: "success"
+                });
+            });
+        }
+    }
+</script>

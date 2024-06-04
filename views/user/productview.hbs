@@ -1,0 +1,303 @@
+
+<main class="main">
+    <div class="page-header breadcrumb-wrap">
+        <div class="container">
+            <div class="breadcrumb">
+                <a href="index.html" rel="nofollow">Home</a>
+                <span></span> Fashion
+                <span></span> Abstract Print Patchwork Dress
+            </div>
+        </div>
+    </div>
+    <section class="mt-50 mb-50">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="product-detail accordion-detail">
+                        <div class="row mb-50">
+                            <div class="col-md-6 col-sm-12 col-xs-12">
+                                <div class="detail-gallery">
+                                    <span class="zoom-icon"><i class="fi-rs-search"></i></span>
+                                    <!-- MAIN SLIDES -->
+                                    <div class="product-image-slider">
+                                        {{#each proData.imageUrl}}
+                                        <figure class="border-radius-10">
+                                            <img src="/images/products/{{this}}" alt="product image">
+                                        </figure>
+                                        {{/each}}
+                                        
+                                    </div>
+                                    <!-- THUMBNAILS -->
+                                    <div class="slider-nav-thumbnails pl-15 pr-15">
+                                        {{#each proData.imageUrl}}
+                                        <div><img src="/images/products/{{this}}" alt="product image"></div>
+                                        {{/each}}
+                                        
+                                    </div>
+                                </div>
+                                <!-- End Gallery -->
+                            </div>
+                            <div class="col-md-6 col-sm-12 col-xs-12">
+                                <div class="detail-info">
+                                    <h2 class="title-detail">{{proData.name}}</h2>
+                                     <input name="product_name" value="{{proData.name}}" type="hidden">
+                                    <div class="product-detail-rating">
+                                        <div class="pro-details-brand">
+                                            {{!-- <span> Brands: <a href="shop-grid-right.html">Bootstrap</a></span> --}}
+                                        </div>
+                                        <div class="product-rate-cover text-end">
+                                            <div class="product-rate d-inline-block">
+                                                <div class="product-rating" style="width:90%">
+                                                </div>
+                                            </div>
+                                            <span class="font-small ml-5 text-muted"> (25 reviews)</span>
+                                        </div>
+                                    </div>
+                                    <div class="clearfix product-price-cover">
+                                        <div class="product-price primary-color float-left">
+                                            <ins><span class="text-brand">₹{{proData.price}}</span></ins>
+                                            <ins><span class="old-price font-md ml-15">₹{{proData.price}}</span></ins>
+                                            <span class="save-price  font-md color3 ml-15">25% Off</span>
+                                        </div>
+                                    </div>
+                                    <div class="bt-1 border-color-1 mt-15 mb-15"></div>
+                                    <div class="short-desc mb-30">
+                                        <p>{{proData.description}}</p>
+                                    </div>
+                                    <div class="product_sort_info font-xs mb-30">
+                                        <ul>
+                                            <li class="mb-10"><i class="fi-rs-crown mr-5"></i> 1 Year AL Jazeera Brand
+                                                Warranty</li>
+                                            <li class="mb-10"><i class="fi-rs-refresh mr-5"></i> Return, If any damages
+                                            </li>
+                                            <li><i class="fi-rs-credit-card mr-5"></i> Cash on Delivery available</li>
+                                        </ul>
+                                    </div>
+                                    {{!-- <div class="attr-detail attr-color mb-15">
+                                        <strong class="mr-10">Color</strong>
+                                        <ul class="list-filter color-filter">
+                                            <li><a href="#" data-color="Red"><span class="product-color-red"></span></a>
+                                            </li>
+                                            <li><a href="#" data-color="Yellow"><span
+                                                        class="product-color-yellow"></span></a></li>
+                                            <li class="active"><a href="#" data-color="White"><span
+                                                        class="product-color-white"></span></a></li>
+                                            <li><a href="#" data-color="Orange"><span
+                                                        class="product-color-orange"></span></a></li>
+                                            <li><a href="#" data-color="Cyan"><span
+                                                        class="product-color-cyan"></span></a></li>
+                                            <li><a href="#" data-color="Green"><span
+                                                        class="product-color-green"></span></a></li>
+                                            <li><a href="#" data-color="Purple"><span
+                                                        class="product-color-purple"></span></a></li>
+                                        </ul>
+                                    </div> --}}
+                                    {{!-- <div class="attr-detail attr-size">
+                                        <strong class="mr-10">Size</strong>
+                                        <ul class="list-filter size-filter font-small">
+                                            <li><a href="#">S</a></li>
+                                            <li class="active"><a href="#">M</a></li>
+                                            <li><a href="#">L</a></li>
+                                            <li><a href="#">XL</a></li>
+                                            <li><a href="#">XXL</a></li>
+                                        </ul>
+                                    </div> --}}
+                                    <div class="bt-1 border-color-1 mt-30 mb-30"></div>
+                                    <div class="detail-extralink">
+                                        <div class="detail-qty border radius">
+                                            <a href="#" class="qty-down"><i class="fi-rs-angle-small-down"></i></a>
+                                            <span class="qty-val">1</span>
+                                            <a href="#" class="qty-up"><i class="fi-rs-angle-small-up"></i></a>
+                                        </div>
+                                        <div class="product-extra-link2">
+
+                                            
+								  {{#if proData.stock}}
+            {{#if productExistInCart}}
+                <button onclick="window.location.href='/cart?id={{userData._id}}'" class="button button-add-to-cart">Go to cart</button>
+            {{else}}
+                <span id="cart_btn">
+                    <button onclick="addToCartBtn('{{proData._id}}')" id="add_to_cart_btn" class="button button-add-to-cart">Add to cart</button>
+                </span>
+            {{/if}}
+        {{else}}
+            <div onclick="outofStock()">
+                <button disabled id="add_to_cart_btn" class="button button-add-to-cart">Out Of Stock</button>
+            </div>
+        {{/if}}
+                                            <a aria-label="Add To Wishlist" class="action-btn hover-up"
+                                                href="shop-wishlist.html"><i class="fi-rs-heart"></i></a>
+                                            <a aria-label="Compare" class="action-btn hover-up"
+                                                href="shop-compare.html"><i class="fi-rs-shuffle"></i></a>
+                                        </div>
+                                    </div>
+                                    <ul class="product-meta font-xs color-grey mt-50">
+                                        <li class="mb-5">SKU: <a href="#">FWM15VKT</a></li>
+                                        <li class="mb-5">Tags: <a href="#" rel="tag">Cloth</a>, <a href="#"
+                                                rel="tag">Women</a>, <a href="#" rel="tag">Dress</a> </li>
+                                         	{{#if proData.stock}}       
+                                        <li>Availability:<span class="in-stock text-success ml-5">{{proData.stock}} Items In
+                                                Stock</span></li>
+						                {{else}}
+                                        <li>Availability:<span class="in-stock text-success ml-5">Out of
+                                                Stock</span></li>
+                                                {{/if}}
+                                    </ul>
+                                </div>
+                                <!-- Detail Info -->
+                            </div>
+                        </div>
+
+                        
+                                    <div class="tab-pane" id="Reviews">
+                                        <!--Comments-->
+                                        <div class="comments-area">
+                                            <div class="row">
+                                                <div class="col-lg-8">
+                                                    {{#if reviewExist}}
+                                                    <h4 class="mb-30"> REVIEWS</h4>
+                                                    <div class="comment-list">
+                                                        {{#each reviews}}
+                                                        <div class="single-comment justify-content-between d-flex">
+                                                            <div class="user justify-content-between d-flex">
+                                                                <div class="thumb text-center">
+                                                                    <img src="assets/imgs/page/avatar-6.jpg" alt="">
+                                                                    <h6><a href="#">{{this.name}}</a></h6>
+                                                                    {{!-- <p class="font-xxs">Since 2012</p> --}}
+                                                                </div>
+                                                                <div class="desc">
+                                                                    <div class="product-rate d-inline-block">
+                                                                        <div class="product-rating" style="width:90%">
+                                                                        </div>
+                                                                    </div>
+                                                                    <p>{{this.comment}}</p>
+                                                                    <div class="d-flex justify-content-between">
+                                                                        <div class="d-flex align-items-center">
+                                                                            <p class="font-xs mr-30">December 4, 2020 at 3:12 pm </p>
+                                                                            {{!-- <a href="#" class="text-brand btn-reply">Reply <i class="fi-rs-arrow-right"></i> </a> --}}
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        {{/each}}
+                                                        <!--single-comment -->
+                                                       
+                                                        <!--single-comment -->
+                                                        
+                                                    </div>
+                                                    {{else}}
+                                                    <h4>No Reviews Yet...</h4>
+                                                    {{/if}}
+                                                </div>
+                                                
+                                            </div>
+                                        </div>
+                                        <!--comment form-->
+                                        {{#if userCanReview}}
+                                        <div class="comment-form">
+                                            <h4 class="mb-15">Add a review</h4>
+                                            <div class="product-rate d-inline-block mb-30">
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-lg-8 col-md-12">
+                                                    <form class="form-contact comment_form" action="/addReview" method = "post" id="commentForm">
+                                                        <div class="row">
+                                                            <div class="col-12">
+                                                                <div class="form-group">
+                                                                    <textarea class="form-control w-100" name="comment" id="comment" cols="30" rows="9" placeholder="Write Comment"></textarea>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-6">
+                                                                <div class="form-group">
+                                                                    <input class="form-control" name="name" id="name" type="text" placeholder="Name" value = "{{userData.name}}">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-6">
+                                                                <div class="form-group">
+                                                                    <input class="form-control" name="email" id="email" type="email" placeholder="Email" value = "{{userData.email}}">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-6" style="display: none;">
+                                                                <div class="form-group">
+                                                                    <input class="form-control" name="proId" id="proId" type="text" placeholder="" value = "{{proData._id}}">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <button type="submit" class="button button-contactForm">Submit
+                                                                Review</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {{else}}
+                                        <div class="comment-form">
+                                            <h4 class="mb-15">Purchase and review our product</h4>
+                                            <div class="product-rate d-inline-block mb-30">
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-lg-8 col-md-12">
+                                                    
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {{/if}}
+                                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+
+
+
+<script>
+ 
+const addToCartBtn = (proId) => {
+    const productid = document.getElementById('add_to_cart_btn').value;
+    const productName = document.getElementsByName('product_name')[0].value;
+    
+    console.log(productName);
+
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', `/add_to_cart?id=${proId}`, true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+
+    xhr.onreadystatechange = () => {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            const data = JSON.parse(xhr.responseText);
+            console.log(data, 'from add to cart btn....');
+
+            document.getElementById('cart_btn').innerHTML = 
+                `<button onclick="window.location.href='/cart?id={{userData._id}}'" class="button button-add-to-cart">Go to cart</button>`;
+
+            if (data) {
+                swal("Awww 🥳!", `${productName} added to Cart! `, "success");
+            }
+        }
+    };
+
+    xhr.send();
+};
+
+
+
+
+
+
+
+</script>
+
+
+<script>
+        const outofStock = () => {
+            alertify.set('notifier', 'position', 'bottom-center');
+            alertify.success('Item Out of stock');
+        }
+    
+</script>
+    

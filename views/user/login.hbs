@@ -1,0 +1,167 @@
+<main class="main">
+    <!-- Headers and containers -->
+    <section class="pt-150 pb-150">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-10 m-auto">
+                    <!-- Login form container -->
+                    <div class="row ">
+                        <div class="col-lg-5 m-auto ">
+                            <div
+                                class="login_wrap widget-taber-content p-30 background-white border-radius-10 mb-md-5 mb-lg-0 mb-sm-5">
+                                <div class="padding_eight_all bg-white">
+                                    <!-- Login title -->
+                                    <div class="heading_s1">
+                                        <h3 class="mb-30 text-center">Login</h3>
+                                    </div>
+
+                                    <!-- Display error messages -->
+
+                                    {{!-- <h5 class="text-center alert alert-danger" style="color: red;">{{msg}}</h5>
+                                    --}}
+                                   {{#if blockMsg}}
+                                    <div class="alert alert-danger mt-3 alert-dismissible fade {{#if blockMsg}}show{{/if}}"
+                                        role="alert">
+                                        {{blockMsg}}
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    {{/if}}
+                                    {{#if regSuccessMsg}}
+                                    <div class="alert alert-success mt-3 alert-dismissible fade {{#if regSuccessMsg}}show{{/if}}"
+                                        role="alert">
+                                        {{regSuccessMsg}}
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    {{/if}}
+                                    {{#if mailErr}}
+                                    
+                                    <div class="alert alert-danger mt-3 alert-dismissible fade {{#if mailErr}}show{{/if}}"
+                                        role="alert">
+                                        {{mailErr}}
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    {{/if}}
+                                    {{#if newpasMsg}}
+                                    <div class="alert alert-success mt-3 alert-dismissible fade {{#if newpasMsg}}show{{/if}}"
+                                        role="alert">
+                                        {{newpasMsg}}
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    {{/if}}
+                                    
+
+
+                                    <!-- Login form -->
+                                    <form method="post" action="/" id="loginForm">
+
+
+                                        <!-- Email input -->
+                                        <div class="form-floating mb-3 input-control">
+                                            <input type="email" class="form-control" onchange="validate_email()"
+                                                id="email" placeholder="name@example.com" name="email">
+                                            <label for="email">Email address</label>
+                                            <div class="error" style="color: red;" id="emailError"></div>
+                                        </div>
+
+                                        <!-- Password input -->
+                                        <div class="form-floating mb-3 input-control">
+                                            <input type="password" class="form-control" id="password"
+                                                placeholder="Password" onchange="validatePassword()" name="password">
+                                            <label for="Password">Password</label>
+                                            <div class="error" style="color: red;" id="passwordError"></div>
+                                        </div>
+
+                                        <div class="login_footer form-group">
+                                            <div class="chek-form">
+                                                <div class="custome-checkbox">
+                                                    <input class="form-check-input" type="checkbox" name="showPassword"
+                                                        id="showPasswordCheckbox" onchange="togglePasswordVisibility()">
+                                                    <label class="form-check-label"
+                                                        for="showPasswordCheckbox"><span>Show
+                                                            Password</span></label>
+                                                </div>
+                                            </div>
+                                            <a class="text-muted" href="/forget_passsword ">Forgot
+                                                password?</a>
+                                        </div>
+
+                                        <!-- Login button -->
+                                        <div class="form-group text-center">
+                                            <button type="submit" class="btn btn-fill-out btn-block hover-up"
+                                                name="login">Log
+                                                in</button>
+                                        </div>
+                                    </form>
+
+                                    <!-- Register link -->
+                                    <div class="text-muted text-center">Have an account? <a href="/signup">
+                                            Signup</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<script>
+    /**
+     * Email validation
+     */
+    function validate_email() {
+        var email = document.getElementById('email').value.trim();
+        var emailPattern = /^\S+@\S+\.\S+$/;
+        var emailError = document.getElementById('emailError');
+
+        if (!emailPattern.test(email)) {
+            emailError.textContent = "Invalid email. Please try again.";
+            document.getElementById('email').focus();
+            return false;
+        } else {
+            emailError.textContent = "";
+            return true;
+        }
+    }
+
+    /**
+     * Password validation
+     */
+    function validatePassword() {
+        var password = document.getElementById('password').value.trim();
+        var passwordPattern = /^.{8,}$/;;
+        var passwordError = document.getElementById('passwordError');
+
+        if (!passwordPattern.test(password)) {
+            passwordError.textContent = "Invalid password. Password must be at least 8 characters long and contain at least one letter and one digit.";
+            document.getElementById('password').focus();
+            return false;
+        } else {
+            passwordError.textContent = "";
+            return true;
+        }
+    }
+
+    function togglePasswordVisibility() {
+        var passwordInput = document.getElementById('password');
+        var checkbox = document.getElementById('showPasswordCheckbox');
+
+        if (checkbox.checked) {
+            passwordInput.type = "text";
+        } else {
+            passwordInput.type = "password";
+        }
+    }
+
+    document.getElementById('loginForm').addEventListener('submit', function (event) {
+        if (!validate_email() || !validatePassword()) {
+            event.preventDefault();
+        }
+    });
+</script>

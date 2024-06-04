@@ -1,0 +1,232 @@
+<main class="main">
+        <div class="page-header breadcrumb-wrap">
+            <div class="container">
+                <div class="breadcrumb">
+                    <a href="index.html" rel="nofollow">Home</a>
+                    {{!-- <span></span> Pages --}}
+                    <span></span> OTP
+                </div>
+            </div>
+        </div>
+        <section class="pt-150 pb-150">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-10 m-auto">
+                        <div class="row ">
+                            <div class="col-lg-5 m-auto ">
+                                <div class="login_wrap widget-taber-content p-30 background-white border-radius-10 mb-md-5 mb-lg-0 mb-sm-5">
+                                    <div class="padding_eight_all bg-white">
+                                        <div class="heading_s1">
+                                            <h3 class="text-center mb-30">Enter OTP</h3>
+                                        </div>
+                    <form id="otp-form" action="/submit_otp" method="post">
+
+                        <h6 id="otp-error" style="color: red;" class="text-center mb-5">{{result.error}}</h6>
+
+
+                        <div class="form-floating mb-3 input-control">
+                                       <div class="otp-field mb-4">
+              <input type="number" name="otp" id="digit1" />
+              <input type="number" name="otp" id="digit2" disabled />
+              <input type="number" name="otp" id="digit3" disabled />
+              <input type="number" name="otp" id="digit4" disabled />
+            </div>
+                        </div>
+                        {{!-- <div class="form-group">
+                            
+                            <input type="password" class="form-control" placeholder="Password" required>
+                        </div> --}}
+
+                        <div class="text-center">
+                             <button type="submit" class="btn btn-fill-out btn-block hover-up">Submit</button>
+                           <p class="text-primary my-3">Time left: <span id="timer">60</span> seconds</p>
+                              <button class="btn  hover-up" id="resendButton" onclick="resendOTP()"><a href="/resend_otp">Resend OTP</a></button>
+
+                        </div>
+</div>
+
+                        
+                    </form> 
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <style>
+    #resendButton {
+        color: #fff; /* Change text color to white */
+        background-color: #fff;
+    }
+          .otp-field {
+  flex-direction: row;
+  column-gap: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.otp-field input {
+  height: 45px;
+  width: 42px;
+  border-radius: 6px;
+  outline: none;
+  font-size: 1.125rem;
+  text-align: center;
+  border: 1px solid #ddd;
+}
+.otp-field input:focus {
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
+}
+.otp-field input::-webkit-inner-spin-button,
+.otp-field input::-webkit-outer-spin-button {
+  display: none;
+}
+
+</style>
+
+    </main>
+
+        <script>
+
+            const form = document.getElementById('otp-form');
+
+form.addEventListener('submit', async (e) => {
+    e.preventDefault(); // prevent page reload
+
+    const digit1 = document.getElementById('digit1').value;
+    const digit2 = document.getElementById('digit2').value;
+    const digit3 = document.getElementById('digit3').value;
+    const digit4 = document.getElementById('digit4').value;
+
+   const otp = digit1 + digit2 + digit3 + digit4;
+   console.log(otp)
+    try {
+        const response = await fetch('/submit_otp', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ otp }),
+        });
+
+        const result = await response.json();
+
+        if (result.error) {
+            // display error message
+            document.getElementById('otp-error').textContent = result.error;
+        } else {
+            // OTP is correct, redirect to login page
+            window.location.href = '/login';
+        }
+    } catch (error) {
+        console.error(error);
+    }
+});
+
+
+
+    let countdown = 60; 
+  let timerElement = document.getElementById('timer');
+  let resendButton = document.getElementById('resendButton');
+  let countdownInterval;
+
+  function updateTimer() {
+      timerElement.textContent = countdown;
+      countdown--;
+      resendButton.disabled = true;
+      if (countdown < 0) {
+          clearInterval(countdownInterval);
+          timerElement.textContent = '0 seconds';
+          resendButton.disabled = false;
+      }
+  }
+
+  function resendOTP() {
+
+
+      countdown = 60;
+      timerElement.textContent = countdown + ' seconds';
+      resendButton.disabled = true;
+
+      countdownInterval = setInterval(updateTimer, 1000);
+  }
+
+
+  countdownInterval = setInterval(updateTimer, 1000);
+
+
+
+
+  const inputs = document.querySelectorAll(".otp-field > input");
+const button = document.querySelector(".btn");
+
+window.addEventListener("load", () => inputs[0].focus());
+button.setAttribute("disabled", "disabled");
+
+inputs[0].addEventListener("paste", function (event) {
+  event.preventDefault();
+
+  const pastedValue = (event.clipboardData || window.clipboardData).getData(
+    "text"
+  );
+  const otpLength = inputs.length;
+
+  for (let i = 0; i < otpLength; i++) {
+    if (i < pastedValue.length) {
+      inputs[i].value = pastedValue[i];
+      inputs[i].removeAttribute("disabled");
+      inputs[i].focus;
+    } else {
+      inputs[i].value = ""; // Clear any remaining inputs
+      inputs[i].focus;
+    }
+  }
+});
+
+inputs.forEach((input, index1) => {
+  input.addEventListener("keyup", (e) => {
+    const currentInput = input;
+    const nextInput = input.nextElementSibling;
+    const prevInput = input.previousElementSibling;
+
+    if (currentInput.value.length > 1) {
+      currentInput.value = "";
+      return;
+    }
+
+    if (
+      nextInput &&
+      nextInput.hasAttribute("disabled") &&
+      currentInput.value !== ""
+    ) {
+      nextInput.removeAttribute("disabled");
+      nextInput.focus();
+    }
+
+    if (e.key === "Backspace") {
+      inputs.forEach((input, index2) => {
+        if (index1 <= index2 && prevInput) {
+          input.setAttribute("disabled", true);
+          input.value = "";
+          prevInput.focus();
+        }
+      });
+    }
+
+    button.classList.remove("active");
+    button.setAttribute("disabled", "disabled");
+
+    const inputsNo = inputs.length;
+    if (!inputs[inputsNo - 1].disabled && inputs[inputsNo - 1].value !== "") {
+      button.classList.add("active");
+      button.removeAttribute("disabled");
+
+      return;
+    }
+  });
+});
+
+    </script>

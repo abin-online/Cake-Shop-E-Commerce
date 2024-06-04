@@ -1,0 +1,318 @@
+const Orders  = require('../../model/order')
+const Address = require('../../model/address')
+const moment  = require('moment')
+const pdfkit  = require('pdfkit')
+const fs      = require('fs')
+const helper  = require('../../helpers/user.helper')
+const User    = require('../../model/userModel')
+
+const path = require('path');
+const easyinvoice = require('easyinvoice');
+const Handlebars = require('handlebars');
+const { handlebars } = require('hbs')
+const { ObjectId } = require('mongodb')
+
+
+
+
+
+
+
+
+// const myOrders = async (req, res) => {
+//   try {
+//       const userData = req.session.user
+//       const userId   = userData._id
+
+//       const orders = await Orders.find({ userId })
+//                                   .sort({ date: -1 })
+
+//       const formattedOrders = orders.map(order => {
+//           const formattedDate = moment(order.date).format('MMMM D, YYYY');
+//           return { ...order.toObject(), date: formattedDate }
+//       })
+
+//       console.log(formattedOrders);
+
+//       res.render('user/my_orders', {
+//           userData,
+//           myOrders: formattedOrders || [],
+//       })
+
+//   } catch (error) {
+//       console.log(error);
+//   }
+// }
+
+
+const myOrders = async (req, res) => {
+  try {
+    const userData = req.session.user;
+    const userId = userData._id;
+
+    // Get page and limit from query parameters, defaulting to 1 and 10 respectively if not provided
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 6;
+
+    // Calculate the number of documents to skip
+    const skip = (page - 1) * limit;
+
+    // Fetch the user's orders from the database with limit and skip, and sort them by date in descending order
+    const orders = await Orders.find({ userId })
+      .sort({ date: -1 })
+      .skip(skip)
+      .limit(limit);
+
+    // Count the total number of documents to calculate total pages
+    const totalOrders = await Orders.countDocuments({ userId });
+    const totalPages = Math.ceil(totalOrders / limit);
+
+    // Format the date for each order
+    const formattedOrders = orders.map(order => {
+      const formattedDate = moment(order.date).format('MMMM D, YYYY');
+      return { ...order.toObject(), date: formattedDate };
+    });
+
+    // Create an array of page numbers
+    const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
+
+    // Render the orders page with the paginated and formatted orders
+    res.render('user/my_orders', {
+      userData,
+      myOrders: formattedOrders || [],
+      currentPage: page,
+      totalPages,
+      pages
+    });
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).send('An error occurred while fetching orders');
+  }
+};
+
+
+
+const filterOrders = async (req, res) => {
+
+  try {
+    const { orderType } = req.query
+    const userData = req.session.user
+    const userId   = userData._id
+
+    const orders = await Orders.find({ userId, status: orderType })
+                                .sort({ date: -1 })
+
+    const formattedOrders = orders.map(order => {
+        const formattedDate = moment(order.date).format('MMMM D, YYYY');
+        return { ...order.toObject(), date: formattedDate }
+    })
+
+    console.log(formattedOrders);
+
+    res.json(formattedOrders)
+
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+
+ const orderDetails = async(req, res) => {
+    try {
+        const userData = req.session.user
+        const orderId = req.query.id
+
+        const myOrderDetails = await Orders.findById(orderId).lean()
+        const orderedProDet  = myOrderDetails.product
+        const addressId      = myOrderDetails.address
+
+        const address        = await Address.findById(addressId).lean()
+
+        console.log(myOrderDetails);
+       
+        res.render('user/order_Details', { myOrderDetails, orderedProDet, userData, address })
+    } catch (error) {
+        console.log(error);
+    }
+ }
+
+
+
+
+ const orderSuccess = (req, res) => {
+    try {
+      const userData = req.session.user
+        res.render('user/order_sucess', {userData})
+    } catch (error) {
+        console.log(error);
+    }
+ }
+
+
+
+ const cancelOrder = async(req, res) => {
+  try {
+      const id       = req.query.id
+      const userData = req.session.user
+      const userId   =  userData._id
+      const subtotal=await  Orders.findOne({_id:id},
+        {
+          total:1,
+          _id:0
+        }
+      ).lean()
+      console.log(subtotal)
+      console.log(req.body)
+      const { updateWallet, payMethod } = req.body
+      console.log(updateWallet)
+
+      if(payMethod === 'wallet' || payMethod === 'razorpay'){
+        await User.findByIdAndUpdate( userId, { $set:{ wallet:updateWallet }}, { new:true })
+         await User.updateOne(
+          { _id: req.session.user._id },
+          {
+              $push: {
+                  history: {
+                      amount: subtotal.total,
+                      status: 'refund',
+                      date: Date.now()
+                  }
+              }
+          }
+      );
+      }
+
+      await Orders.findByIdAndUpdate(id, { $set: { status: 'Cancelled' } }, { new: true });
+
+      res.json('sucess')
+  } catch (error) {
+      console.log(error);
+    }
+ }
+
+
+
+ 
+ const returnOrder = async(req, res) => {
+    try {
+        const id = req.query.id
+        
+
+        await Orders.findByIdAndUpdate(id, { $set: { status: 'Returned' } }, { new: true });
+
+        res.json('sucess')
+    } catch (error) {
+        console.log(error);
+    }
+ }
+
+
+
+const getInvoice = async (req, res) => {
+  try {
+    const orderId = req.query.id; 
+   
+  
+
+    const order = await Orders.findById(orderId);
+    if (!order) {
+      return res.status(404).send({ message: 'Order not found' });
+    }
+
+    const { userId, address: addressId } = order;
+
+    const [user, address] = await Promise.all([
+      User.findById(userId),
+      Address.findById(addressId),
+    ]);
+
+
+    const products = order.product.map((product) => ({
+      quantity: product.quantity.toString(),
+      description: product.name,
+      tax: product.tax,
+      price: product.price,
+    }));
+
+    const date = moment(order.date).format('MMMM D, YYYY');
+    
+    
+
+
+    if (!user || !address) {
+      return res.status(404).send({ message: 'User or address not found' });
+    }
+
+    const filename = `invoice_${orderId}.pdf`;
+
+    const data = {
+      currency: 'USD',
+      taxNotation: 'vat',
+      marginTop: 25,
+      marginRight: 25,
+      marginLeft: 25,
+      marginBottom: 25,
+      background: 'https://public.easyinvoice.cloud/img/watermark-draft.jpg',
+      sender: {
+        company: 'Coza Store',
+        address: 'Plaza Kannur',
+        zip: '670320',
+        city: 'Kannur',
+        country: 'India',
+      },
+      client: {
+        company: user.name,
+        address: address.adressLine1,
+        zip: address.pin,
+        city: address.city,
+        country: 'India',
+      },
+
+      information: {
+        // Invoice number
+        number: "2021.0001",
+        // Invoice data
+        date: date,
+        // Invoice due date
+        // duedate: "31-12-2021"
+    },
+  
+      // invoiceNumber: '2023001',
+      // invoiceDate: date,
+
+
+      products: products
+     
+    };
+
+easyinvoice.createInvoice(data, function (result) {
+
+  easyinvoice.createInvoice(data, function (result) {
+    const fileName = 'invoice.pdf'
+    const pdfBuffer = Buffer.from(result.pdf, 'base64');
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', 'attachment; filename=' + fileName);
+    res.send(pdfBuffer);
+  })
+  console.log('PDF base64 string: ');
+});
+} 
+   
+   catch (error) {
+    res.sendStatus(500);
+  }
+};
+
+
+
+
+module.exports = {
+    myOrders,
+    orderDetails,
+    orderSuccess,
+    cancelOrder, 
+    getInvoice,
+    returnOrder,
+    filterOrders,
+}

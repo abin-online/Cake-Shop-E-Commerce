@@ -1,0 +1,49 @@
+<main class="main">
+    <div class="page-header breadcrumb-wrap">
+        <div class="container">
+            <div class="breadcrumb">
+                <a href="index.html" rel="nofollow">Home</a>
+                <span></span> Email
+            </div>
+        </div>
+    </div>
+    <section class="pt-150 pb-150">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-10 m-auto">
+                    <div class="row ">
+                        <div class="col-lg-5 m-auto ">
+                            <div class="login_wrap widget-taber-content p-30 background-white border-radius-10 mb-md-5 mb-lg-0 mb-sm-5">
+                                <div class="padding_eight_all bg-white">
+                                    <div class="heading_s1">
+                                        <h3 class="mb-30 text-center">Enter your email</h3>
+                                    </div>
+                    <form action="/changePassword" method="post">
+
+                    <h6 style="color: red;" class="text-center mb-5">{{mailError}}</h6>
+
+                         <div class="form-floating mb-3 input-control">
+                           <input type="text" class="form-control" id="email"  placeholder="Enter your email" name="email" required>
+                           <label for="email">Email</label>
+                        </div>
+                        {{!-- <div class="form-group">
+
+                            <input type="password" class="form-control" placeholder="Password" required>
+                        </div> --}}
+
+                        <div class="text-center">
+                             <button type="submit" class="btn btn-fill-out btn-block hover-up">Submit</button>
+
+                        </div>
+                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
