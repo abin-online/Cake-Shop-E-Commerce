@@ -21,7 +21,8 @@
                 </a>
 
             </li>
-            <li class="menu-item ">
+            
+             <li class="menu-item ">
                 <a class="menu-link" href="/admin/orders"> <i class="icon material-icons md-shopping_cart"></i>
                     <span class="text">Orders</span>
                 </a>
@@ -67,6 +68,12 @@
                 </a>
 
             </li>
+             <li class="menu-item">
+                    <a class="menu-link" href="/admin/banners"> <i class="icon material-icons md-local_offer"></i>
+                        <span class="text"> Starter page </span>
+                    </a>
+                </li>
+            
             {{!-- <li class="menu-item">
                 <a class="menu-link" href="page-reviews.html"> <i class="icon material-icons md-comment"></i>
                     <span class="text">Reviews</span>
@@ -150,9 +157,22 @@
 
 
                                 <td class="text-center" width="20%">
-                                    <a href="/admin/delete_cpn?id={{this._doc._id}}" id = "delete" onclick="return confirm ('Are you sure want to delete?')" type="button" class="btn btn-primary">
+                                    {{!-- <a href="/admin/delete_cpn?id={{this._doc._id}}" id = "delete" onclick="return confirm ('Are you sure want to delete?')" type="button" class="btn btn-primary">
                                         Delete
-                                    </a>
+                                    </a> --}}
+                                     {{#if this._doc.isListed}}
+
+                                <a data-product-id="{{this._id}}" id="blockprod"  class="btn btn-pill font-sm rounded btn-brand">
+                                    <i class="material-icons md-edit"></i>UnList
+                                </a>
+                         
+                            {{else}}
+                      
+                                <a data-product-id="{{this._id}}" id="blockprod" class="btn btn-pill font-sm rounded btn-brand">
+                                    <i class="material-icons md-edit"></i>List
+                                </a>
+                        
+                            {{/if}}
                                 </td>
 
                             </tr>
@@ -195,3 +215,50 @@
         </div>
     </footer>
 </main>
+
+<script>
+
+//block product
+
+$(document).ready(function () {
+    $(document).on('click', '.toggle-listing', function(e) {
+        e.preventDefault();
+        var id = $(this).data('product-id');
+        var $this = $(this);
+        var isListed = $this.text().trim() === 'UnList';
+
+        Swal.fire({
+            title: "Are you sure?",
+            text: isListed ? "Do you want to unlist the product?" : "Do you want to list the product?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#088178",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    type: 'PUT',
+                    url: '/admin/listCoupon',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ id: id }),
+                    success: function (response) {
+                        Swal.fire({
+                            title: 'Done!',
+                            text: response.isListed ? 'Product successfully listed!' : 'Product successfully unlisted!',
+                            icon: 'success',
+                            confirmButtonText: 'Cool'
+                        }).then(() => window.location.reload());
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("Error updating product listing status:", error);
+                        Swal.fire("Error", "Something went wrong. Please try again later.", "error");
+                    }
+                });
+            }
+        });
+    });
+});
+
+
+</script>

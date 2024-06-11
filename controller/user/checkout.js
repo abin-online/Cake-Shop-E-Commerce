@@ -40,7 +40,7 @@ const loadCheckout = async (req, res) => {
 
     const couponList = await Coupon.find({}).lean()
 
-    res.render('user/checkout/checkout', { userData: user, cart, addressData, subTotal, couponList , availableCoupons })
+    res.render('user/checkout/checkout', { userData: user, cart, addressData, subTotal, couponList, availableCoupons })
 }
 
 
@@ -116,19 +116,18 @@ const placeOrder = async (req, res) => {
 
 
     try {
-        const userData  = req.session.user
-        const userId    = userData._id
+        const userData = req.session.user
+        const userId = userData._id
         const addressId = req.body.selectedAddress
         const payMethod = req.body.selectedPayment
-
         const userDataa = await User.findOne({ _id: userId }).populate("cart.product")
-        const cartPro   = userDataa.cart
+        const cartPro = userDataa.cart
 
         let subTotal = 0
 
         cartPro.forEach((val) => {
-            val.total   = val.product.price * val.quantity
-            subTotal   += val.total
+            val.total = val.product.price * val.quantity
+            subTotal += val.total
         })
 
 
@@ -153,37 +152,40 @@ const placeOrder = async (req, res) => {
 
 
         let saveOrder = async () => {
-            console.log("..........copon data" , req.body)
+            console.log("..........copon data", req.body)
+            // Create the base order object
+            let orderData = {
+                userId: userId,
+                product: productDet,
+                address: addressId,
+                orderId: ordeId,
+                total: subTotal,
+                paymentMethod: payMethod
+            };
+
+            // Add status if req.body.status is true
+            if (req.body.status) {
+                orderData.status = "Payment Failed";
+            }
+
+            // Check if couponData exists in the request body
             if (req.body.couponData) {
-                console.log("BODY REQ........................" , req.body)
-                const order = new Order({
-                    userId: userId,
-                    product: productDet,
-                    address: addressId,
-                    orderId: ordeId,
-                    total: subTotal,
-                    paymentMethod: payMethod,
+                console.log("BODY REQ........................", req.body);
+                // If couponData exists, add coupon-related properties
+                orderData = {
+                    ...orderData,
                     discountAmt: req.body.couponData.discountAmt,
                     amountAfterDscnt: req.body.couponData.newTotal,
                     coupon: req.body.couponData.couponVal
-                })
-
-                const ordered = await order.save()
-
-
-            } else {
-                const order = new Order({
-                    userId: userId,
-                    product: productDet,
-                    address: addressId,
-                    orderId: ordeId,
-                    total: subTotal,
-                    paymentMethod: payMethod,
-                })
-
-                const ordered = await order.save()
-
+                };
             }
+
+            // Create a new order instance with the constructed data
+            const order = new Order(orderData);
+
+            // Save the order
+            const ordered = await order.save();
+
 
             let userDetails = await User.findById(userId)
             let userCart = userDetails.cart
@@ -199,19 +201,21 @@ const placeOrder = async (req, res) => {
 
                 await Product.updateOne(
                     { _id: productId },
-                    { $set: { stock: updatedStock, isOnCart: false },
-                     $inc: { bestSelling:1} }
-                  );
-                
-                    const populatedProd= await Product.findById(productId).populate("category").lean()
-                    await Category.updateMany({ _id: populatedProd.category._id }, { $inc: { bestselling:1}});
+                    {
+                        $set: { stock: updatedStock, isOnCart: false },
+                        $inc: { bestSelling: 1 }
+                    }
+                );
+
+                const populatedProd = await Product.findById(productId).populate("category").lean()
+                await Category.updateMany({ _id: populatedProd.category._id }, { $inc: { bestselling: 1 } });
 
             })
 
 
             userDetails.cart = []
             await userDetails.save()
-            console.log("___________",userDetails.cart);
+            console.log("___________", userDetails.cart);
         }
 
 
@@ -281,55 +285,6 @@ const placeOrder = async (req, res) => {
 
 
 
-// const validateCoupon = async (req, res) => {
-//     try {
-//         const { couponVal, subTotal } = req.body;
-//         const coupon = await Coupon.findOne({ code: couponVal });
-//         const userId = req.session.user._id;
-
-//         if (!coupon) {
-//             return res.json({ status: 'invalid' });
-//         } else if (coupon.expiryDate < new Date()) {
-//             return res.json({ status: 'expired' });
-//         } else {
-//             const isCouponAlreadyUsed = coupon.usedBy.includes(userId);
-//             const discountAmt = (subTotal * coupon.discount) / 100;
-
-//             if (isCouponAlreadyUsed) {
-//                 // Remove user ID from usedBy array
-//                 await Coupon.updateOne({ _id: coupon._id }, { $pull: { usedBy: userId } });
-
-//                 // Calculate the new total by adding back the discount amount correctly
-//                 const newTotal = subTotal + discountAmt;
-
-//                 return res.json({
-//                     discountAmt,
-//                     newTotal,
-//                     discount: coupon.discount,
-//                     status: 'removed'
-//                 });
-//             } else {
-//                 // Add user ID to usedBy array
-//                 await Coupon.updateOne({ _id: coupon._id }, { $push: { usedBy: userId } });
-
-//                 // Calculate the new total by subtracting the discount amount
-//                 const newTotal = subTotal - discountAmt;
-
-//                 return res.json({
-//                     discountAmt,
-//                     newTotal,
-//                     discount: coupon.discount,
-//                     status: 'applied'
-//                 });
-//             }
-//         }
-//     } catch (error) {
-//         console.log(error);
-//         res.status(500).json({ status: 'error', error });
-//     }
-// };
-
-
 const applyCoupon = async (req, res) => {
     try {
         const { couponVal, subTotal } = req.body;
@@ -345,14 +300,14 @@ const applyCoupon = async (req, res) => {
         } else {
 
 
-            
-            
 
-            const discountAmt = (subTotal * coupon.discount) / 100;
 
-            if(discountAmt > coupon.maxDiscountAmount ){
+
+            let discountAmt = (subTotal * coupon.discount) / 100;
+
+            if (discountAmt > coupon.maxDiscountAmount) {
                 discountAmt = coupon.maxDiscountAmount
-                
+
             }
             const newTotal = subTotal - discountAmt
 

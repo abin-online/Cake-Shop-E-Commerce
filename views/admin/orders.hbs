@@ -67,6 +67,11 @@
                 </a>
 
             </li>
+                         <li class="menu-item">
+                    <a class="menu-link" href="/admin/banners"> <i class="icon material-icons md-local_offer"></i>
+                        <span class="text"> Starter page </span>
+                    </a>
+                </li>
             {{!-- <li class="menu-item">
                 <a class="menu-link" href="page-reviews.html"> <i class="icon material-icons md-comment"></i>
                     <span class="text">Reviews</span>
@@ -219,6 +224,24 @@
 
                                 <td class="text-center"><span class="badge bg-primary">{{this.status}}</span></td>
                                 <td class="text-center">
+                                    {{#ifeq this.status 'Delivered'}}
+                                    
+                                     <form action="/admin/change_status?id={{this._id}}" method="post">
+                                        <div class="d-flex w-50 ml-30">
+                                            <div class="col-lg-2 col-6 col-md-3 w-100 mr-15">
+                                                <select name="status" class="form-select"
+                                                    aria-label="Default select example" id = "status">
+                                                   
+                                                    <option value="Delivered" disabled selected>Delivered</option>
+                                                    
+                                                </select>
+                                            </div>
+                                            <div>
+                                                <button type="submit" class="btn btn-primary w-100" disabled>Delivered</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                    {{else}}
                                     <form action="/admin/change_status?id={{this._id}}" method="post">
                                         <div class="d-flex w-50 ml-30">
                                             <div class="col-lg-2 col-6 col-md-3 w-100 mr-15">
@@ -235,6 +258,8 @@
                                             </div>
                                         </div>
                                     </form>
+                                   
+                                    {{/ifeq}}
                                 </td>
                                 <td class="text-center">
                                     <a href="/admin/order_details?id={{this._id}}" type="button"

@@ -325,8 +325,8 @@ const toggleCoupon = async () => {
 
         })
       }else{
-         Cod()
-      }
+        Cod()
+      }
     } else if (paymentMethod === 'razorpay') {
       online()
     } else if (paymentMethod === 'wallet') {
@@ -349,42 +349,73 @@ const toggleCoupon = async () => {
       Cod()
     } else {
       alertify.set('notifier', 'position', 'bottom-center');
-      alertify.success('you dont have sufficient balance in ur wallet choose another payment method')
+      //alertify.success('you dont have sufficient balance in ur wallet choose another payment method')
+      Swal.fire({
+                icon: 'error',
+                title: 'Insufficient Balance',
+                text: 'You don’t have sufficient balance in your wallet. Please choose another payment method.',
+                confirmButtonText: 'OK'
+            });
     }
   }
 
 
+let paymentStatus = true;
 
-  const Cod = async () => {
-    const selectAddress = document.querySelector('#selectedAddress').value
-    const subTotal = Number(document.getElementsByName('subTotal')[0].value)
+const Cod = async () => {
+    try {
+        const selectAddress = document.querySelector('#selectedAddress').value;
+        const subTotal = Number(document.getElementsByName('subTotal')[0].value);
 
-    const datas = await fetch('/place_order', {
-      method: 'POST',
-      headers: {
-        'Content-Type': "application/json",
-      },
+        // Prepare the request body based on the payment status
+        let requestBody = {
+            selectedAddress: selectAddress,
+            selectedPayment: paymentMethod,
+            amount: subTotal,
+            couponData: couponData,
+            couponName: couponEl,
+            updateWallet: updateWallet
+        };
 
-      body: JSON.stringify({
+        // Check payment status and modify the request body accordingly
+        if (!paymentStatus) {
+            requestBody.status = "Payment Failed";
+        }
 
-        selectedAddress: selectAddress,
-        selectedPayment: paymentMethod,
-        amount: subTotal,
-        couponData: couponData,
-        couponName: couponEl,
-        updateWallet: updateWallet
-      })
-    })
+        // Make the fetch call
+        const response = await fetch('/place_order', {
+            method: 'POST',
+            headers: {
+                'Content-Type': "application/json",
+            },
+            body: JSON.stringify(requestBody)
+        });
 
-    const placeOrderData = await datas.json()
+        const placeOrderData = await response.json();
 
-    if (placeOrderData) {
-      console.log(' hiiii am from place oreder data')
-
-      //const wallet = document.getElementById('update_wallet').innerText = updateWallet
-      window.location.href = '/order_sucess'
+        if (placeOrderData) {
+            console.log('Received placeOrderData:', placeOrderData);
+            if (paymentStatus) {
+                window.location.href = '/order_sucess';
+            } else {
+                // Show an alert and redirect to the payment_failed route
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Payment Failed',
+                    text: 'Your payment could not be processed. Please try again later or use a different payment method.',
+                    confirmButtonText: 'OK'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = '/payment_failed';
+                    }
+                });
+            }
+        }
+    } catch (error) {
+        console.error('Error placing order:', error);
+        // Optionally handle the error, e.g., show a notification to the user
     }
-  }
+};
 
   const online = () => {
     subTotal = Number(document.getElementsByName('subTotal')[0].value)
@@ -407,6 +438,21 @@ const toggleCoupon = async () => {
 
     };
     var rzp1 = new Razorpay(options);
+    rzp1.on('payment.failed',function(response){
+    paymentStatus = false;
+    Cod()
+     Swal.fire({
+    icon: 'error',
+    title: 'Payment Failed',
+    text: 'Your payment could not be processed. Please try again later or use a different payment method.',
+    confirmButtonText: 'OK'
+}).then((result) => {
+    if (result.isConfirmed) {
+        window.location.href = '/payment_failed';
+    }
+});
+
+    })
     rzp1.open();
 
   }

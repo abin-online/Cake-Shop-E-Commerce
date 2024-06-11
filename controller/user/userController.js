@@ -182,7 +182,7 @@ const searchProducts = async (req, res) => {
     } catch (error) {
         console.log(error.message);
         res.status(500).send("Internal Server Error");
-    }
+    }
 }
 
 //Product details page

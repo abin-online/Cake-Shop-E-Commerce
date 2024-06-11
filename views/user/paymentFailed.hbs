@@ -1,0 +1,75 @@
+
+    <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:400,400i,700,900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            text-align: center;
+            background-color: #f8f9fa;
+        }
+
+        h1 {
+            color: #D9534F;
+            font-family: "Nunito Sans", "Helvetica Neue", sans-serif;
+            font-weight: 900;
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+
+        p {
+            color: #404F5E;
+            font-family: "Nunito Sans", "Helvetica Neue", sans-serif;
+            font-size: 20px;
+            margin: 0;
+        }
+
+        #cross {
+            color: #D9534F;
+        }
+
+        i {
+            font-size: 100px;
+            line-height: 200px;
+            margin-left: -15px;
+        }
+
+        .card {
+            background: white;
+            padding: 60px;
+            border-radius: 4px;
+            box-shadow: 0 2px 3px #C8D0D8;
+            display: inline-block;
+            margin: 0 auto;
+        }
+
+        .btn {
+            display: inline-block;
+            font-weight: 400;
+            color: #fff;
+            text-align: center;
+            vertical-align: middle;
+            cursor: pointer;
+            background-color: #D9534F;
+            border: 1px solid transparent;
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+            line-height: 1.5;
+            border-radius: 0.2rem;
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            background-color: #C9302C;
+        }
+    </style>
+</head>
+<body>
+    <div class="card" style="margin-top: 130px;">
+        <div style="border-radius:200px; height:200px; width:200px; background: #F8FAF5; margin:0 auto;">
+            <i id="cross" class="checkmark">✗</i>
+        </div>
+        <h1>Payment Failed</h1>
+        <p>Your payment could not be processed.<br /> Please try again later or use a different payment method.</p>
+    </div>
+    <div>
+        <a class="btn btn-danger m-5" href="/my_orders">Retry Payment</a>
+    </div>
+</body>

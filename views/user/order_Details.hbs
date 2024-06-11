@@ -160,7 +160,7 @@
                                                                     <article class="float-end">
                                                                         <dl class="dlist">
                                                                             <dt>Subtotal:</dt>
-                                                                            <dd>{{myOrderDetails.total}}</dd>
+                                                                            <dd name="amount">{{myOrderDetails.total}}</dd>
                                                                             <input type="hidden" name="total"
                                                                                 value="{{myOrderDetails.total}}">
                                                                             <input type="hidden" name="user_wallet" value="{{userData.wallet}}">
@@ -226,6 +226,14 @@
                                                         </button>
                                                     </span>
                                                     {{/ifeq}}
+                                                    {{#ifeq myOrderDetails.status 'Payment Failed'}}
+                                                    <span id="cancel_btn">
+                                                        <button onclick="status3()" type="button"
+                                                            class="btn btn-md rounded font-sm mx-2">
+                                                             Retry Payment
+                                                        </button>
+                                                    </span>
+                                                    {{/ifeq}}
 
                     {{#ifeq myOrderDetails.status 'Delivered'}}
                     <span id="return_btn">
@@ -258,9 +266,11 @@
         </section> <!-- content-main end// -->
     </main>
 
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
 <script>
 
-
+const amount = parseInt({{myOrderDetails.total}} * 100)
   const orderId = document.getElementsByName('order_id')[0].value
   console.log(orderId)
 
@@ -305,6 +315,59 @@ const status2 = () => {
     });
 }
 
+
+ const status3 = () => {
+        Swal.fire({
+        title: 'Are you sure you want retry payment?',
+        text: "",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No',
+        dangerMode: true
+    }).then((willDelete) => {
+        if (willDelete.isConfirmed) {
+            payment(orderId)
+            Swal.fire("Retry Payment Successfull!");
+        } else {
+            Swal.fire("Your order was not canceled!");
+        }
+    });
+  }
+
+
+const retryPayment = async (id , status) => {
+    
+    try{
+        
+    const response = await fetch(`/retry_payment?id=${id}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+        
+    status : "pending"
+
+      })
+    });
+
+    const paymentSuccess = await response.json();
+    if(paymentSuccess){
+
+        Swal.fire({
+        title: 'Payment Successful!',
+        text: 'Thank you for your purchase.',
+        icon: 'success',
+        confirmButtonText: 'OK'
+    })
+
+    }
+
+
+        }catch{
+            console.error('Error changing status:', error);
+        }
+
+}
 
 
 
@@ -362,6 +425,44 @@ const status2 = () => {
   }
 };
 
+
+  const payment = (id) => {
+    //subTotal = Number(document.getElementsByName('total')[0].value)
+
+
+    var options = {
+      "key": "rzp_test_RgbHBDrROekluj", // Enter the Key ID generated from the Dashboard
+      "amount": parseInt(amount), // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+      "currency": "INR",
+
+      "name" : "Cake Shop",
+      /*"name": "Acme Corp", //your business name
+      "description": "Test Transaction",
+      "image": "https://example.com/your_logo",*/
+
+      "order_id": undefined, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+      "handler": function (response) {
+        retryPayment(orderId, 'Pending');
+      },
+
+    };
+    var rzp1 = new Razorpay(options);
+    rzp1.on('payment.failed',function(response){
+     Swal.fire({
+                    icon: 'error',
+                    title: 'Payment Failed',
+                    text: 'Your payment could not be processed. Please try again later.',
+                    confirmButtonText: 'OK'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = '/payment_failed';
+                    }
+                });
+
+    })
+    rzp1.open();
+
+  }
 
 
 

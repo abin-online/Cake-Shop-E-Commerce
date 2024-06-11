@@ -148,6 +148,15 @@ const filterOrders = async (req, res) => {
         console.log(error);
     }
  }
+ 
+ const payment_failed = (req, res) => {
+  try {
+    const userData = req.session.user
+      res.render('user/paymentFailed', {userData})
+  } catch (error) {
+      console.log(error);
+  }
+}
 
 
 
@@ -156,26 +165,38 @@ const filterOrders = async (req, res) => {
       const id       = req.query.id
       const userData = req.session.user
       const userId   =  userData._id
-      const subtotal=await  Orders.findOne({_id:id},
+      
+      const { updateWallet, payMethod } = req.body
+
+      const myOrderDetails = await Orders.findOne({_id:id},
         {
           total:1,
-          _id:0
+          amountAfterDscnt:1,
+          _id : 0
         }
       ).lean()
-      console.log(subtotal)
-      console.log(req.body)
-      const { updateWallet, payMethod } = req.body
-      console.log(updateWallet)
+
+      console.log("myOrderDetails",myOrderDetails,"myOrderDetails");
+      let refundAmount
+      if(myOrderDetails.amountAfterDscnt){
+       refundAmount=myOrderDetails.amountAfterDscnt-50
+      }else{
+        refundAmount=myOrderDetails.total-50
+
+      }
+
+
 
       if(payMethod === 'wallet' || payMethod === 'razorpay'){
         await User.findByIdAndUpdate( userId, { $set:{ wallet:updateWallet }}, { new:true })
-         await User.updateOne(
+
+        await User.updateOne(
           { _id: req.session.user._id },
           {
               $push: {
                   history: {
-                      amount: subtotal.total,
-                      status: 'refund',
+                      amount:refundAmount,
+                      status: 'Refunded',
                       date: Date.now()
                   }
               }
@@ -190,6 +211,7 @@ const filterOrders = async (req, res) => {
       console.log(error);
     }
  }
+
 
 
 
@@ -208,8 +230,43 @@ const filterOrders = async (req, res) => {
  }
 
 
+ const retryPayment = async(req, res) =>{
+  try {
 
-const getInvoice = async (req, res) => {
+    const id = req.query.id
+
+    
+    // let Order = await Orders.find({_id: ObjectId(id)})
+
+    //   var instance = new Razorpay({
+    //       key_id: process.env.RAZORPAY_ID,
+    //       key_secret: process.env.RAZORPAY_SECRET
+    //   })
+
+    //   const order = await instance.orders.create({
+    //       amount: Order[0].total,
+    //       currency: 'INR',
+    //       receipt: 'Abin Babu',
+    //   })
+
+      await Orders.findByIdAndUpdate(id, { $set: { status: 'pending' } }, { new: true });
+
+      res.json({
+          razorPaySucess: true,
+          order
+      })
+
+
+  
+    
+  } catch (error) {
+    
+  }
+ }
+
+
+
+ const getInvoice = async (req, res) => {
   try {
     const orderId = req.query.id; 
    
@@ -233,6 +290,8 @@ const getInvoice = async (req, res) => {
       description: product.name,
       tax: product.tax,
       price: product.price,
+      
+      
     }));
 
     const date = moment(order.date).format('MMMM D, YYYY');
@@ -244,9 +303,10 @@ const getInvoice = async (req, res) => {
       return res.status(404).send({ message: 'User or address not found' });
     }
 
-    const filename = `invoice_${orderId}.pdf`;
+    
 
     const data = {
+      mode: "development",
       currency: 'USD',
       taxNotation: 'vat',
       marginTop: 25,
@@ -255,10 +315,10 @@ const getInvoice = async (req, res) => {
       marginBottom: 25,
       background: 'https://public.easyinvoice.cloud/img/watermark-draft.jpg',
       sender: {
-        company: 'Coza Store',
-        address: 'Plaza Kannur',
-        zip: '670320',
-        city: 'Kannur',
+        company: 'Coco Loco',
+        address: 'Plaza Bakes ',
+        zip: '621313',
+        city: 'Thogaimalai',
         country: 'India',
       },
       client: {
@@ -301,9 +361,8 @@ easyinvoice.createInvoice(data, function (result) {
    
    catch (error) {
     res.sendStatus(500);
-  }
+  }
 };
-
 
 
 
@@ -315,4 +374,6 @@ module.exports = {
     getInvoice,
     returnOrder,
     filterOrders,
+    payment_failed,
+    retryPayment
 }

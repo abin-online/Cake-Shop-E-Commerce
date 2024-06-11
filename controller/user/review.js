@@ -24,7 +24,8 @@ addNewReviewPost: async(req, res) => {
 
         const reviewData = await review.save()
         console.log(reviewData)
-        res.redirect('/')
+        res.redirect(`/productview?id=${req.body.proId}`)
+       
     } catch (error) {
         console.log(error);
     }

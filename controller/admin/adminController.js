@@ -322,6 +322,37 @@ const deleteCategory = async (req, res) => {
   }
 }
 
+const listCoupon = async (req, res) => {
+  try {
+    const { id } = req.body;
+
+    // Validate if the provided ID is valid
+    if (!id) {
+      return res.status(400).json({ error: 'Missing coupon ID' });
+    }
+
+    let coupon = await Coupon.findById(id);
+    if (!coupon) {
+      return res.status(404).json({ error: 'Coupon not found' });
+    }
+
+    // Toggle the isListed property
+    coupon.isListed = !coupon.isListed;
+    await coupon.save();
+
+    // Send JSON response indicating success
+    res.status(200).json({ success: true, isListed: coupon.isListed });
+  } catch (error) {
+    // Handle any errors that occur during the process
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+
+
+
+
 // load product ///////////
 
 const getProduct = async (req, res) => {
@@ -562,7 +593,7 @@ const loadCoupon = async (req, res) => {
         expiryDate: formattedDate,
       };
     });
-
+console.log(couponData,"copondAtaaaaaaaaaaa")
     res.render("admin/coupon", { couponData, layout:'adminlayout' });
   } catch (error) {
     console.log(error);
@@ -731,7 +762,7 @@ const deleteBanner = async (req, res) => {
 
     await Coupon.findByIdAndDelete(id);
 
-    res.redirect("/admin/banners");
+    res.redirect("/admin/bannerss");
   } catch (error) {
     console.log(error);
   }
@@ -778,4 +809,5 @@ module.exports = {
   addBanner,
   addBannerPost,
   deleteBanner,
+  listCoupon
 };

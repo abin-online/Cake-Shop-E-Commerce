@@ -104,11 +104,11 @@
                                     </div> --}}
                                     <div class="bt-1 border-color-1 mt-30 mb-30"></div>
                                     <div class="detail-extralink">
-                                        <div class="detail-qty border radius">
+                                        {{!-- <div class="detail-qty border radius">
                                             <a href="#" class="qty-down"><i class="fi-rs-angle-small-down"></i></a>
                                             <span class="qty-val">1</span>
                                             <a href="#" class="qty-up"><i class="fi-rs-angle-small-up"></i></a>
-                                        </div>
+                                        </div> --}}
                                         <div class="product-extra-link2">
 
                                             
@@ -125,10 +125,10 @@
                 <button disabled id="add_to_cart_btn" class="button button-add-to-cart">Out Of Stock</button>
             </div>
         {{/if}}
-                                            <a aria-label="Add To Wishlist" class="action-btn hover-up"
+                                            {{!-- <a aria-label="Add To Wishlist" class="action-btn hover-up"
                                                 href="shop-wishlist.html"><i class="fi-rs-heart"></i></a>
                                             <a aria-label="Compare" class="action-btn hover-up"
-                                                href="shop-compare.html"><i class="fi-rs-shuffle"></i></a>
+                                                href="shop-compare.html"><i class="fi-rs-shuffle"></i></a> --}}
                                         </div>
                                     </div>
                                     <ul class="product-meta font-xs color-grey mt-50">
@@ -173,7 +173,7 @@
                                                                     <p>{{this.comment}}</p>
                                                                     <div class="d-flex justify-content-between">
                                                                         <div class="d-flex align-items-center">
-                                                                            <p class="font-xs mr-30">December 4, 2020 at 3:12 pm </p>
+                                                                            <p class="font-xs mr-30">{{this.createdAt}} </p>
                                                                             {{!-- <a href="#" class="text-brand btn-reply">Reply <i class="fi-rs-arrow-right"></i> </a> --}}
                                                                         </div>
                                                                     </div>

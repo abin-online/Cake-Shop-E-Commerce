@@ -110,8 +110,11 @@ router.post('/place_order', logedin, isBlocked, checkout.placeOrder)
 router.get('/my_orders', logedin, isBlocked, orders.myOrders)
 router.get('/order_details', logedin, isBlocked, orders.orderDetails)
 router.get('/order_sucess', logedin, isBlocked, orders.orderSuccess)
+router.get('/payment_failed', logedin , isBlocked , orders.payment_failed)
 router.post('/cancel_order', logedin, isBlocked, orders.cancelOrder)
-router.get('/return_order', logedin, isBlocked, orders.returnOrder)
+router.post('/return_order', logedin, isBlocked, orders.returnOrder)
+
+router.post('/retry_payment' ,logedin , isBlocked , orders.retryPayment)
 
 router.get('/filter_orders', logedin, isBlocked, orders.filterOrders)
 

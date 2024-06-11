@@ -79,15 +79,6 @@ const loadDashboard = async(req, res) => {
 
       console.log(thisMonthOrder, thisMonthSales);
 
-
-    //   const data = {
-    //     months: months,
-    //     ordersByMonth: odersByMonth,
-    //     revenueByMonth: revnueByMonth,
-       
-    //   };
-      
-    //   const jsonData = JSON.stringify(data);
      
 
       console.log(months);
@@ -106,12 +97,8 @@ const loadDashboard = async(req, res) => {
 
 
 
-
-
-
-
-
  const getSales = async (req, res) => {
+    console.log(req.query , "................................/")
     const { stDate, edDate } = req.query
     console.log(stDate, edDate)
     
@@ -175,6 +162,8 @@ const loadDashboard = async(req, res) => {
         
     }
  }
+
+ 
 
 
 

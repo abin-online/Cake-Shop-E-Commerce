@@ -44,7 +44,9 @@ router.delete('/product_img_delete', adminController.deleteProdImage)
 router.get('/add_coupon', adminController.addCoupon)
 router.get('/coupons', adminController.loadCoupon)
 router.post('/add_coupon', adminController.addCouponPost)
-router.get('/delete_cpn', adminController.deleteCoupon)
+// router.get('/delete_cpn', adminController.deleteCoupon)
+
+router.put('/listCoupon' , adminController.listCoupon)
 
 router.get('/orders', adminAuth.isLogin, adminController.getOrders)
 router.get('/order_details', adminAuth.isLogin, adminController.orderDetails)
