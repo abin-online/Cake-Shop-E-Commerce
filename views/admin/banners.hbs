@@ -1,4 +1,110 @@
-po
+<aside class="navbar-aside" id="offcanvas_aside">
+    <div class="aside-top">
+        <a href="/admin/home" class="brand-wrap">
+            <img src="/assetsAdmin/imgs/theme/logo.svg" class="logo" alt="Evara Dashboard">
+        </a>
+        <div>
+            <button class="btn btn-icon btn-aside-minimize"> <i class="text-muted material-icons md-menu_open"></i>
+            </button>
+        </div>
+    </div>
+    <nav>
+        <ul class="menu-aside">
+            <li class="menu-item ">
+                <a class="menu-link" href="/admin/home"> <i class="icon material-icons md-home"></i>
+                    <span class="text">Dashboard</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a class="menu-link" href="/admin/product"> <i class="icon material-icons md-shopping_bag"></i>
+                    <span class="text">Products</span>
+                </a>
+
+            </li>
+            <li class="menu-item ">
+                <a class="menu-link" href="/admin/orders"> <i class="icon material-icons md-shopping_cart"></i>
+                    <span class="text">Orders</span>
+                </a>
+
+            </li>
+            {{!-- <li class="menu-item has-submenu">
+                <a class="menu-link" href="page-sellers-cards.html"> <i class="icon material-icons md-store"></i>
+                    <span class="text">Sellers</span>
+                </a>
+                <div class="submenu">
+                    <a href="page-sellers-cards.html">Sellers cards</a>
+                    <a href="page-sellers-list.html">Sellers list</a>
+                    <a href="page-seller-detail.html">Seller profile</a>
+                </div>
+            </li> --}}
+            {{!-- <li class="menu-item has-submenu">
+                <a class="menu-link" href="page-form-product-1.html"> <i class="icon material-icons md-add_box"></i>
+                    <span class="text">Add product</span>
+                </a>
+                <div class="submenu">
+                    <a href="page-form-product-1.html">Add product 1</a>
+                    <a href="page-form-product-2.html">Add product 2</a>
+                    <a href="page-form-product-3.html">Add product 3</a>
+                    <a href="page-form-product-4.html">Add product 4</a>
+                </div>
+            </li> --}}
+            <li class="menu-item">
+                <a class="menu-link" href="/admin/category"> <i class="icon material-icons md-category"></i>
+                    <span class="text">Category</span>
+                </a>
+
+            </li>
+            
+
+             <li class="menu-item ">
+                    <a class="menu-link" href="/admin/coupons"><i class="icon fa-solid fa-ticket"></i>
+                        <span class="text">Coupons</span>
+                    </a>
+      </li>
+            <li class="menu-item">
+                <a class="menu-link" href="/admin/manage_users"> <i class="icon material-icons md-person"></i>
+                    <span class="text">Users</span>
+                </a>
+
+            </li>
+             <li class="menu-item active">
+                    <a class="menu-link" href="/admin/banners"> <i class="icon material-icons md-local_offer"></i>
+                        <span class="text"> Banner </span>
+                    </a>
+                </li>
+            {{!-- <li class="menu-item">
+                <a class="menu-link" href="page-reviews.html"> <i class="icon material-icons md-comment"></i>
+                    <span class="text">Reviews</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a class="menu-link" href="page-brands.html"> <i class="icon material-icons md-stars"></i>
+                    <span class="text">Brands</span> </a>
+            </li>
+            <li class="menu-item">
+                <a class="menu-link" disabled href="#"> <i class="icon material-icons md-pie_chart"></i>
+                    <span class="text">Statistics</span>
+                </a>
+            </li> --}}
+        </ul>
+        <hr>
+        <ul class="menu-aside">
+            <li class="menu-item ">
+                <a class="menu-link" href="#"> <i class="icon material-icons md-settings"></i>
+                    <span class="text">Settings</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a class="menu-link btn btn-primary" href="/admin/logout"> <i
+                        class="icon material-icons md-exit_to_app"></i>
+                    Logout
+                </a>
+            </li>
+        </ul>
+        <br>
+        <br>
+    </nav>
+</aside>
 
 
        {{#each bannerData}}
@@ -14,3 +120,111 @@ po
             </td>
           </tr>
           {{/each}}
+
+<main class="main-wrap">
+
+    <section class="content-main">
+        <div class="content-header">
+            <h2 class="content-title">Coupons list</h2>
+            <div>
+                <a href="/admin/add_banner" class="btn btn-primary"><i class="material-icons md-plus"></i>Add Banner</a>
+            </div>
+        </div>
+        <div class="card mb-4">
+            <header class="card-header">
+                <div class="row gx-3">
+                    <div class="col-lg-4 col-md-6 me-auto">
+                        <input type="text" placeholder="Search..." class="form-control">
+                    </div>
+
+                    <div class="col-lg-2 col-md-3 col-6">
+                        {{!-- <select class="form-select">
+                            <option>Show 20</option>
+                            <option>Show 30</option>
+                            <option>Show 40</option>
+                        </select> --}}
+                    </div>
+                </div>
+            </header> <!-- card-header end// -->
+            <div class="card-body ">
+                <div class="table-responsive ">
+                    <table class="table table-hover ">
+                        <thead>
+                            <tr>
+                                <th class="text-center">Coupon Code</th>
+                                <th class="text-center">Discount Percentage</th>
+                                <th class="text-center">Expiry Date</th>
+                                <th class="text-center">Action</th>
+                            </tr>
+                        </thead>
+                         {{#each couponData}}
+                        <tbody>
+                            <tr >
+                                <td width="20%" class="text-center">
+                                        <div class="info pl-3">
+                                            <h6 class="mb-0 title">{{this._doc.code}}</h6>
+                                        </div>
+                                </td>
+                                <td class="text-center" width="20%">{{this._doc.discount}}%</td>
+                                 <td class="text-center" width="20%">{{this.expiryDate}}</td>
+
+
+                                <td class="text-center" width="20%">
+                                    {{!-- <a href="/admin/delete_cpn?id={{this._doc._id}}" id = "delete" onclick="return confirm ('Are you sure want to delete?')" type="button" class="btn btn-primary">
+                                        Delete
+                                    </a> --}}
+                                     {{#if this._doc.isListed}}
+
+                                <a data-product-id="{{this._id}}" id="blockprod"  class="btn btn-pill font-sm rounded btn-brand">
+                                    <i class="material-icons md-edit"></i>UnList
+                                </a>
+                         
+                            {{else}}
+                      
+                                <a data-product-id="{{this._id}}" id="blockprod" class="btn btn-pill font-sm rounded btn-brand">
+                                    <i class="material-icons md-edit"></i>List
+                                </a>
+                        
+                            {{/if}}
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+                        {{/each}}
+                    </table> <!-- table-responsive.// -->
+                </div>
+            </div> <!-- card-body end// -->
+        </div> <!-- card end// -->
+<div class="pagination-area mt-30 mb-50">
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-start">
+            {{#each pages}}
+                <li class="page-number {{#if (eq ../currentPage this)}}active{{/if}}">
+                    <a class="page-link" href="?page={{this}}">{{this}}</a>
+                </li>
+            {{/each}}
+        </ul>
+    </nav>
+</div>
+
+
+        
+    </section> <!-- content-main end// -->
+    <footer class="main-footer font-xs">
+        <div class="row pb-30 pt-15">
+            <div class="col-sm-6">
+                <script data-cfasync="false"
+                    src="../../../cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+                <script>
+                    document.write(new Date().getFullYear())
+                </script> ©, Evara - HTML Ecommerce Template .
+            </div>
+            <div class="col-sm-6">
+                <div class="text-sm-end">
+                    All rights reserved
+                </div>
+            </div>
+        </div>
+    </footer>
+</main>

@@ -328,7 +328,7 @@ const status2 = () => {
     }).then((willDelete) => {
         if (willDelete.isConfirmed) {
             payment(orderId)
-            Swal.fire("Retry Payment Successfull!");
+            //Swal.fire("Retry Payment Successfull!");
         } else {
             Swal.fire("Your order was not canceled!");
         }
@@ -351,7 +351,8 @@ const retryPayment = async (id , status) => {
     });
 
     const paymentSuccess = await response.json();
-    if(paymentSuccess){
+    location.reload()
+    if(true){
 
         Swal.fire({
         title: 'Payment Successful!',
@@ -455,7 +456,7 @@ const retryPayment = async (id , status) => {
                     confirmButtonText: 'OK'
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        window.location.href = '/payment_failed';
+                        location.reload()
                     }
                 });
 

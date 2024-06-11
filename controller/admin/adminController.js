@@ -730,7 +730,7 @@ const loadBanner = async (req, res) => {
 const addBanner =  (req, res) => {
   try {
    
-    res.render('admin/add_banner', {bannerData, layout:'adminlayout'})
+    res.render('admin/add_banner', { layout:'adminlayout'})
   } catch (error) {
     console.log(error);
   }
@@ -762,7 +762,7 @@ const deleteBanner = async (req, res) => {
 
     await Coupon.findByIdAndDelete(id);
 
-    res.redirect("/admin/bannerss");
+    res.redirect("/admin/banners");
   } catch (error) {
     console.log(error);
   }
