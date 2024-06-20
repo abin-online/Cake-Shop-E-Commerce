@@ -72,8 +72,17 @@
                         <span class="text"> Banner </span>
                     </a>
                 </li>
+                     <li class="menu-item">
+                <a class="menu-link" href="/admin/reviews"> <i class="icon material-icons md-comment"></i>
+                    <span class="text">Reviews</span>
+                </a>
+            </li>
+            <li class="menu-item ">
+                <a class="menu-link" href="/admin/brands"> <i class="icon material-icons md-stars"></i>
+                    <span class="text">Brands</span> </a>
+            </li>
             {{!-- <li class="menu-item">
-                <a class="menu-link" href="page-reviews.html"> <i class="icon material-icons md-comment"></i>
+                <a class="menu-link" href="/admin/reviews"> <i class="icon material-icons md-comment"></i>
                     <span class="text">Reviews</span>
                 </a>
             </li>
@@ -178,15 +187,18 @@
     <label for="coupon-code">Coupon Code</label>
     <input type="text" class="form-control" id="coupon-code" placeholder="Enter coupon code" name="code" required>
   </div>
-  <div class="form-group">
-    <label for="discount">Discount (%)</label>
-    <div class="input-group">
-      <input type="number" class="form-control" id="discount" placeholder="Enter discount percentage" name="percent" required>
-      <div class="input-group-append">
-        <span class="input-group-text">%</span>
-      </div>
-    </div>
-  </div>
+ <div class="form-group">
+            <label for="discount">Discount (%)</label>
+            <div class="input-group">
+                <input type="number" class="form-control" id="discount" placeholder="Enter discount percentage" name="percent" max="99" required>
+                <div class="input-group-append">
+                    <span class="input-group-text">%</span>
+                </div>
+            </div>
+            <div class="invalid-feedback" id="discountFeedback">
+                Please enter a valid discount percentage (0-99).
+            </div>
+        </div>
   <div class="form-group">
     <label for="max">Discount Limit</label>
     <div class="input-group">
@@ -195,9 +207,10 @@
     <div style="height: 10px;"></div>
   </div>
   <div class="form-group">
-    <label for="expiry-date">Expiry Date</label>
-    <input type="date" class="form-control" id="expiry-date" name="expDate" required>
-  </div>
+            <label for="expiry-date">Expiry Date</label>
+            <input type="date" class="form-control" id="expiry-date" name="expDate" required>
+        </div>
+
   <div class="form-group text-center">
     <button type="submit" class="btn btn-primary">Add Coupon</button>
   </div>
@@ -212,3 +225,20 @@
 	<script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm"></script>
 
+     <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const expiryDateInput = document.getElementById('expiry-date');
+
+            // Get today's date
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0'); // Add leading zero
+            const day = String(today.getDate()).padStart(2, '0'); // Add leading zero
+
+            // Set the minimum date to today
+            const minDate = `${year}-${month}-${day}`;
+            expiryDateInput.setAttribute('min', minDate);
+
+            console.log(minDate);
+        });
+    </script>

@@ -12,7 +12,10 @@ let walletpage =async (req,res)=>{
     const userData = await User.findById(req.session.user._id).lean();
     try {
         // const userId = req.query.id
-        res.render('user/wallet',{userData , KEY_ID : process.env.RAZORPAY_ID})
+        let history = userData.history.sort((a,b)=>{
+            return b.date - a.date
+        })
+        res.render('user/wallet',{userData , history , KEY_ID : process.env.RAZORPAY_ID})
         
     } catch (error) {
         

@@ -55,16 +55,10 @@ const orderSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
-  // coupon: [
-  //   {
-  //     name: {
-  //       type: String,
-  //     },
-  //     offer: {
-  //       type: Number,
-  //     },
-  //   },
-  // ],
+  deliveryCharge: {
+    type: Number,
+    default: 50
+  },
 
   status: {
     type: String,

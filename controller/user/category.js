@@ -5,10 +5,11 @@ const catFilter = async (req, res) => {
     try {
         const { catId, page } = req.body;
         console.log(page);
+        let search = req.query.search || '';
         const limit = 9;
         const skip = (page - 1) * limit;
 
-        let query = { is_blocked: false };
+        let query = {name: { $regex: ".*" + search + ".*", $options: "i" }, is_blocked: false };
         if (catId) {
             query.category = catId;
         }

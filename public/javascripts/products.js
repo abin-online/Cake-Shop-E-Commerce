@@ -1,32 +1,3 @@
-// let catId = false;
-
-// const categoryFilter = async (id, page = 1) => {
-//     catId = document.getElementById('cat_id' + id).value;
-//     console.log(catId, 'am cat idddd');
-
-//     const response = await fetch(`/category_fil`, {
-//         method: 'POST',
-//         headers: { 'Content-Type': 'application/json' },
-//         body: JSON.stringify({
-//             catId: catId,
-//             page: page
-//         })
-//     });
-
-//     const data = await response.json();
-//     console.log(data);
-
-//     if (data.productData.length > 0) {
-//         filteredDataDisplay(data.productData);
-//         updatePagination(data.pages, data.currentPage, 'categoryFilter', catId);
-//     } else {
-//         proContainer.innerHTML = `<h2 class="m-5">No product available</h2>`;
-//         clearPagination();
-//     }
-// };
-
-
-
 
 let catId = false;
 
@@ -50,6 +21,7 @@ const categoryFilter = async (id, page = 1) => {
     if (data.productData.length > 0) {
         filteredDataDisplay(data.productData);
         updatePagination(data.pages, data.currentPage, 'categoryFilter', catId);
+        count.innerHTML = data.productData.length
     } else {
         proContainer.innerHTML = `<h2 class="m-5">No product available</h2>`;
         clearPagination();
@@ -71,6 +43,7 @@ const getProductsPage = async (page, catId = '', sort = '') => {
         filteredDataDisplay(data.proData);
         updatePagination(data.pages, data.currentPage, 'getProductsPage', catId, sort);
     } else {
+        count.innerHTML = data.proData.length
         proContainer.innerHTML = `<h2 class="m-5">No product available</h2>`;
         clearPagination();
     }
@@ -144,25 +117,6 @@ const sortHighToLow = async (page = 1) => {
 
 
 
-// Function to update pagination links for High to low low to high
-// const updatePagination = (pages, currentPage, currentFunction, catId = '', sort = '') => {
-//     const paginationList = document.getElementById("paginationList");
-//     paginationList.innerHTML = "";
-
-//     pages.forEach(page => {
-//         const listItem = document.createElement("li");
-//         listItem.classList.add("page-item");
-//         if (page === currentPage) {
-//             listItem.classList.add("active");
-//         }
-//         const link = document.createElement("a");
-//         link.classList.add("page-link");
-//         link.href = `javascript:${currentFunction}(${page});`;
-//         link.innerText = page;
-//         listItem.appendChild(link);
-//         paginationList.appendChild(listItem);
-//     });
-// };
 
 
 
@@ -217,32 +171,6 @@ const updatePagination = (pages, currentPage, currentFunction, catId = '', sort 
 
 
 
-
-
-
-//it is woring for category
-// const updatePagination = (pages, currentPage, currentFunction, catId = '', sort = '') => {
-//     const paginationList = document.getElementById("paginationList");
-//     paginationList.innerHTML = "";
-
-//     pages.forEach(page => {
-//         const listItem = document.createElement("li");
-//         listItem.classList.add("page-item");
-//         if (page === currentPage) {
-//             listItem.classList.add("active");
-//         }
-//         const link = document.createElement("a");
-//         link.classList.add("page-link");
-//         if (sort) {
-//             link.href = `javascript:${currentFunction}(${catId ? `'${catId}'` : 'null'}, ${page}, '${sort}');`;
-//         } else {
-//             link.href = `javascript:${currentFunction}(${catId ? `'${catId}'` : 'null'}, ${page});`;
-//         }
-//         link.innerText = page;
-//         listItem.appendChild(link);
-//         paginationList.appendChild(listItem);
-//     });
-// };
 
 
 
@@ -313,8 +241,6 @@ const filteredDataDisplay = (data) => {
             </div>`;
     });
 };
-
-
 
 
 
@@ -396,7 +322,9 @@ const searchProducts = async () => {
 
     if (data.length > 0) {
         filteredDataDisplay(data)
+        count.innerHTML = data.length
     } else {
+        count.innerHTML = data.length
         proContainer.innerHTML = `<h2 class="m-5">No product available</h2>`
     }
 }

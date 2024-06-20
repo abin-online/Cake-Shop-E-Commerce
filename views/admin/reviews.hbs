@@ -1,0 +1,244 @@
+ <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.2/dist/sweetalert2.min.css">
+    <!-- SweetAlert2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.2/dist/sweetalert2.all.min.js"></script>  
+  
+  <aside class="navbar-aside" id="offcanvas_aside">
+    <div class="aside-top">
+        <a href="/admin/home" class="brand-wrap">
+            <img src="/assetsAdmin/imgs/theme/logo.svg" class="logo" alt="Evara Dashboard">
+        </a>
+        <div>
+            <button class="btn btn-icon btn-aside-minimize"> <i class="text-muted material-icons md-menu_open"></i>
+            </button>
+        </div>
+    </div>
+    <nav>
+        <ul class="menu-aside">
+            <li class="menu-item ">
+                <a class="menu-link" href="/admin/home"> <i class="icon material-icons md-home"></i>
+                    <span class="text">Dashboard</span>
+                </a>
+            </li>
+            <li class="menu-item ">
+                <a class="menu-link" href="/admin/product"> <i class="icon material-icons md-shopping_bag"></i>
+                    <span class="text">Products</span>
+                </a>
+
+            </li>
+            <li class="menu-item ">
+                <a class="menu-link" href="/admin/orders"> <i class="icon material-icons md-shopping_cart"></i>
+                    <span class="text">Orders</span>
+                </a>
+
+            </li>
+
+            <li class="menu-item ">
+                <a class="menu-link" href="/admin/category"> <i class="icon material-icons md-category"></i>
+                    <span class="text">Category</span>
+                </a>
+
+            </li>
+            
+
+             <li class="menu-item ">
+                    <a class="menu-link" href="/admin/coupons"><i class="icon fa-solid fa-ticket"></i>
+                        <span class="text">Coupons</span>
+                    </a>
+      </li>
+            <li class="menu-item">
+                <a class="menu-link" href="/admin/manage_users"> <i class="icon material-icons md-person"></i>
+                    <span class="text">Users</span>
+                </a>
+
+            </li>
+                         <li class="menu-item">
+                    <a class="menu-link" href="/admin/banners"> <i class="icon material-icons md-local_offer"></i>
+                        <span class="text"> Banner </span>
+                    </a>
+                </li>
+                     <li class="menu-item active">
+                <a class="menu-link " href="/admin/reviews"> <i class="icon material-icons md-comment"></i>
+                    <span class="text">Reviews</span>
+                </a>
+            </li>
+            <li class="menu-item ">
+                <a class="menu-link" href="/admin/brands"> <i class="icon material-icons md-stars"></i>
+                    <span class="text">Brands</span> </a>
+            </li>
+            {{!-- <li class="menu-item">
+                <a class="menu-link" href="/admin/reviews"> <i class="icon material-icons md-comment"></i>
+                    <span class="text">Reviews</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a class="menu-link" href="page-brands.html"> <i class="icon material-icons md-stars"></i>
+                    <span class="text">Brands</span> </a>
+            </li>
+            <li class="menu-item">
+                <a class="menu-link" disabled href="#"> <i class="icon material-icons md-pie_chart"></i>
+                    <span class="text">Statistics</span>
+                </a>
+            </li> --}}
+        </ul>
+        <hr>
+        <ul class="menu-aside">
+            <li class="menu-item ">
+                <a class="menu-link" href="#"> <i class="icon material-icons md-settings"></i>
+                    <span class="text">Settings</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a class="menu-link btn btn-primary" href="/admin/logout"> <i
+                        class="icon material-icons md-exit_to_app"></i>
+                    Logout
+                </a>
+            </li>
+        </ul>
+        <br>
+        <br>
+    </nav>
+</aside>
+  <main class="main-wrap">
+        
+        <section class="content-main">
+            <div class="content-header">
+                <div>
+                    <h2 class="content-title card-title">Reviews</h2>
+                    <p>Lorem ipsum dolor sit amet.</p>
+                </div>
+                <div>
+                    <input type="text" placeholder="Search by name" class="form-control bg-white">
+                </div>
+            </div>
+            <div class="card mb-4">
+               
+                <!-- card-header end// -->
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    
+                                    <th>NO</th>
+                                    <th>Product</th>
+                                    <th>Name</th>
+                                    <th>Comment</th>
+                                    <th>Date</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{#each reviews}}
+                                <tr>
+                                    
+                                    <td>{{increment @index}}</td>
+                                    <td><b>{{this.productDetails.name}}</b></td>
+                                    <td>{{this.name}}</td>
+                                    <td>{{this.comment}}</td>
+                                    <td>{{formatDate this.createdAt}}</td>
+                                    <td width="20%" > 
+
+                                        {{#if this.isListed}}
+    <div class="col-lg-3 col-sm-3 col-3 text-center review-button">
+        <a href="javascript:void(0);" data-review-id="{{this._id}}" onclick="toggleReviewStatus('{{this._id}}', true)" class="btn btn-pill font-sm rounded btn-brand">
+            <i class="material-icons md-edit"></i>Block
+        </a>
+    </div>
+{{else}}
+    <div class="col-lg-3 col-sm-3 col-3 text-center review-button">
+        <a href="javascript:void(0);" data-review-id="{{this._id}}" onclick="toggleReviewStatus('{{this._id}}', false)" class="btn btn-pill font-sm rounded btn-brand">
+            <i class="material-icons md-edit"></i>Unblock
+        </a>
+    </div>
+{{/if}}
+
+                                    </td>
+                                </tr>
+                                {{/each}}
+                            </tbody>
+                        </table>
+                    </div> <!-- table-responsive//end -->
+                </div>
+                <!-- card-body end// -->
+            </div>
+            <div class="pagination-area mt-30 mb-50">
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-start">
+                        <li class="page-item active"><a class="page-link" href="#">01</a></li>
+                        <li class="page-item"><a class="page-link" href="#">02</a></li>
+                        <li class="page-item"><a class="page-link" href="#">03</a></li>
+                        <li class="page-item"><a class="page-link dot" href="#">...</a></li>
+                        <li class="page-item"><a class="page-link" href="#">16</a></li>
+                        <li class="page-item"><a class="page-link" href="#"><i class="material-icons md-chevron_right"></i></a></li>
+                    </ul>
+                </nav>
+            </div>
+        </section> <!-- content-main end// -->
+        <footer class="main-footer font-xs">
+            <div class="row pb-30 pt-15">
+                <div class="col-sm-6">
+                    <script>
+                    document.write(new Date().getFullYear())
+                    </script> ©, Evara - HTML Ecommerce Template .
+                </div>
+                <div class="col-sm-6">
+                    <div class="text-sm-end">
+                        All rights reserved
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+        function toggleReviewStatus(reviewId, status) {
+            const action = status ? 'Block' : 'Unblock';
+            const actionUrl = '/admin/toggle_review';
+
+            Swal.fire({
+                title: `Are you sure you want to ${action} this review?`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: `${action}`
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: 'POST',
+                        url: actionUrl,
+                        contentType: 'application/json',
+                        data: JSON.stringify({ id: reviewId }),
+                        success: function (response) {
+                            Swal.fire({
+                                title: 'Done!',
+                                text: `Review successfully ${action}ed!`,
+                                icon: 'success',
+                                confirmButtonText: 'Cool'
+                            }).then(() => {
+                                window.location.reload();
+                            });
+                        },
+                        error: function (xhr, status, error) {
+                            console.error(`Error ${action}ing review:`, error);
+                            Swal.fire("Error", "Something went wrong. Please try again later.", "error");
+                        }
+                    });
+                }
+            });
+        }
+</script>
+
+<style>
+    .review-button {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+    }
+
+    .review-button a {
+        width: 100px; /* Set a fixed width to ensure both buttons have the same width */
+    }
+</style>

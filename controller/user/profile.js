@@ -27,9 +27,24 @@ module.exports = {
     try {
         const userData = req.session.user
         const id       = userData._id
+
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 4;
+    
+        // Calculate the number of documents to skip
+        const skip = (page - 1) * limit;
         
-        const userAddress = await Address.find({userId : id}).lean()
-        res.render('user/manage_address', {userAddress, userData})
+        const userAddress = await Address.find({userId : id})
+        .skip(skip)
+        .limit(limit).lean()
+
+        const totalAddress = await Address.find({userId : id}).count()
+        const totalPages = Math.ceil(totalAddress / limit);
+        const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
+        console.log(pages)
+        res.render('user/manage_address', {currentPage: page,
+            totalPages,
+            pages, userAddress, userData})
     } catch (error) {
         console.log(error);
     }

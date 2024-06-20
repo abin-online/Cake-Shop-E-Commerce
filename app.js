@@ -14,6 +14,8 @@ const exphbs = require('express-handlebars')
 const nocache = require('nocache')
 const multer = require('multer')
 const swal=require('sweetalert')
+const moment = require('moment');
+
  require('dotenv').config()
 
  mongoose.set('strictQuery', false);
@@ -94,6 +96,27 @@ Handlebars.registerHelper('ifeq', function (a, b, options) {
 
 Handlebars.registerHelper('add', function (a, b) {
   return a+b
+});
+
+Handlebars.registerHelper('increment', function(index) {
+  return index + 1;
+});
+
+// Define a Handlebars helper
+Handlebars.registerHelper('ifFirst', function(index, options) {
+  if (index === 0) {
+      return options.fn(this); // Return content inside the block
+  } else {
+      return options.inverse(this); // Return if not first
+  }
+});
+
+
+Handlebars.registerHelper('formatDate', function (timestamp) {
+  return moment(timestamp).format(' D,MMMM, YYYY');
+});
+Handlebars.registerHelper('formatTime', function (timestamp) {
+  return moment(timestamp).format(' h:mm A');
 });
 
 

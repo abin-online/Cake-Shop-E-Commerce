@@ -6,8 +6,15 @@ const Product     = require("../../model/productModel");
 const Coupon      = require("../../model/coupon");
 const Orders      = require("../../model/order");
 const Address     = require("../../model/address");
-const Banner      = require('../../model/banner')
+const Banner      = require('../../model/banner');
+const Reviews     = require('../../model/review')
+const Brand       = require('../../model/brandModel')
 const moment      = require("moment");
+const mongoose    = require('mongoose');
+const coupon = require("../../model/coupon");
+
+
+
 
 let adminData 
 let catSaveMsg = "Category added suceessfully..!!";
@@ -83,7 +90,7 @@ const loadUsersData = async (req, res) => {
       page = req.query.page
     }
     const limit = 1;
-    let allUsersData = await await User.find()
+    let allUsersData =  await User.find()
     .skip((page - 1) * limit)
     .limit(limit * 1)
     .lean();
@@ -130,10 +137,15 @@ const getCategory = async (req, res) => {
       .skip((page - 1) * limit)
       .limit(limit * 1)
       .lean();
-
     const count = await Category.find({}).count();
     const totalPages = Math.ceil(count / limit)
     const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
+        
+// const proData = await Category.aggregate([{$lookup: {from: 'products' , foreignField : 'category' , localField : '_id', as: "catDetails" }},{$project: {category:1, count: {$size : '$catDetails'} }}])  
+
+
+
+    console.log(proData)
     let catUpdtMsg = "Category updated successfully..!!";
 
     if (req.session.categoryUpdate) {
@@ -312,6 +324,7 @@ const deleteCategory = async (req, res) => {
           isListed: !newListed
       },
       { new: true })
+
       res.redirect('/admin/category')
 
 
@@ -322,32 +335,7 @@ const deleteCategory = async (req, res) => {
   }
 }
 
-const listCoupon = async (req, res) => {
-  try {
-    const { id } = req.body;
 
-    // Validate if the provided ID is valid
-    if (!id) {
-      return res.status(400).json({ error: 'Missing coupon ID' });
-    }
-
-    let coupon = await Coupon.findById(id);
-    if (!coupon) {
-      return res.status(404).json({ error: 'Coupon not found' });
-    }
-
-    // Toggle the isListed property
-    coupon.isListed = !coupon.isListed;
-    await coupon.save();
-
-    // Send JSON response indicating success
-    res.status(200).json({ success: true, isListed: coupon.isListed });
-  } catch (error) {
-    // Handle any errors that occur during the process
-    console.error(error);
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
-};
 
 
 
@@ -361,7 +349,7 @@ const getProduct = async (req, res) => {
     if(req.query.page){
       page = req.query.page
     }
-    const limit = 3;
+    const limit = 10;
     const productData = await Product.aggregate([
       {
         $lookup: {
@@ -402,13 +390,31 @@ const newProduct = async (req, res) => {
   try {
     let productSaveMsg = "Product added successfuly..!!";
 
-    const catogories = await Category.find().lean();
+    const catogories = await Category.aggregate([
+      {
+        $match: {
+          isListed: true
+        }
+      }
+    ]);
+    
+    console.log(catogories);
+    
+    const brandData = await Brand.aggregate([
+      {
+        $match: {
+          isListed: true
+        }
+      }
+    ])
+    console.log(brandData);
+    
     console.log(catogories , "...........................poda")
     if (req.session.productSave) {
-      res.render("admin/addproduct", { productSaveMsg, catogories,layout:'adminlayout' });
+      res.render("admin/addproduct", { brandData , productSaveMsg, catogories,layout:'adminlayout' });
       req.session.productSave = false;
     } else {
-      res.render("admin/addproduct", { catogories, layout:'adminlayout' });
+      res.render("admin/addproduct", {brandData , catogories, layout:'adminlayout' });
     }
   } catch (error) {
     console.log(error);
@@ -469,12 +475,13 @@ const addNewProduct = async (req, res) => {
       const image = file.filename;
       images.push(image);
     });
-    const { name, price, description, category, stock } = req.body;
+    const { name, price, description, category, stock , brand} = req.body;
     const product = new Product({
       name        : name,
       price       : price,
       description : description,
       category    : category,
+      brand       : brand,
       stock       : stock,
       imageUrl    : images,
       isWishlisted: false
@@ -495,9 +502,14 @@ const editProduct = async (req, res) => {
     let proId = req.params.id;
     
     const proData = await Product.findById({ _id: proId }).lean()
-    const catogories = await Category.find().lean()
+    const catogories = await Category.find({isListed:true}).lean()
+    const brandData  = await Brand.find({isListed:true}).lean()
 
-    res.render("admin/edit_product", { proData, catogories, layout:'adminlayout' })
+    console.log(".........................................................oo",proData);
+    console.log(catogories);
+
+
+    res.render("admin/edit_product", {brandData , proData, catogories, layout:'adminlayout' })
   } catch (error) {
     console.log(error);
   }
@@ -521,7 +533,7 @@ const updateProduct = async (req, res) => {
       updImages = exImage;
     }
 
-    const { name, price, description, category, stock } = req.body;
+    const { name, price, description, category, stock , brand} = req.body;
     await Product.findByIdAndUpdate(
       proId,
       {
@@ -531,6 +543,7 @@ const updateProduct = async (req, res) => {
         category    : category,
         stock       : stock,
         is_blocked  : false,
+        brand       : brand,
 
         imageUrl    : updImages,
       },
@@ -581,8 +594,20 @@ const blockProduct = async (req, res) => {
 
 const loadCoupon = async (req, res) => {
   try {
-    const coupon = await Coupon.find();
-
+    var page = 1
+    if(req.query.page){
+      page = req.query.page
+    }
+    const limit = 5;
+    let coupon = await Coupon.find()
+    .skip((page - 1) * limit)
+    .limit(limit * 1)
+    const count = await Coupon.find({}).count();
+    const totalPages = Math.ceil(count/limit)
+    const pages = Array.from({length: totalPages}, (_, i) => i + 1); 
+    console.log(coupon)
+  
+    
     const now = moment();
 
     const couponData = coupon.map((cpn) => {
@@ -594,7 +619,7 @@ const loadCoupon = async (req, res) => {
       };
     });
 console.log(couponData,"copondAtaaaaaaaaaaa")
-    res.render("admin/coupon", { couponData, layout:'adminlayout' });
+    res.render("admin/coupon", { couponData, pages , currentPage : page , layout:'adminlayout' });
   } catch (error) {
     console.log(error);
   }
@@ -614,6 +639,7 @@ const addCoupon = (req, res) => {
     } else {
       res.render("admin/add_coupon",{layout:'adminlayout'});
     }
+    
   } catch (error) {
     console.log(error);
   }
@@ -635,7 +661,8 @@ const addCouponPost = async (req, res) => {
 
       await coupon.save();
       req.session.coupon = true;
-      res.redirect("/admin/add_coupon");
+      res.redirect("/admin/coupons");
+      
     } else {
       req.session.exCoupon = true;
       res.redirect("/admin/add_coupon");
@@ -644,6 +671,85 @@ const addCouponPost = async (req, res) => {
     console.log(error);
   }
 };
+
+// Adjust the path as necessary
+
+// for coupon block 
+
+const listCoupon = async (req, res) => {
+  try {
+    const {id}=req.body
+      // const catId = req.params.id
+      let coupon = await Coupon.findById(id)
+      console.log(coupon)
+      let newListed = coupon.status
+      console.log(newListed)
+      await Coupon.findByIdAndUpdate(id, {
+          status: !newListed
+      },
+      { new: true })
+      res.redirect('/admin/coupons')
+
+
+  } catch (error) {
+      console.log(error)
+
+  }
+}
+//for review block
+const listReview = async (req, res) => {
+  try {
+    const {id}=req.body
+      // const catId = req.params.id
+      let review = await Reviews.findById(id)
+      console.log(review)
+      let newListed = review.isListed
+      console.log(newListed)
+      await Reviews.findByIdAndUpdate(id, {
+          isListed: !newListed
+      },
+      { new: true })
+      res.redirect('/admin/reviews')
+
+
+  } catch (error) {
+      console.log(error)
+
+  }
+}
+
+//for banner block
+const listBanner = async (req, res) => {
+  try {
+    const {id}=req.body
+      // const catId = req.params.id
+      let banner = await Banner.findById(id)
+      console.log(banner)
+      let newListed = banner.active
+      console.log(newListed)
+      await Banner.findByIdAndUpdate(id, {
+          active: !newListed
+      },
+      { new: true })
+      res.redirect('/admin/banners')
+  } catch (error) {
+      console.log(error)
+
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 const deleteCoupon = async (req, res) => {
   try {
@@ -665,7 +771,7 @@ const orderDetails = async (req, res) => {
     const myOrderDetails = await Orders.findById(orderId).lean();
     const orderedProDet = myOrderDetails.product;
     const addressId = myOrderDetails.address;
-
+    console.log(orderedProDet)
     const address = await Address.findById(addressId).lean();
 
     res.render("admin/order_Details", {
@@ -720,7 +826,8 @@ const deleteProdImage =  async (req, res) => {
 const loadBanner = async (req, res) => {
   try {
     
-    const bannerData = await Banner.find()
+    const bannerData = await Banner.find().lean()
+    console.log(bannerData)
     res.render('admin/banners' , {bannerData, layout:'adminlayout'})
   } catch (error) {
     console.log(error)
@@ -739,21 +846,36 @@ const addBanner =  (req, res) => {
 
 const addBannerPost = async (req, res) => {
   try {
-    const {title, link} = req.body
+    const {line1 , line2 , line3 , line4 } = req.body
     const image  = req.file.filename 
 
     const banner = new Banner ({
-      title : title,
+      line1 : line1,
+      line2 : line2,
+      line3 : line3,
+      line4 : line4,
       image : image,
-      link  : link,
     })
 
     await banner.save()
+    res.redirect('/admin/banners')
   } catch (error) { 
     console.log(error)
   }
 }
 
+
+const editBanner = async (req, res)=>{
+  try {
+    const id = req.params.id
+    const bannerData = await Banner.findById({ _id: id }).lean()
+
+    res.render("admin/editBanner" , {bannerData , layout:'adminlayout'})
+    
+  } catch (error) {
+    
+  }
+}
 
 
 const deleteBanner = async (req, res) => {
@@ -767,6 +889,219 @@ const deleteBanner = async (req, res) => {
     console.log(error);
   }
 };
+
+
+
+
+
+const loadReviews = async (req , res)=> {
+  try {
+
+    const reviews = await Reviews.aggregate([
+      {
+        $lookup: {
+          from: "products",
+          localField: "productId",
+          foreignField: "_id",
+          as: "productDetails"
+        }
+      },
+      {
+        $unwind: "$productDetails"
+      }
+    ])
+    console.log(reviews)
+  
+
+console.log("REVIEWSSSSSSSSSSS" ,reviews)
+
+    res.render('admin/reviews' , {reviews , layout: 'adminlayout' })
+    
+  } catch (error) {
+    
+  }
+};
+
+const loadBrands = async (req, res)=>{
+  try {
+
+    const brandData = await Product.aggregate([
+      { $match: { is_blocked: false } },
+      {
+        $lookup: {
+          from: 'brands',
+          localField: 'brand',
+          foreignField: '_id',
+          as: 'brandDetails'
+        }
+      },
+      { $unwind: '$brandDetails' },
+      {
+        $group: {
+          _id: '$brandDetails._id',
+          brandName: { $first: '$brandDetails.brand' },
+          brandImageUrl: { $first: '$brandDetails.imageUrl' },
+          isListed: { $first: '$brandDetails.isListed' },
+          productCount: { $sum: 1 }
+        }
+      },
+      {
+        $project: {
+          _id: 0,
+          brandId: '$_id',
+          brandName: 1,
+          brandImageUrl: 1,
+          productCount: 1,
+          isListed: 1
+        }
+      }
+    ])
+    
+    console.log(brandData);
+    
+    
+    
+    res.render('admin/brands' , { brandData , layout: 'adminlayout' })
+    
+  } catch (error) {
+    
+  }
+}
+
+
+
+
+/// To get add brand page ///
+
+const addBrandPage = (req, res) => {
+  try {
+    let brandExistMsg = "Brand already exists..!!";
+
+    if (req.session.brandSave) {
+      res.render("admin/add_brand", { brandSaveMsg: "Brand saved successfully!", layout: 'adminlayout' });
+      req.session.brandSave = false;
+    } else if (req.session.brandExist) {
+      res.render("admin/add_brand", { brandExistMsg, layout: 'adminlayout' });
+      req.session.brandExist = false;
+    } else {
+      res.render("admin/add_brand", { layout: 'adminlayout' });
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+
+/// To add new brand post///
+const addNewBrand = async (req, res) => {
+  const brandName = req.body.name;
+  const image = req.file;
+  const lBrandName = brandName;
+
+  try {
+    const brandExist = await Brand.findOne({ brand: { $regex: new RegExp("^" + lBrandName + "$", "i") } });
+    if (!brandExist) {
+      const brand = new Brand({
+        brand: lBrandName,
+        imageUrl: image.filename,
+      });
+
+      await brand.save();
+      req.session.brandSave = true;
+      res.redirect("/admin/add_brands");
+    } else {
+      req.session.brandExist = true;
+      res.redirect("/admin/add_brands");
+    }
+  } catch (error) {
+    console.log(error);
+    res.redirect("/admin/add_brands");
+  }
+};
+
+/// To edit brand ///
+
+const editBrandPage = async (req, res) => {
+  let brandId = req.params.id;
+
+  try {
+    const brandData = await Brand.findById({ _id: brandId }).lean();
+    let brandExistMsg = "Brand already exists..!!";
+    console.log(brandData)
+    if (req.session.brandExist) {
+      res.render("admin/edit_brand", { brandData, brandExistMsg, layout: 'adminlayout' });
+      req.session.brandExist = false;
+    } else {
+      res.render("admin/edit_brand", { brandData, layout: 'adminlayout' });
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const updateBrand = async (req, res) => {
+  try {
+    const brandName = req.body.name;
+    const image = req.file;
+    const brandId = req.params.id;
+
+    const brand = await Brand.findById(brandId);
+    const brandImg = brand.imageUrl;
+    let updImg;
+
+    if (image) {
+      updImg = image.filename;
+    } else {
+      updImg = brandImg;
+    }
+
+    const brandExist = await Brand.findOne({ brand: { $regex: new RegExp("^" + brandName + "$", "i") }, _id: { $ne: brandId } });
+
+    if (!brandExist) {
+      await Brand.findByIdAndUpdate(
+        brandId,
+        {
+          brand: req.body.name,
+          imageUrl: updImg
+        },
+        { new: true }
+      );
+
+      req.session.brandUpdate = true;
+      res.redirect("/admin/brands");
+    } else {
+      req.session.brandExist = true;
+      res.redirect("/admin/brands");
+    }
+  } catch (error) {
+    console.log(error);
+    res.redirect("/admin/brands");
+  }
+};
+
+
+const deleteBrand = async (req, res) => {
+  try {
+    const { id } = req.body;
+
+    let brand = await Brand.findById(id);
+    console.log(brand)
+    let newListed = brand.isListed;
+
+    await Brand.findByIdAndUpdate(
+      id,
+      {
+        isListed: !newListed
+      },
+      { new: true }
+    );
+    res.redirect('/admin/brands');
+  } catch (error) {
+    console.log(error);
+    res.redirect('/admin/brands');
+  }
+};
+
 
 
 
@@ -808,6 +1143,19 @@ module.exports = {
   loadBanner,
   addBanner,
   addBannerPost,
+  editBanner,
   deleteBanner,
-  listCoupon
+  listCoupon,
+  listReview,
+
+
+  loadReviews,
+  loadBrands,
+  addBrandPage,
+  addNewBrand,
+  editBrandPage,
+  updateBrand,
+  deleteBrand,
+  listBanner
+ 
 };

@@ -6,9 +6,12 @@ const Category   = require('../../model/categoryModel')
 const Banners    = require('../../model/banner')
 const Review     = require('../../model/review')
 const Order      = require('../../model/order')
+const Coupon     = require('../../model/coupon')
 const { log } = require('handlebars')
 
 const mongoose = require('mongoose');
+const ObjectId = mongoose.Types.ObjectId;
+
 
 
 let otp
@@ -29,12 +32,51 @@ const loadHome = async(req, res)=>{
    
    try {
     const loadProData = await Product.find().lean()
+    const newProduct = await Product.find({is_blocked: false}).sort({_id:-1}).limit(8).lean()
     const loadCatData = await Category.find({isListed:true}).lean()
     const banners     = await Banners.find().lean()
+    const popularCakes = await Order.aggregate([
+        { $match: { status: "Delivered" } },
+        { $unwind: "$product" },
+        { $group: { _id: "$product.id", totalQuantityDelivered: { $sum: "$product.quantity" } } },
+        { $lookup: { from: "products", localField: "_id", foreignField: "_id", as: "productDetails" } },
+        { $unwind: "$productDetails" },
+        { $sort: { totalQuantityDelivered: -1 } },
+        { $lookup: { from: "categories", localField: "productDetails.category", foreignField: "_id", as: "categoryDetails" } },
+        { $unwind: "$categoryDetails" }
+      ]);
+      
+      
+      console.log(popularCakes)
+
+    //const coupons      = await Coupon.find().limit(6).lean()
     const userData = req.session.user
+    console.log(userData)
+    let coupons = await Coupon.find({status:true,
+        expiryDate: { $gte: new Date() }
+    }).limit(6).lean();
+    
+    
+    if(userData){
+        coupons = await Coupon.find({status:true,
+            expiryDate: { $gte: new Date() },
+            usedBy: { $nin: [userData._id] }
+        }).limit(6).lean();
+
+        res.render('user/home',{userData, loadProData, loadCatData, banners , coupons , newProduct , popularCakes})
+    }else{
+
+        res.render('user/home',{userData, loadProData, loadCatData, banners , coupons , newProduct , popularCakes})
+
+    }
+
+   
 
 
-    res.render('user/home',{userData, loadProData, loadCatData, banners})
+
+
+
+    
     
    } catch (error) {
     console.log(error);
@@ -45,15 +87,22 @@ const loadHome = async(req, res)=>{
 
 
 const getProduct = async (req, res) => {
+    let userData = false;
+    if(req.session.user){
+
     const user = req.session.user;
     const id = user._id
-    const userData = await User.findById(id).lean();
+    userData = await User.findById(id).lean();
     console.log(userData)
+
+    }
+    
+    
 
     try {
         let page = 1; // Initial page is always 1 for the GET request
         const limit = 9;
-        const loadCatData = await Category.find().lean();
+        const loadCatData = await Category.find({}).lean();
         const proData = await Product.find({ is_blocked: false })
             .skip((page - 1) * limit)
             .limit(limit)
@@ -61,7 +110,7 @@ const getProduct = async (req, res) => {
             .lean();
         const count = await Product.countDocuments({ is_blocked: false });
         const totalPages = Math.ceil(count / limit);
-        
+        const proCount = count
     
         // const user = await User.findById(userId).populate('wishlist').lean()
         // const wishItem = user.wishlist
@@ -78,14 +127,15 @@ const getProduct = async (req, res) => {
         const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
         const newProduct = await Product.find({is_blocked: false}).sort({_id:-1}).limit(3).lean()
         console.log(newProduct)
-  
+        
         res.render('user/products', { userData ,
             proData,
             pages,
             currentPage: page,
             loadCatData,
             newProduct,
-            currentFunction: 'getProductsPage',    
+            currentFunction: 'getProductsPage',  
+            proCount  
             
         });
     } catch (error) {
@@ -125,63 +175,19 @@ const getProductsPage = async (req, res) => {
 };
 
 
-const searchProducts = async (req, res) => {
+
+
+const aboutPage = async(req, res)=>{
     try {
-        const user = req.session.user;
-        let search = req.query.search || '';
-        let page = parseInt(req.query.page) || 1;
-        const limit = 9;
-        console.log(search)
+        const userData = req.session.user
         
-        const loadCatData = await Category.find().lean();
 
-        
-        const searchResult = await Product.find({
-            is_blocked: false,
-            name: { $regex: ".*" + search + ".*", $options: "i" }
-        })       
-        .skip((page - 1) * limit) 
-        .limit(limit)
-        .lean();
-        const proCount = searchResult.length
-        const newProduct = await Product.find({}).sort({_id:-1}).limit(3).lean()
-        
-        console.log(searchResult)
-        // Count the total number of matching documents
-        const count = await Product.countDocuments({
-            isBlocked: false,
-            name: { $regex: "." + search + ".", $options: "i" }
-        });
 
-        const totalPages = Math.ceil(count / limit);
-        const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
 
-        if (user) {
-            const findUser = await User.findById(user);
-
-            res.render("user/products", {
-                user: findUser,
-                proData: searchResult,
-                loadCatData,
-                pages,
-                currentPage: page,
-                proCount ,
-                newProduct
-            });
-        } else {
-            res.render("user/products", {
-                proData: searchResult,
-                loadCatData,
-                pages,
-                currentPage: page,
-                count ,
-                newProduct
-            });
-        }
-
+        console.log(userData)
+        res.render('user/aboutPage' , {userData})
     } catch (error) {
-        console.log(error.message);
-        res.status(500).send("Internal Server Error");
+        
     }
 }
 
@@ -192,62 +198,107 @@ const ProductView = async(req, res)=>{
     try {
       const proId = req.query.id
       const proData = await Product.findById(proId).lean()
+      console.log(proData )
       const userData = req.session.user
-      const userId = userData._id
-        console.log(userData)
-        let productExistInCart
 
-        const ObjectId = mongoose.Types.ObjectId;
+      
+
+        
+        let reviewExist = true //variable to check review exist or not
+        const reviews = await Review.aggregate([
+            {
+              $match: {isListed: true , productId: ObjectId(proId) }
+            }
+            
+          ]);
+        console.log(reviews)
+
+        if(reviews.length == 0){
+            reviewExist = false
+        }
+
+        let userCanReview = false; //variable to check user can able to review or not
+
+        
+        let productExist  //store the user data if the product exist in the respective user's cart
+        let productExistInCart //
+
+      if(userData){
+
+        const userId = userData._id
+        console.log(userData)
+        
 
         // query
-        const productExist = await User.find({ _id: userId , "cart.product": new ObjectId(proId)}).lean();
+        productExist = await User.find({ _id: userId , "cart.product": new ObjectId(proId)}).lean();
 
         console.log(productExist)
         if(productExist.length === 0) productExistInCart = false
         else productExistInCart = true
         console.log(productExistInCart) 
 
-        const reviews = await Review.find({productId: proData._id}).lean()
-
-        console.log(reviews)
-        let reviewExist = true
-        if(reviews.length == 0){
-            reviewExist = false
-        }
         
+        // const Orders = await Order.find({userId : ObjectId(userId) , status: "Delivered"},{product:1,_id:0})
 
-        const Orders = await Order.find({userId : ObjectId(userId) , status: "Delivered"},{product:1,_id:0})
+        // console.log(Orders)
 
-        let userCanReview = false;
-
-        for(let i of Orders){
+        // for(let i of Orders){
             
-            for(let j of i.product){
-                console.log(j.name)
-                if(j.name == proData.name){
-                    console.log("I found " , j.name)
-                    userCanReview = true
-                }
-            }
-        }
+        //     for(let j of i.product){
+        //         console.log(j.name)
+        //         if(j.name == proData.name){
+        //             console.log("I found " , j.name)
+        //             userCanReview = true
+        //         }
+        //     }
+        // }
 
-          console.log(userCanReview)
-
-          await Product.updateOne(
+        
+      
+          const orders = await Order.aggregate([
             {
-                _id: proId
+              $match: {
+                userId: ObjectId(userId),
+                status: "Delivered"
+              }
             },
             {
-                $inc:{
-                    popularity:1
-                }
+              $unwind: "$product"
+            },
+            {
+              $match: {
+                "product.id": proData._id
+              }
+            },
+            {
+              $project: {
+                _id: 0,
+                product: 1
+              }
             }
-        )
+          ]);;
+          console.log("Orders:", orders);
+      
+          
+          if (orders.length > 0) {
+            userCanReview = true;
+            console.log("I found", orders[0].product.name);
+          }
+
+        console.log(userCanReview)
+
+      }
+      
+
+        
+
+
 
       if (userData) {
+        console.log(userCanReview)
         res.render('user/productview', {proData, userData ,  productExistInCart , reviews , userCanReview , reviewExist})
       }else{
-        res.render('user/productview', {proData , userCanReview , reviewExist})    
+        res.render('user/productview', {proData , reviews , reviewExist})    
       }
     } catch (error) {
         console.log(error);
@@ -399,9 +450,13 @@ const doLogin = async(req, res)=>{
        let password = req.body.password
 
        userData = await User.findOne({ email: email });
-       console.log(userData.password)
+       if(userData){
+        console.log(userData.password)
        console.log(email)
        console.log(password)
+
+       }
+       
 
        if(userData){
           if (await argon2.verify(userData.password, password)){ 
@@ -478,23 +533,40 @@ const doSignup = async(req, res)=>{
 }
 
 
-const productSearch = async (req, res) => {
-    const { search, catId } = req.body;
 
-    console.log(search, catId);
+const productSearch = async(req, res)=>{
+    const { search, catId } = req.body
 
-    try {
-        const query = { name: { $regex: search, $options: 'i' } };
-        if (catId) {
-            query.category = catId;
-        }
-        const products = await Product.find(query);
-        res.json(products);
-    } catch (error) {
-        console.log(error);
-        return res.status(500).send();
-    }
-};
+
+
+    if(catId){   
+
+        try {
+            const products = await Product.find({ category: catId, name: { $regex: search, $options: 'i' } })
+            .populate('category', 'category');
+            res.json(products);
+          } catch (error) {
+            console.log(error);
+            return res.status(500).send();
+          }
+          
+          
+     }else{
+        try {
+            const products = await Product.find({ name: { $regex: search, $options: 'i' } })
+            .populate('category', 'category');
+
+
+            res.json(products);
+          } catch (error) {
+            console.log(error);
+            return res.status(500).send();
+          }
+          
+     }
+    }
+
+
 
 
     const sortProductByName = async (req, res) => {
@@ -521,8 +593,8 @@ const productSearch = async (req, res) => {
             const count = await Product.countDocuments(query);
             const totalPages = Math.ceil(count / limit);
             const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
-    
-            res.json({ productData: products, pages, currentPage: page, sort });
+            const proCount = count
+            res.json({ productData: products, pages, currentPage: page, sort , count ,proCount});
         } catch (error) {
             console.log(error);
             res.status(500).json({ error: 'Internal server error' });
@@ -552,8 +624,8 @@ const productSearch = async (req, res) => {
             const count = await Product.countDocuments(query);
             const totalPages = Math.ceil(count / limit);
             const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
-    
-            res.json({ productData: products, pages, currentPage: page, sort });
+            const proCount = count
+            res.json({ productData: products, pages, currentPage: page, sort , count , proCount});
         } catch (error) {
             console.log(error);
             res.status(500).json({ error: 'Internal server error' });
@@ -580,5 +652,5 @@ module.exports = {
     sortProductByName,
     sortProductByPrice,
     googleCallback,
-    searchProducts
+    aboutPage
 }

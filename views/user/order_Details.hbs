@@ -18,6 +18,9 @@
     <link rel="shortcut icon" type="image/x-icon" href="/assetsAdmin/imgs/theme/favicon.svg">
     <!-- Template CSS -->
     <link href="/assetsAdmin/css/main.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 </head>
 
 <body>
@@ -42,7 +45,6 @@
                             <nav class="nav nav-pills flex-lg-column mb-4">
                                 <a class="nav-link " aria-current="page" href="/profile">General</a>
                                 <a class="nav-link active" href="/my_orders">Orders</a>
-                                <a class="nav-link" href="#">Track Your Order</a>
                                 <a class="nav-link" href="/adresses">My Address</a>
                                 <a class="nav-link" href="/wallet">Wallet</a>
                                 <a class="nav-link" href="/logout">Log out</a>
@@ -147,7 +149,9 @@
                                                                     </a>
                                                                 </td>
                                                                 <td> ₹{{this.price}} </td>
-                                                                <td>{{this.quantity}} </td>
+                                                                <td >{{this.quantity}}  </td>
+                                                                
+                                                                
                                                                 <td class="text-end">{{multiply this.quantity
                                                                     this.price}}</td>
                                                             </tr>
@@ -166,6 +170,7 @@
                                                                             <input type="hidden" name="user_wallet" value="{{userData.wallet}}">
                                                                             <input type="hidden" name="pay-method"
                                                                                 value="{{myOrderDetails.paymentMethod}}">
+                                                                            
                                                                         </dl>
                                                                         {{#if myOrderDetails.coupon}}
                                                                         <dl class="dlist">
@@ -189,9 +194,15 @@
                                                                         </dl>
                                                                         <dl class="dlist">
                                                                             <dt>Grand total:</dt>
+                                                                            {{#if myOrderDetails.amountAfterDscnt}}
                                                                             <dd> <b
                                                                                     class="h5">{{myOrderDetails.amountAfterDscnt}}</b>
                                                                             </dd>
+                                                                            {{else}}
+                                                                            <dd> <b
+                                                                                    class="h5">{{myOrderDetails.total}}</b>
+                                                                            </dd>
+                                                                            {{/if}}
                                                                         </dl>
                                                                         <dl class="dlist">
                                                                             <dt class="text-muted">Status:</dt>
@@ -375,6 +386,19 @@ const retryPayment = async (id , status) => {
   const changeStatus = async (id, status, status2) => {
   try {
     // Declare variables for wallet and updatedWallet
+    // let obj = {};
+    //let n = myOrderDetails.product.length;
+
+    //for(let i = 1; i <= n; i++) {
+    //    obj[`qty${i}`] = myOrderDetails.product[i].quantity;
+    //    obj[`id${i}`] = myOrderDetails.product[i].id;
+    //}
+
+    //
+    
+    console.log(obj);
+
+    
     let wallet = Number(document.getElementsByName('user_wallet')[0].value);
     let updatedWallet;
 
@@ -401,7 +425,8 @@ const retryPayment = async (id , status) => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         updateWallet: updatedWallet,
-        payMethod: payMethod,
+        payMethod: payMethod
+        //{...obj}
       })
     });
 

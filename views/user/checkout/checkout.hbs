@@ -56,7 +56,7 @@
                           class="font-xl text-brand fw-900" id="total">{{add subTotal 50}}</span></span>
 
                     </td>
-                    <input type="hidden" name="subTotal" value="{{add subTotal 0}}" id="subTotal">
+                    <input type="hidden" name="subTotal" value="{{add subTotal 50}}" id="subTotal">
                   </tr>
                 </tbody>
               </table>
@@ -78,7 +78,7 @@
         </select>
     </div>
     <div class="form-group col-lg-6">
-        <button id="couponBtn" onclick="toggleCoupon()" type="button" class="btn btn-sm">
+        <button id="couponBtn" onclick="toggleCoupon()" type="button" class="btn btn-sm" style="width: 120px;">
             <i class="fi-rs-label mr-10"></i>Apply
         </button>
     </div>
@@ -101,19 +101,19 @@
               <div class="payment_option">
                 <div class="custome-radio">
                   <input class="form-check-input" required="" type="radio" name="payment_option" id="cash-on-delivery"
-                    checked="" value="cash-on-delivery">
+                     value="cash-on-delivery">
                   <label class="form-check-label" for="cash-on-delivery" data-bs-toggle="collapse"
                     data-target="#bankTranfer" aria-controls="bankTranfer">Cash On Delivery</label>
                 </div>
                 <div class="custome-radio">
                   <input class="form-check-input" required="" type="radio" name="payment_option" value="razorpay"
-                    id="razorpay" checked="">
+                    id="razorpay" >
                   <label class="form-check-label" for="razorpay" data-bs-toggle="collapse" data-target="#checkPayment"
                     aria-controls="checkPayment"> Razor Pay</label>
                 </div>
                 <div class="custome-radio">
                   <input class="form-check-input" required="" type="radio" name="payment_option" value="wallet"
-                    id="wallet" checked="">
+                    id="wallet" >
                   <label class="form-check-label" for="wallet" data-bs-toggle="collapse" data-target="#paypal"
                     aria-controls="paypal"> Wallet</label>
                 </div>

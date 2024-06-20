@@ -2,7 +2,123 @@
     <script src="https://cdn.jsdelivr.net/npm/handlebars/dist/handlebars.min.js"></script>
 </head>
 
+<aside class="navbar-aside" id="offcanvas_aside">
+    <div class="aside-top">
+        <a href="/admin/home" class="brand-wrap">
+            <img src="/assetsAdmin/imgs/theme/logo.svg" class="logo" alt="Evara Dashboard">
+        </a>
+        <div>
+            <button class="btn btn-icon btn-aside-minimize"> <i class="text-muted material-icons md-menu_open"></i>
+            </button>
+        </div>
+    </div>
+    <nav>
+        <ul class="menu-aside">
+            <li class="menu-item active">
+                <a class="menu-link" href="/admin/home"> <i class="icon material-icons md-home"></i>
+                    <span class="text">Dashboard</span>
+                </a>
+            </li>
+            <li class="menu-item ">
+                <a class="menu-link" href="/admin/product"> <i class="icon material-icons md-shopping_bag"></i>
+                    <span class="text">Products</span>
+                </a>
 
+            </li>
+            <li class="menu-item ">
+                <a class="menu-link" href="/admin/orders"> <i class="icon material-icons md-shopping_cart"></i>
+                    <span class="text">Orders</span>
+                </a>
+
+            </li>
+            {{!-- <li class="menu-item has-submenu">
+                <a class="menu-link" href="page-sellers-cards.html"> <i class="icon material-icons md-store"></i>
+                    <span class="text">Sellers</span>
+                </a>
+                <div class="submenu">
+                    <a href="page-sellers-cards.html">Sellers cards</a>
+                    <a href="page-sellers-list.html">Sellers list</a>
+                    <a href="page-seller-detail.html">Seller profile</a>
+                </div>
+            </li> --}}
+            {{!-- <li class="menu-item has-submenu">
+                <a class="menu-link" href="page-form-product-1.html"> <i class="icon material-icons md-add_box"></i>
+                    <span class="text">Add product</span>
+                </a>
+                <div class="submenu">
+                    <a href="page-form-product-1.html">Add product 1</a>
+                    <a href="page-form-product-2.html">Add product 2</a>
+                    <a href="page-form-product-3.html">Add product 3</a>
+                    <a href="page-form-product-4.html">Add product 4</a>
+                </div>
+            </li> --}}
+            <li class="menu-item ">
+                <a class="menu-link" href="/admin/category"> <i class="icon material-icons md-category"></i>
+                    <span class="text">Category</span>
+                </a>
+
+            </li>
+            
+
+             <li class="menu-item ">
+                    <a class="menu-link" href="/admin/coupons"><i class="icon fa-solid fa-ticket"></i>
+                        <span class="text">Coupons</span>
+                    </a>
+      </li>
+            <li class="menu-item">
+                <a class="menu-link" href="/admin/manage_users"> <i class="icon material-icons md-person"></i>
+                    <span class="text">Users</span>
+                </a>
+
+            </li>
+                         <li class="menu-item ">
+                    <a class="menu-link" href="/admin/banners"> <i class="icon material-icons md-local_offer"></i>
+                        <span class="text"> Banner </span>
+                    </a>
+                </li>
+                     <li class="menu-item">
+                <a class="menu-link" href="/admin/reviews"> <i class="icon material-icons md-comment"></i>
+                    <span class="text">Reviews</span>
+                </a>
+            </li>
+            <li class="menu-item ">
+                <a class="menu-link" href="/admin/brands"> <i class="icon material-icons md-stars"></i>
+                    <span class="text">Brands</span> </a>
+            </li>
+          
+            {{!-- <li class="menu-item">
+                <a class="menu-link" href="/admin/reviews"> <i class="icon material-icons md-comment"></i>
+                    <span class="text">Reviews</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a class="menu-link" href="page-brands.html"> <i class="icon material-icons md-stars"></i>
+                    <span class="text">Brands</span> </a>
+            </li>
+            <li class="menu-item">
+                <a class="menu-link" disabled href="#"> <i class="icon material-icons md-pie_chart"></i>
+                    <span class="text">Statistics</span>
+                </a>
+            </li> --}}
+        </ul>
+        <hr>
+        <ul class="menu-aside">
+            <li class="menu-item ">
+                <a class="menu-link" href="#"> <i class="icon material-icons md-settings"></i>
+                    <span class="text">Settings</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a class="menu-link btn btn-primary" href="/admin/logout"> <i
+                        class="icon material-icons md-exit_to_app"></i>
+                    Logout
+                </a>
+            </li>
+        </ul>
+        <br>
+        <br>
+    </nav>
+</aside>
     
 
 <main class="main-wrap">
@@ -15,6 +131,8 @@
                 </div>
 
             </div>
+
+
             <div class="row">
                 <div class="col-lg-3">
                     <div class="card card-body mb-4">
@@ -24,7 +142,7 @@
                                 <h6 class="mb-1 card-title">Total Revenue</h6>
                                 <span>₹{{totalRevnue}}</span>
                                 <span class="text-sm">
-                                    Shipping fees are not included
+                                    
                                 </span>
                             </div>
                         </article>
@@ -37,7 +155,7 @@
                             <div class="text">
                                 <h6 class="mb-1 card-title">Total Orders</h6> <span>{{thisMonthOrder}}</span>
                                 <span class="text-sm">
-                                    Excluding orders in transit
+                                    
                                 </span>
                             </div>
                         </article>
@@ -50,7 +168,7 @@
                             <div class="text">
                                 <h6 class="mb-1 card-title">This Month sales</h6> <span>{{thisMonthOrder}}</span>
                                 <span class="text-sm">
-                                    In 19 Categories
+                                    
                                 </span>
                             </div>
                         </article>
@@ -63,7 +181,7 @@
                             <div class="text">
                                 <h6 class="mb-1 card-title">Monthly Earning</h6> <span>₹{{thisMonthSales}}</span>
                                 <span class="text-sm">
-                                    Based in your local time.
+                                    
                                 </span>
                             </div>
                         </article>
@@ -71,28 +189,24 @@
                 </div>
             </div>
             <div class="row">
-    <div class="col-xl-8 col-lg-12">
-        <div class="card mb-4">
-            <article class="card-body">
-                <h5 class="card-title">Sale statistics</h5>
-                <select id="timeRange" class="form-select mb-3">
-                    <option value="daily">Daily</option>
-                    <option value="weekly">Weekly</option>
-                    <option value="monthly">Monthly</option>
-                </select>
-                <canvas id="myChart1" height="120px"></canvas>
-            </article>
-        </div>
-    </div>
-    <div class="col-xl-4 col-lg-12">
-        <div class="card mb-4">
-            <article class="card-body">
-                <h5 class="card-title">Revenue</h5>
-                <canvas id="myChar" height="265px"></canvas>
-            </article>
-        </div>
-    </div>
-</div>
+                <div class="col-xl-8 col-lg-12">
+                    <div class="card mb-4">
+                        <article class="card-body">
+                            <h5 class="card-title">Sale statistics</h5>
+                            <canvas id="myChart1" height="120px"></canvas>
+                        </article>
+                    </div>
+
+                </div>
+                <div class="col-xl-4 col-lg-12">
+                    <div class="card mb-4">
+                        <article class="card-body">
+                            <h5 class="card-title">Revenue</h5>
+                            <canvas id="myChar" height="265px"></canvas>
+                        </article>
+                    </div>
+                </div>
+            </div>
 
 
 
@@ -133,131 +247,91 @@
                 </div>
 
             <div class="row">
-            <div class="col-lg-4">
-                 <div class="card mb-4">
-                <header class="card-header">
-                    <div class="row align-items-center">
-                        
-                       
-                        <div class="col-md-12 col-12">
-                            <h5>Best Selling (5)</h5>
-                        </div>
-                        
-                    </div>
-                </header> <!-- card-header end// -->
-                <div class="card-body">
-                    {{#each bestSellings}}
-                    <article class="itemlist">
-                        <div class="row align-items-center">
-                            <div class="col col-check flex-grow-0">
-                                {{!-- <div class="form-check">
-                                    <input class="form-check-input" type="checkbox">
-                                </div> --}}
+                <div class="col-lg-16">
+                    <div class="card mb-4">
+                        <header class="card-header">
+                            <div class="row align-items-center">
+                                <div class="col-md-12 col-12">
+                                    <h5>Top 5 Selling Products</h5>
+                                </div>
                             </div>
-                            <div class="col-lg-4 col-sm-4 col-8 flex-grow-1 col-name">
-                                <a class="itemside" href="#">
-                                    <div class="left">
-                                        <img src="/images/products/{{imageUrl.[0]}}" class="img-sm img-thumbnail" alt="Item">
-                                    </div>
-                                    <div class="info">
-                                        <h6 class="mb-0">{{name}}</h6>
-                                    </div>
-                                </a>
-                            </div>
-                         
-                        </div> <!-- row .// -->
-                    </article> <!-- itemlist  .// -->
-                    {{/each}}
-          
+                        </header> <!-- card-header end// -->
+                    <div class="card-body">
+                        <div class="row gx-3 row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 row-cols-xxl-5">
+                        {{#each bestSellings}}
+                            <div class="col">
+                                <div class="card card-product-grid">
+                                    <a href="#" class="img-wrap"> <img src="/images/products/{{productDetails.imageUrl.[0]}}" alt="Product"> </a>
+                                    <div class="info-wrap">
+                                        <a href="#" class="title text-truncate">{{productDetails.name}}</a>
+                                    <div class="price mb-2">₹ {{productDetails.price}}</div> <!-- price.// -->
+                                </div>
+                            </div> <!-- card-product  end// -->
+                        </div> <!-- col.// -->
+                        {{/each}}
+                    </div> <!-- row.// -->
                 </div> <!-- card-body end// -->
             </div> <!-- card end// -->
           
 
             </div>
-              <div class="col-lg-4">
-                 <div class="card mb-4">
-                <header class="card-header">
-                    <div class="row align-items-center">
-                        
-                       
-                        <div class="col-md-12 col-12">
-                            <h5>Popular products (5)</h5>
-                        </div>
-                        
-                    </div>
-                </header> <!-- card-header end// -->
-                <div class="card-body">
-                    {{#each popuarProducts}}
-                    <article class="itemlist">
-                        <div class="row align-items-center">
-                            <div class="col col-check flex-grow-0">
-                                {{!-- <div class="form-check">
-                                    <input class="form-check-input" type="checkbox">
-                                </div> --}}
-                            </div>
-                            <div class="col-lg-4 col-sm-4 col-8 flex-grow-1 col-name">
-                                <a class="itemside" href="#">
-                                    <div class="left">
-                                        <img src="/images/products/{{imageUrl.[0]}}" class="img-sm img-thumbnail" alt="Item">
-                                    </div>
-                                    <div class="info">
-                                        <h6 class="mb-0">{{name}}</h6>
-                                    </div>
-                                </a>
-                            </div>
-                         
-                        </div> <!-- row .// -->
-                    </article> <!-- itemlist  .// -->
-                    {{/each}}
-          
-                </div> <!-- card-body end// -->
-            </div> <!-- card end// -->
-          
-
+            <div class="col-lg-16">
+    <div class="card mb-4">
+        <header class="card-header">
+            <div class="row align-items-center">
+                <div class="col-md-12 col-12">
+                    <h5>Top 5 Brands</h5>
+                </div>
             </div>
-              <div class="col-lg-4">
-                 <div class="card mb-4">
-                <header class="card-header">
-                    <div class="row align-items-center">
-                        
-                       
-                        <div class="col-md-12 col-12">
-                            <h5>Best Selling Categories </h5>
+        </header> <!-- card-header end// -->
+        <div class="card-body">
+            <div class="row gx-3 row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 row-cols-xxl-5">
+                {{#each popularBrands}}
+                <div class="col">
+                    <div class="card card-product-grid">
+                        <a href="" class="img-wrap"> <img src="/images/products/{{this.brandImageUrl}}" alt="Product"> </a>
+                        <div class="info-wrap">
+                            <a href="#" class="title text-truncate">{{this.brandName}}</a>
+                            <!-- Example price, replace with actual logic if needed -->
+                            <div class="price mb-2"> {{this.productCount}} items</div> 
+                            
                         </div>
-                        
-                    </div>
-                </header> <!-- card-header end// -->
-                <div class="card-body">
-                    {{#each bestSellingCategory}}
-                    <article class="itemlist">
-                        <div class="row align-items-center">
-                            <div class="col col-check flex-grow-0">
-                                {{!-- <div class="form-check">
-                                    <input class="form-check-input" type="checkbox">
-                                </div> --}}
-                            </div>
-                            <div class="col-lg-4 col-sm-4 col-8 flex-grow-1 col-name">
-                                <a class="itemside" href="#">
-                                    <div class="left">
-                                        <img src="/images/products/{{imageUrl}}" class="img-sm img-thumbnail" alt="Item">
-                                    </div>
-                                    <div class="info">
-                                        <h6 class="mb-0">{{category}}</h6>
-                                    </div>
-                                </a>
-                            </div>
-                         
-                        </div> <!-- row .// -->
-                    </article> <!-- itemlist  .// -->
-                    {{/each}}
-          
-                </div> <!-- card-body end// -->
-            </div> <!-- card end// -->
-          
+                    </div> <!-- card-product  end// -->
+                </div> <!-- col.// -->
+                {{/each}}
+            </div> <!-- row.// -->
+        </div> <!-- card-body end// -->
+    </div> <!-- card end// -->
+</div>
 
+<div class="col-lg-16">
+    <div class="card mb-4">
+        <header class="card-header">
+            <div class="row align-items-center">
+                <div class="col-md-12 col-12">
+                    <h5>Top Selling Categories</h5>
+                </div>
             </div>
+        </header> <!-- card-header end// -->
+        <div class="card-body">
+            <div class="row gx-3 row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 row-cols-xxl-5">
+                {{#each bestSellingCategory}}
+                <div class="col">
+                    <div class="card card-product-grid">
+                        <a href="#" class="img-wrap"> <img src="/images/products/{{categoryDetails.imageUrl}}" alt="Category"> </a>
+                        <div class="info-wrap">
+                            <a href="#" class="title text-truncate">{{categoryDetails.category}}</a>
+                        </div>
+                    </div> <!-- card-product  end// -->
+                </div> <!-- col.// -->
+                {{/each}}
+            </div> <!-- row.// -->
+        </div> <!-- card-body end// -->
+    </div> <!-- card end// -->
+</div>
+
             
-            
+        
         </div>
 
         </section> <!-- content-main end// -->
@@ -285,62 +359,57 @@
 
 
 
-let months, ordersByMonth, revenueByMonth;
+    let months
+    let ordersByMonth
+    let revenueByMonth
+    const getChartData = async () => {
+        const response = await fetch('/admin/get_chart_data', {
+            headers: { 'Content-Type': "application/json" },
+        })
 
-const getChartData = async (timeRange = 'monthly') => {
-    const response = await fetch(`/admin/get_chart_data?timeRange=${timeRange}`, {
-        headers: { 'Content-Type': 'application/json' },
-    });
+        const data = await response.json()
 
-    const data = await response.json();
+        months = data.months
+        console.log(typeof months, months)
+        ordersByMonth = data.odersByMonth
+        revenueByMonth = data.revnueByMonth
 
-    months = data.months;
-    console.log(typeof months, months);
-    ordersByMonth = data.ordersByMonth;  // Fixed typo
-    revenueByMonth = data.revenueByMonth; // Fixed typo
+        //graph functions
+        salesGraph(months,ordersByMonth)
+        revenue(months,revenueByMonth)
 
-    // Update the graphs
-    salesGraph(months, ordersByMonth);
-    revenue(months, revenueByMonth);
-};
+    }
 
-// Event listener for time range selection
-document.getElementById('timeRange').addEventListener('change', (event) => {
-    const selectedTimeRange = event.target.value;
-    getChartData(selectedTimeRange);
-});
+    getChartData()
 
-// Initial data fetch
-getChartData();
 
-// Function to create sales graph
-function salesGraph(months, ordersByMonth) {
-    const ctx = document.getElementById('myChart1').getContext('2d');
-    new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: months,
-            datasets: [{
-                label: '# of Sales',
-                data: ordersByMonth,
-                borderWidth: 1
-            }]
-        },
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true
+    function salesGraph(months,ordersByMonth) {
+        const ctx = document.getElementById('myChart1');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels:months ,
+                datasets: [{
+                    label: '# of Sales',
+                    data: ordersByMonth,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
                 }
             }
-        }
-    });
-}
+        })
+    }
 
-// Function to create revenue graph
-function revenue(months, revenueByMonth) {
-    const ctx1 = document.getElementById('myChar').getContext('2d');
+
+function revenue(months,revenueByMonth){
+    const ctx1 = document.getElementById('myChar');
     new Chart(ctx1, {
-        type: 'bar',
+        type: 'line',
         data: {
             labels: months,
             datasets: [{
@@ -358,6 +427,8 @@ function revenue(months, revenueByMonth) {
         }
     });
 }
+
+
 
 
 

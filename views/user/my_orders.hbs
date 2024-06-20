@@ -41,7 +41,6 @@
                             <nav class="nav nav-pills flex-lg-column mb-4">
                                 <a class="nav-link " aria-current="page" href="/profile">General</a>
                                 <a class="nav-link active" href="/my_orders">Orders</a>
-                                <a class="nav-link" href="#">Track Your Order</a>
                                 <a class="nav-link" href="/adresses">My Address</a>
                                 <a class="nav-link" href="/wallet">Wallet</a>
                                 <a class="nav-link" href="/logout">Log out</a>
@@ -53,43 +52,24 @@
                 <div>
                     <h2 class="content-title card-title">Order List </h2>
                 </div>
-                <div>
-                    <input type="text" placeholder="Search order ID" class="form-control bg-white">
-                </div>
+               
             </div>
              <div class="card mb-4">
-                <header class="card-header">
-                    <div class="row gx-3">
-                        <div class="col-lg-4 col-md-6 me-auto">
-                            <input type="text" placeholder="Search..." class="form-control">
-                        </div>
-                        <div class="col-lg-2 col-6 col-md-3">
-                            <select class="form-select">
-                                <option>Status</option>
-                                <option>Active</option>
-                                <option>Disabled</option>
-                                <option>Show all</option>
-                            </select>
-                        </div>
-                        <div class="col-lg-2 col-6 col-md-3">
-                            <select class="form-select">
-                                <option>Show 20</option>
-                                <option>Show 30</option>
-                                <option>Show 40</option>
-                            </select>
-                        </div>
-                    </div>
-                </header> <!-- card-header end// -->
+                <!-- card-header end// -->
                 <div class="card-body">
                     <div class="container">
   <div class="row">
     {{#each myOrders}}
-      <div class="col-md-4 mb-4">
+      <div class="col-md-3 mb-3">
         <div class="card">
           <div class="card-body">
-            <h5 class="card-title text-center">Order #{{this.orderId}}</h5>
+            <h5 class="card-title text-center">Order_{{this.orderId}}</h5>
             <p class="card-text text-center"><strong>Payment Method:</strong> {{this.paymentMethod}}</p>
+            {{#if this.amountAfterDscnt}}
+            <p class="card-text text-center"><strong>Total:</strong> ₹{{this.amountAfterDscnt}}</p>
+            {{else}}
             <p class="card-text text-center"><strong>Total:</strong> ₹{{this.total}}</p>
+            {{/if}}
             <p class="card-text text-center"><strong>Status:</strong> <span class="badge rounded-pill alert-warning">{{this.status}}</span></p>
             <p class="card-text text-center"><strong>Date:</strong> {{this.date}}</p>
             <div class="text-center">
@@ -101,9 +81,6 @@
     {{/each}}
   </div>
 </div>
- <!-- table-responsive //end -->
-                </div> <!-- card-body end// -->
-            </div> <!-- card end// -->
 <div class="pagination-area mt-15 mb-50">
   <nav aria-label="Page navigation example">
     <ul class="pagination justify-content-start">
@@ -115,6 +92,10 @@
     </ul>
   </nav>
 </div>
+ <!-- table-responsive //end -->
+                </div> <!-- card-body end// -->
+            </div> <!-- card end// -->
+
 
         </section> <!-- content-main end// -->
                         </div> <!-- col.// -->

@@ -176,7 +176,12 @@
 			const elem= document.getElementById(id)
 			if( act == 'inc')
 			{{!-- stock > --}}
-				 elem.value < 4 ? elem.value=Number(elem.value)+1 : '' 
+				 elem.value <  4? elem.value=Number(elem.value)+1 : Swal.fire({
+                    title: 'Limit Reached',
+                    text: 'You cannot order more than 4 units of this product.',
+                    icon: 'info',
+                    confirmButtonText: 'OK'
+                });
 			else if( act == 'dec' )
 				elem.value > 1 ? elem.value=Number(elem.value)-1 :''
 			

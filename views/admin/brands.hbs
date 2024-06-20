@@ -1,0 +1,221 @@
+<head>
+    <!-- SweetAlert2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <!-- SweetAlert2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+</head>
+
+<aside class="navbar-aside" id="offcanvas_aside">
+    <div class="aside-top">
+        <a href="/admin/home" class="brand-wrap">
+            <img src="/assetsAdmin/imgs/theme/logo.svg" class="logo" alt="Evara Dashboard">
+        </a>
+        <div>
+            <button class="btn btn-icon btn-aside-minimize"> <i class="text-muted material-icons md-menu_open"></i>
+            </button>
+        </div>
+    </div>
+    <nav>
+        <ul class="menu-aside">
+            <li class="menu-item ">
+                <a class="menu-link" href="/admin/home"> <i class="icon material-icons md-home"></i>
+                    <span class="text">Dashboard</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a class="menu-link" href="/admin/product"> <i class="icon material-icons md-shopping_bag"></i>
+                    <span class="text">Products</span>
+                </a>
+
+            </li>
+            <li class="menu-item ">
+                <a class="menu-link" href="/admin/orders"> <i class="icon material-icons md-shopping_cart"></i>
+                    <span class="text">Orders</span>
+                </a>
+
+            </li>
+            {{!-- <li class="menu-item has-submenu">
+                <a class="menu-link" href="page-sellers-cards.html"> <i class="icon material-icons md-store"></i>
+                    <span class="text">Sellers</span>
+                </a>
+                <div class="submenu">
+                    <a href="page-sellers-cards.html">Sellers cards</a>
+                    <a href="page-sellers-list.html">Sellers list</a>
+                    <a href="page-seller-detail.html">Seller profile</a>
+                </div>
+            </li> --}}
+            {{!-- <li class="menu-item has-submenu">
+                <a class="menu-link" href="page-form-product-1.html"> <i class="icon material-icons md-add_box"></i>
+                    <span class="text">Add product</span>
+                </a>
+                <div class="submenu">
+                    <a href="page-form-product-1.html">Add product 1</a>
+                    <a href="page-form-product-2.html">Add product 2</a>
+                    <a href="page-form-product-3.html">Add product 3</a>
+                    <a href="page-form-product-4.html">Add product 4</a>
+                </div>
+            </li> --}}
+            <li class="menu-item">
+                <a class="menu-link" href="/admin/category"> <i class="icon material-icons md-category"></i>
+                    <span class="text">Category</span>
+                </a>
+
+            </li>
+            
+
+             <li class="menu-item ">
+                    <a class="menu-link" href="/admin/coupons"><i class="icon fa-solid fa-ticket"></i>
+                        <span class="text">Coupons</span>
+                    </a>
+      </li>
+            <li class="menu-item">
+                <a class="menu-link" href="/admin/manage_users"> <i class="icon material-icons md-person"></i>
+                    <span class="text">Users</span>
+                </a>
+
+            </li>
+             <li class="menu-item ">
+                    <a class="menu-link" href="/admin/banners"> <i class="icon material-icons md-local_offer"></i>
+                        <span class="text"> Banner </span>
+                    </a>
+                </li>
+                     <li class="menu-item">
+                <a class="menu-link" href="/admin/reviews"> <i class="icon material-icons md-comment"></i>
+                    <span class="text">Reviews</span>
+                </a>
+            </li>
+            <li class="menu-item active">
+                <a class="menu-link" href="/admin/brands"> <i class="icon material-icons md-stars"></i>
+                    <span class="text">Brands</span> </a>
+            </li>
+           
+
+        </ul>
+        <hr>
+        <ul class="menu-aside">
+            <li class="menu-item ">
+                <a class="menu-link" href="#"> <i class="icon material-icons md-settings"></i>
+                    <span class="text">Settings</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a class="menu-link btn btn-primary" href="/admin/logout"> <i
+                        class="icon material-icons md-exit_to_app"></i>
+                    Logout
+                </a>
+            </li>
+        </ul>
+        <br>
+        <br>
+    </nav>
+</aside>
+     <main class="main-wrap">
+        <section class="content-main">
+            <div class="content-header">
+                <div>
+                    <h2 class="content-title card-title">Brand </h2>
+                    <p>Brand and vendor management</p>
+                </div>
+                <div>
+                    <a href="/admin/add_brands" class="btn btn-primary"><i class="text-muted material-icons md-post_add"></i>Add New Brand</a>
+                </div>
+            </div>
+            <div class="card mb-4">
+                <!-- card-header end// -->
+                <div class="card-body">
+                    <div class="row gx-3">
+                        {{#each brandData}}
+                        <div class="col-xl-2 col-lg-3 col-md-4 col-6">
+                            <figure class="card border-1">
+                                <div class="card-header bg-white text-center">
+                                    <img height="76" src="/images/products/{{this.brandImageUrl}}" class="img-fluid" alt="Logo">
+                                </div>
+                                <figcaption class="card-body text-center">
+                                    <h6 class="card-title m-0">{{this.brandName}}</h6>
+                                    <a href="#"> {{this.productCount}} products </a>
+                                </figcaption>
+                                 
+                            </figure>
+                            <a href="/admin/edit_brands/{{this.brandId}}" class="btn btn-pill font-sm rounded btn-brand" style="width: 90px;">
+                                    <i class="material-icons md-edit"></i> Edit
+                                </a>
+                          
+                            
+    {{#if this.isListed}}
+      <a data-product-id="{{this.brandId}}" class="btn btn-pill font-sm rounded btn-brand toggle-listing" style="width: 90px;">
+        <i class="material-icons md-edit"></i>Unlist
+      </a>
+    {{else}}
+      <a data-product-id="{{this.brandId}}" class="btn btn-pill font-sm rounded btn-brand toggle-listing" style="width: 90px;">
+        <i class="material-icons md-edit"></i>List
+      </a>
+    {{/if}}
+                        </div>
+                        {{/each}} <!-- col.// -->
+                    </div> <!-- row.// -->
+                </div> <!-- card-body end// -->
+            </div> <!-- card end// -->
+        </section> <!-- content-main end// -->
+        <footer class="main-footer font-xs">
+            <div class="row pb-30 pt-15">
+                <div class="col-sm-6">
+                    <script>
+                    document.write(new Date().getFullYear())
+                    </script> ©, Evara - HTML Ecommerce Template .
+                </div>
+                <div class="col-sm-6">
+                    <div class="text-sm-end">
+                        All rights reserved
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </main>
+   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> 
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+        <script>
+    $(document).ready(function () {
+        $(document).on('click', '.toggle-listing', function(e){
+            e.preventDefault();
+            var id = $(this).data('product-id');
+            var $this = $(this);
+            var action = $this.text().trim() === 'Unlist' ? 'unlist' : 'list';
+            var confirmText = action === 'unlist' ? 'unlist' : 'list';
+            var successMessage = action === 'unlist' ? 'unlisted' : 'listed';
+
+            Swal.fire({
+                title: "Are you sure?",
+                text: `Do you want to ${confirmText} this brand?`,
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#088178",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: 'POST',
+                        url: '/admin/delete_brands',
+                        contentType: 'application/json',
+                        data: JSON.stringify({ id: id }),
+                        success: function (data) {
+                            console.log(`Brand ${successMessage}`);
+                            Swal.fire({
+                                title: 'Done!',
+                                text: `Brand successfully ${successMessage}!`,
+                                icon: 'success',
+                                confirmButtonText: 'okay'
+                            }).then(() => window.location.reload());
+                        },
+                        error: function (xhr, status, error) {
+                            console.error(`Error ${action}ing brand:`, error);
+                            Swal.fire("Error", "Something went wrong. Please try again later.", "error");
+                        }
+                    });
+                }
+            });
+        });
+    });
+</script>

@@ -72,12 +72,16 @@
                         <span class="text"> Banner </span>
                     </a>
                 </li>
-            {{!-- <li class="menu-item">
-                <a class="menu-link" href="page-reviews.html"> <i class="icon material-icons md-comment"></i>
+             <li class="menu-item">
+                <a class="menu-link" href="/admin/reviews"> <i class="icon material-icons md-comment"></i>
                     <span class="text">Reviews</span>
                 </a>
             </li>
-            <li class="menu-item">
+            <li class="menu-item ">
+                <a class="menu-link" href="/admin/brands"> <i class="icon material-icons md-stars"></i>
+                    <span class="text">Brands</span> </a>
+            </li>
+            {{!-- <li class="menu-item">
                 <a class="menu-link" href="page-brands.html"> <i class="icon material-icons md-stars"></i>
                     <span class="text">Brands</span> </a>
             </li>
@@ -85,7 +89,7 @@
                 <a class="menu-link" disabled href="#"> <i class="icon material-icons md-pie_chart"></i>
                     <span class="text">Statistics</span>
                 </a>
-            </li> --}}
+            </li>  --}}
         </ul>
         <hr>
         <ul class="menu-aside">
@@ -139,7 +143,7 @@
                                 <div class="col-lg-6">
                                     <div class="mb-4">
                                         <label class="form-label">Line 2</label>
-                                        <input name="stock" class="form-control" placeholder="Line 2 (Bold)" type="text"
+                                        <input name="line2" class="form-control" placeholder="Line 2 (Bold)" type="text"
                                             id="line2">
                                     </div>
                                     <h6 class="alertAddProduct mt-1" style="color: red" id="qtyAlert"></h6>
@@ -173,40 +177,33 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-lg-3">
-                                    <div class="mb-4">
-                                        <label class="form-label">Image 1</label>
-                                        <div class="input-group">
-                                            <input class="form-control" type="file" name="image" id="input1"
-                                                accept="image/png, image/jpeg, image/jpg ,image/avif" 
-                                                onchange="viewImage1(event),viewImage(event, 1)"/>
-                                                <label for="input1" id="file-1-preview">
-                                            <img src="" alt="" id="imgView1">
-                                        </div>
-                                        <div class="image-cropper" style="display: none; width: 200px; height: 250px;">
-                                            <img src="" id="croppedImg1" alt="" />
-                                            <button type="button" id="saveButton1"
-                                                class="btn btn-primary">Save</button>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Repeat the above code for Image 2 to Image 5 with appropriate IDs -->
-                                                          
-
-                                <!-- Repeat the above code for Image 2 to Image 5 with appropriate IDs -->
-                                                               
-                                <!-- Repeat the above code for Image 2 to Image 5 with appropriate IDs -->
-
-                            </div>
+    <!-- Image 1 -->
+    <div class="col-lg-3">
+        <div class="mb-4">
+            <label class="form-label">Image 1</label>
+            <div class="input-group">
+                <input class="form-control" type="file" name="image" id="input1"
+                    accept="image/png, image/jpeg, image/jpg ,image/avif"
+                    onchange="viewImage(event, 1)"/>
+                <label for="input1" id="file-1-preview">
+                    <img src="" alt="" id="imgView1">
+                </label>
+            </div>
+            <div class="image-cropper" style="display: none; width: 200px; height: 250px;">
+                <img src="" id="croppedImg1" alt="" />
+                <button type="button" id="saveButton1" class="btn btn-primary">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
                             <h6 id="imgAlert" class=" mt-2" style="color: red;"></h6>
 
 
                             <div class="d-flex g-2">
                                 <div class="m-2">
-                                    <button type="submit" class="btn btn-primary">SUBMIT</button>
+    <button id="submitBtn" class="btn btn-primary">SUBMIT</button>
+</div>
 
-                                </div>
                                 <div class="m-2">
                                     <a href="/admin/banner" type="button" class="btn btn-primary"
                                         id="backbutton">BACK</a>
@@ -246,3 +243,71 @@
         </div>
     </footer>
 </main>
+
+
+  <script>
+function viewImage(event, index) {
+    let input = event.target;
+    let file = input.files[0];
+
+    // Check file size
+    const maxSize = 5 * 1024 * 1024; // 5MB in bytes
+    if (file.size > maxSize) {
+        alert("File size exceeds the maximum limit of 5MB.");
+        input.value = ""; // Clear the file input
+        return;
+    }
+
+    const allowedExtensions = /\.(jpg|jpeg|png|gif|avif)$/i;
+    if (!allowedExtensions.test(file.name)) {
+        alert('Please upload file having extensions .jpeg/.jpg/.png/.gif/.avif only.');
+        input.value = ""; // Clear the file input
+        return;
+    }
+
+    let reader = new FileReader();
+
+    reader.onload = function () {
+        let dataURL = reader.result;
+        let image = document.getElementById('imgView' + index);
+        image.src = dataURL;
+
+        // Initialize Cropper.js on the image
+        let cropper = new Cropper(image, {
+            aspectRatio: 1 / 1, // Initial aspect ratio
+            viewMode: 1,
+            guides: true,
+            background: false,
+            autoCropArea: 1,
+            zoomable: true
+        });
+
+        // Show the image cropper container
+        let cropperContainer = document.querySelector('#croppedImg' + index).parentNode;
+        cropperContainer.style.display = 'block';
+
+        // Update the cropped image when the "Save" button is clicked
+        let saveButton = document.querySelector('#saveButton' + index);
+        saveButton.addEventListener('click', async function () {
+            let croppedCanvas = cropper.getCroppedCanvas();
+            let croppedImage = document.getElementById("croppedImg" + index);
+            croppedImage.src = croppedCanvas.toDataURL('image/jpeg', 1.0);
+
+            // Generate a unique name for the cropped image file based on the current timestamp
+            let timestamp = new Date().getTime();
+            let fileName = `cropped-img-${timestamp}-${index}.png`;
+
+            await croppedCanvas.toBlob(blob => {
+                let imgFile = new File([blob], fileName, { type: "image/png" });
+                const fileList = new DataTransfer();
+                fileList.items.add(imgFile);
+                input.files = fileList.files;
+            });
+            // cropperContainer.style.display = 'none';
+        });
+    };
+    reader.readAsDataURL(file);
+}
+</script>
+
+

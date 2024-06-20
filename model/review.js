@@ -3,12 +3,14 @@ const mongoose = require('mongoose');
 
 const reviewSchema = new mongoose.Schema({
     userId: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'users',
         required: true
     },
 
     productId: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'products',
         required: true
     },
 
@@ -17,12 +19,10 @@ const reviewSchema = new mongoose.Schema({
         required: true
     },
 
-    // rating: {
-    //     type: Number,
-    //     required: true,
-    //     min: 1,
-    //     max: 5
-    // },
+    isListed: {
+        type: Boolean,
+        default: true
+    },
 
     comment: {
         type: String,

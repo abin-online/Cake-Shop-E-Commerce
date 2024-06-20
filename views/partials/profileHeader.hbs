@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SweetAlert2 Example</title>
+    <!-- SweetAlert2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    
+
+    <!-- SweetAlert2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <!-- SweetAlert2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+
+</head>
+<body>
+    <aside class="col-lg-3 border-end">
+        <nav class="nav nav-pills flex-lg-column mb-4">
+            <a class="nav-link active" aria-current="page" href="/profile">General</a>
+            <a class="nav-link" href="/my_orders">Orders</a>
+            <a class="nav-link" href="/adresses">My Address</a>
+            <a class="nav-link" href="/wallet">Wallet</a>
+            <a class="nav-link" href="/logout" id="logoutLink">Log out</a>
+        </nav>
+    </aside>
+
+    <!-- SweetAlert2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+
+    <script>
+    document.getElementById('logoutLink').addEventListener('click', function(event) {
+    event.preventDefault(); // Prevent the default action
+
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You will be logged out!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, logout!',
+        cancelButtonText: 'No, keep me logged in!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            window.location.href = '/logout'; // Redirect to logout URL
+        }
+    });
+});
+    </script>
+</body>
+</html>

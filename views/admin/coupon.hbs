@@ -74,20 +74,17 @@
                     </a>
                 </li>
             
-            {{!-- <li class="menu-item">
-                <a class="menu-link" href="page-reviews.html"> <i class="icon material-icons md-comment"></i>
+            <li class="menu-item">
+                <a class="menu-link" href="/admin/reviews"> <i class="icon material-icons md-comment"></i>
                     <span class="text">Reviews</span>
                 </a>
             </li>
-            <li class="menu-item">
-                <a class="menu-link" href="page-brands.html"> <i class="icon material-icons md-stars"></i>
+            <li class="menu-item ">
+                <a class="menu-link" href="/admin/brands"> <i class="icon material-icons md-stars"></i>
                     <span class="text">Brands</span> </a>
             </li>
-            <li class="menu-item">
-                <a class="menu-link" disabled href="#"> <i class="icon material-icons md-pie_chart"></i>
-                    <span class="text">Statistics</span>
-                </a>
-            </li> --}}
+
+           
         </ul>
         <hr>
         <ul class="menu-aside">
@@ -157,22 +154,27 @@
 
 
                                 <td class="text-center" width="20%">
-                                    {{!-- <a href="/admin/delete_cpn?id={{this._doc._id}}" id = "delete" onclick="return confirm ('Are you sure want to delete?')" type="button" class="btn btn-primary">
-                                        Delete
-                                    </a> --}}
-                                     {{#if this._doc.isListed}}
 
-                                <a data-product-id="{{this._id}}" id="blockprod"  class="btn btn-pill font-sm rounded btn-brand">
-                                    <i class="material-icons md-edit"></i>UnList
-                                </a>
-                         
-                            {{else}}
-                      
-                                <a data-product-id="{{this._id}}" id="blockprod" class="btn btn-pill font-sm rounded btn-brand">
-                                    <i class="material-icons md-edit"></i>List
-                                </a>
-                        
-                            {{/if}}
+
+{{#if this._doc.status}}
+     <div class="col-lg-3 col-sm-3 col-3 text-center coupon-button">
+        <a href="javascript:void(0);" data-coupon-id="{{this._doc._id}}" onclick="toggleCouponStatus('{{this._doc._id}}', true)" class="btn btn-pill font-sm rounded btn-brand">
+            <i class="material-icons md-edit"></i>Unlist
+        </a>
+    </div>
+{{else}}
+     <div class="col-lg-3 col-sm-3 col-3 text-center coupon-button">
+        <a href="javascript:void(0);" data-coupon-id="{{this._doc._id}}" onclick="toggleCouponStatus('{{this._doc._id}}', false)" class="btn btn-pill font-sm rounded btn-brand">
+            <i class="material-icons md-edit"></i>List
+        </a>
+    </div>
+{{/if}}
+
+
+
+
+
+
                                 </td>
 
                             </tr>
@@ -187,7 +189,7 @@
     <nav aria-label="Page navigation example">
         <ul class="pagination justify-content-start">
             {{#each pages}}
-                <li class="page-number {{#if (eq ../currentPage this)}}active{{/if}}">
+                {{!-- <li class="page-number {{#if  ../currentPage this}}active{{/if}}"> --}}
                     <a class="page-link" href="?page={{this}}">{{this}}</a>
                 </li>
             {{/each}}
@@ -216,49 +218,54 @@
     </footer>
 </main>
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-
-//block product
-
-$(document).ready(function () {
-    $(document).on('click', '.toggle-listing', function(e) {
-        e.preventDefault();
-        var id = $(this).data('product-id');
-        var $this = $(this);
-        var isListed = $this.text().trim() === 'UnList';
+    function toggleCouponStatus(couponId, isListed) {
+        const action = isListed ? 'Unlist' : 'List';
+        const actionUrl = '/admin/toggle_coupon';
 
         Swal.fire({
-            title: "Are you sure?",
-            text: isListed ? "Do you want to unlist the product?" : "Do you want to list the product?",
-            icon: "warning",
+            title: `Are you sure you want to ${action} this coupon?`,
+            icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: "#088178",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Yes!"
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: `${action}`
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
-                    type: 'PUT',
-                    url: '/admin/listCoupon',
+                    type: 'POST',
+                    url: actionUrl,
                     contentType: 'application/json',
-                    data: JSON.stringify({ id: id }),
+                    data: JSON.stringify({ id: couponId }),
                     success: function (response) {
                         Swal.fire({
                             title: 'Done!',
-                            text: response.isListed ? 'Product successfully listed!' : 'Product successfully unlisted!',
+                            text: `Coupon successfully ${action}ed!`,
                             icon: 'success',
-                            confirmButtonText: 'Cool'
-                        }).then(() => window.location.reload());
+                            confirmButtonText: 'okay'
+                        }).then(() => {
+                            window.location.reload();
+                        });
                     },
                     error: function (xhr, status, error) {
-                        console.error("Error updating product listing status:", error);
+                        console.error(`Error ${action}ing coupon:`, error);
                         Swal.fire("Error", "Something went wrong. Please try again later.", "error");
                     }
                 });
             }
         });
-    });
-});
-
-
+    }
 </script>
+
+<style>
+    .coupon-button {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+    }
+
+    .coupon-button a {
+        width: 100px; /* Set a fixed width to ensure both buttons have the same width */
+    }
+</style>

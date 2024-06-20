@@ -4,8 +4,8 @@
         <div class="container">
             <div class="breadcrumb">
                 <a href="index.html" rel="nofollow">Home</a>
-                <span></span> Fashion
-                <span></span> Abstract Print Patchwork Dress
+                <span></span> Shop
+                <span></span> {{proData.name}}
             </div>
         </div>
     </div>
@@ -166,14 +166,11 @@
                                                                     {{!-- <p class="font-xxs">Since 2012</p> --}}
                                                                 </div>
                                                                 <div class="desc">
-                                                                    <div class="product-rate d-inline-block">
-                                                                        <div class="product-rating" style="width:90%">
-                                                                        </div>
-                                                                    </div>
+                                                                    
                                                                     <p>{{this.comment}}</p>
                                                                     <div class="d-flex justify-content-between">
                                                                         <div class="d-flex align-items-center">
-                                                                            <p class="font-xs mr-30">{{this.createdAt}} </p>
+                                                                            <p class="font-xs mr-30">{{formatDate this.createdAt}} </p>
                                                                             {{!-- <a href="#" class="text-brand btn-reply">Reply <i class="fi-rs-arrow-right"></i> </a> --}}
                                                                         </div>
                                                                     </div>

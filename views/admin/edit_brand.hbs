@@ -1,0 +1,267 @@
+<aside class="navbar-aside" id="offcanvas_aside">
+    <div class="aside-top">
+        <a href="/admin/home" class="brand-wrap">
+            <img src="/assetsAdmin/imgs/theme/logo.svg" class="logo" alt="Evara Dashboard">
+        </a>
+        <div>
+            <button class="btn btn-icon btn-aside-minimize"> <i class="text-muted material-icons md-menu_open"></i>
+            </button>
+        </div>
+    </div>
+    <nav>
+        <ul class="menu-aside">
+            <li class="menu-item ">
+                <a class="menu-link" href="/admin/home"> <i class="icon material-icons md-home"></i>
+                    <span class="text">Dashboard</span>
+                </a>
+            </li>
+            <li class="menu-item ">
+                <a class="menu-link" href="/admin/product"> <i class="icon material-icons md-shopping_bag"></i>
+                    <span class="text">Products</span>
+                </a>
+
+            </li>
+            <li class="menu-item ">
+                <a class="menu-link" href="/admin/orders"> <i class="icon material-icons md-shopping_cart"></i>
+                    <span class="text">Orders</span>
+                </a>
+
+            </li>
+            {{!-- <li class="menu-item has-submenu">
+                <a class="menu-link" href="page-sellers-cards.html"> <i class="icon material-icons md-store"></i>
+                    <span class="text">Sellers</span>
+                </a>
+                <div class="submenu">
+                    <a href="page-sellers-cards.html">Sellers cards</a>
+                    <a href="page-sellers-list.html">Sellers list</a>
+                    <a href="page-seller-detail.html">Seller profile</a>
+                </div>
+            </li> --}}
+            {{!-- <li class="menu-item has-submenu">
+                <a class="menu-link" href="page-form-product-1.html"> <i class="icon material-icons md-add_box"></i>
+                    <span class="text">Add product</span>
+                </a>
+                <div class="submenu">
+                    <a href="page-form-product-1.html">Add product 1</a>
+                    <a href="page-form-product-2.html">Add product 2</a>
+                    <a href="page-form-product-3.html">Add product 3</a>
+                    <a href="page-form-product-4.html">Add product 4</a>
+                </div>
+            </li> --}}
+            <li class="menu-item ">
+                <a class="menu-link" href="/admin/category"> <i class="icon material-icons md-category"></i>
+                    <span class="text">Category</span>
+                </a>
+
+            </li>
+            
+
+             <li class="menu-item ">
+                    <a class="menu-link" href="/admin/coupons"><i class="icon fa-solid fa-ticket"></i>
+                        <span class="text">Coupons</span>
+                    </a>
+      </li>
+            <li class="menu-item">
+                <a class="menu-link" href="/admin/manage_users"> <i class="icon material-icons md-person"></i>
+                    <span class="text">Users</span>
+                </a>
+
+            </li>
+             <li class="menu-item">
+                    <a class="menu-link" href="/admin/banners"> <i class="icon material-icons md-local_offer"></i>
+                        <span class="text"> Banner </span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                <a class="menu-link" href="/admin/reviews"> <i class="icon material-icons md-comment"></i>
+                    <span class="text">Reviews</span>
+                </a>
+            </li>
+            <li class="menu-item active">
+                <a class="menu-link" href="/admin/brands"> <i class="icon material-icons md-stars"></i>
+                    <span class="text">Brands</span> </a>
+            </li>
+            {{!-- <li class="menu-item">
+                <a class="menu-link" href="/admin/reviews"> <i class="icon material-icons md-comment"></i>
+                    <span class="text">Reviews</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a class="menu-link" href="page-brands.html"> <i class="icon material-icons md-stars"></i>
+                    <span class="text">Brands</span> </a>
+            </li>
+            <li class="menu-item">
+                <a class="menu-link" disabled href="#"> <i class="icon material-icons md-pie_chart"></i>
+                    <span class="text">Statistics</span>
+                </a>
+            </li> --}}
+        </ul>
+        <hr>
+        <ul class="menu-aside">
+            <li class="menu-item ">
+                <a class="menu-link" href="#"> <i class="icon material-icons md-settings"></i>
+                    <span class="text">Settings</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a class="menu-link btn btn-primary" href="/admin/logout"> <i
+                        class="icon material-icons md-exit_to_app"></i>
+                    Logout
+                </a>
+            </li>
+        </ul>
+        <br>
+        <br>
+    </nav>
+</aside>
+<main class="main-wrap">
+    <section class="content-main">
+        <div class="content-header">
+            <div>
+                <h2 class="content-title card-title">Edit Brands </h2>
+            </div>
+            
+        </div>
+        <div class="card">
+            <div class="card-body">
+                {{#if brandSaveMsg}}
+  <div class="alert alert-success mt-3 alert-dismissible fade show" role="alert">
+    {{brandSaveMsg}}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+{{/if}}
+{{#if brandExistMsg}}
+  <div class="alert alert-danger mt-3 alert-dismissible fade show" role="alert">
+    {{brandExistMsg}}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+{{/if}}
+                <div class="row">
+                    <div class="col-md-12">
+                        <form action="/admin/update_brands/{{brandData._id}}" method="post" id="product_form'" class=""
+                            enctype="multipart/form-data" onsubmit="return Validation()">
+                            <div class="mb-4">
+                                <label for="categoryName" class="form-label"  >Brand Name:</label>
+                                <input type="text" placeholder="Type here" class="form-control" name="name" id="name" value ={{brandData.brand}}>
+                                <div class="error" style="color: red;" id="nameError"></div>
+                            </div>
+
+
+
+                         
+                            <div class="form-group">
+                                    <label for="productImage" >Category Image:</label>
+                                    <br>
+                                    <img class="border m-2" style="width: 150px; height: auto;" src="/images/products/{{brandData.imageUrl}}"   alt="">
+                                    <br>
+                                    <input type="file"  class="form-control-file" name="image" id="productImage">
+                                    
+                                    
+                                </div>
+                            <div class="d-flex g-2">
+                                <div class="m-2">
+                                    <button type="submit" class="btn btn-primary">Create Brands</button>
+
+                                </div>
+                                <div class="m-2">
+                                    <a href="/admin/brands" type="button" class="btn btn-primary" id="backbutton">Back</a>
+
+                                </div>
+
+
+                            </div>
+                        </form>
+                    </div>
+
+                </div> <!-- .row // -->
+            </div> <!-- card body .// -->
+        </div> <!-- card .// -->
+    </section> <!-- content-main end// -->
+    <footer class="main-footer font-xs">
+        <div class="row pb-30 pt-15">
+            <div class="col-sm-6">
+                <script>
+                    document.write(new Date().getFullYear())
+                </script> ©, Evara - HTML Ecommerce Template .
+            </div>
+            <div class="col-sm-6">
+                <div class="text-sm-end">
+                    All rights reserved
+                </div>
+            </div>
+        </div>
+    </footer>
+</main>
+
+<script>
+    function Validation() {
+        let errors = []
+
+        var name = document.getElementById('name').value;
+        var image = document.getElementById('image')
+
+        var nameerror = document.getElementById('nameError')
+        var imageerror = document.getElementById('imageError')
+
+        var categoryPattern = /^[a-zA-Z\s]{3,}$/;
+
+
+        if (!name.match( categoryPattern)) {
+        errors.push("Name Not Valid");
+    }
+        if (image.files.length === 0) {
+            errors.push("Please choose an image");
+        }
+
+
+
+
+
+        if (errors.length > 0) {
+            nameError.innerHTML = errors.includes("Name Not Valid") ? "Name Not Valid" : "";
+            imageError.innerHTML = errors.includes("Please choose an image") ? "Please choose an image" : "";
+
+
+
+
+
+            return false; // Prevent form submission
+        }
+
+        return true;
+
+
+
+    }
+
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    ////////////back
+    $(document).ready(function () {
+        $('#backbutton').click(function (e) {
+            e.preventDefault();
+
+
+            Swal.fire({
+                title: "Leave the page?",
+                text: "The Data will not be saved",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#088178",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = "/admin/brands";
+
+                }
+            });
+
+
+        });
+    });
+</script>

@@ -5,12 +5,14 @@ const pdfkit  = require('pdfkit')
 const fs      = require('fs')
 const helper  = require('../../helpers/user.helper')
 const User    = require('../../model/userModel')
+const Product = require('../../model/productModel')
 
 const path = require('path');
 const easyinvoice = require('easyinvoice');
 const Handlebars = require('handlebars');
 const { handlebars } = require('hbs')
 const { ObjectId } = require('mongodb')
+const { ProductView } = require('./userController')
 
 
 
@@ -52,7 +54,7 @@ const myOrders = async (req, res) => {
 
     // Get page and limit from query parameters, defaulting to 1 and 10 respectively if not provided
     const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 6;
+    const limit = parseInt(req.query.limit) || 12;
 
     // Calculate the number of documents to skip
     const skip = (page - 1) * limit;
@@ -129,7 +131,7 @@ const filterOrders = async (req, res) => {
 
         const address        = await Address.findById(addressId).lean()
 
-        console.log(myOrderDetails);
+        console.log("mAYYII",myOrderDetails);
        
         res.render('user/order_Details', { myOrderDetails, orderedProDet, userData, address })
     } catch (error) {
@@ -175,6 +177,8 @@ const filterOrders = async (req, res) => {
           _id : 0
         }
       ).lean()
+
+      
 
       console.log("myOrderDetails",myOrderDetails,"myOrderDetails");
       let refundAmount
@@ -273,6 +277,7 @@ const filterOrders = async (req, res) => {
   
 
     const order = await Orders.findById(orderId);
+    console.log(order)
     if (!order) {
       return res.status(404).send({ message: 'Order not found' });
     }
@@ -290,6 +295,7 @@ const filterOrders = async (req, res) => {
       description: product.name,
       tax: product.tax,
       price: product.price,
+      
       
       
     }));
@@ -315,10 +321,10 @@ const filterOrders = async (req, res) => {
       marginBottom: 25,
       background: 'https://public.easyinvoice.cloud/img/watermark-draft.jpg',
       sender: {
-        company: 'Coco Loco',
-        address: 'Plaza Bakes ',
-        zip: '621313',
-        city: 'Thogaimalai',
+        company: 'Coke Shop',
+        address: 'Chennai Central ',
+        zip: '600020',
+        city: 'Chennai',
         country: 'India',
       },
       client: {

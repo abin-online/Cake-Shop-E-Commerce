@@ -18,9 +18,90 @@ let totalSales  = 0
 
 const loadDashboard = async(req, res) => {
 
-  let bestSellings= await Product.find().sort({bestSelling:-1}).limit(5).lean()
-  let popuarProducts= await Product.find().sort({popularity:-1}).limit(5).lean()
-  let bestSellingCategory= await Category.find().sort({bestselling:-1}).limit(5).lean()
+  const bestSellings = await Order.aggregate([
+    { $match: { status: "Delivered" } },
+    { $unwind: "$product" },
+    { $group: { _id: "$product.id", totalQuantityDelivered: { $sum: "$product.quantity" } } },
+    { $lookup: { from: "products", localField: "_id", foreignField: "_id", as: "productDetails" } },
+    { $unwind: "$productDetails" },
+    { $sort: { totalQuantityDelivered: -1 } },
+    { $lookup: { from: "categories", localField: "productDetails.category", foreignField: "_id", as: "categoryDetails" } },
+    { $unwind: "$categoryDetails" },
+    {$limit:5}
+  ]);
+  
+  const bestSellingCategory = await Order.aggregate([
+    { $match: { status: "Delivered" } },
+    { $unwind: "$product" },
+    { 
+      $lookup: {
+        from: "products",
+        localField: "product.id",
+        foreignField: "_id",
+        as: "productDetails"
+      }
+    },
+    { $unwind: "$productDetails" },
+    { 
+      $group: {
+        _id: "$productDetails.category",
+        totalQuantityDelivered: { $sum: "$product.quantity" }
+      }
+    },
+    { 
+      $lookup: {
+        from: "categories",
+        localField: "_id",
+        foreignField: "_id",
+        as: "categoryDetails"
+      }
+    },
+    { $unwind: "$categoryDetails" },
+    { $sort: { totalQuantityDelivered: -1 } },
+    { $limit: 5}
+  ]);
+
+  console.log(bestSellingCategory)
+  
+  
+  
+
+  const popularBrands = await Product.aggregate([
+    { $match: { is_blocked: false } },
+    {
+      $lookup: {
+        from: 'brands',
+        localField: 'brand',
+        foreignField: '_id',
+        as: 'brandDetails'
+      }
+    },
+    { $unwind: '$brandDetails' },
+    {
+      $group: {
+        _id: '$brandDetails._id',
+        brandName: { $first: '$brandDetails.brand' },
+        brandImageUrl: { $first: '$brandDetails.imageUrl' },
+        productCount: { $sum: 1 }
+      }
+    },
+    {
+      $project: {
+        _id: 0,
+        brandId: '$_id',
+        brandName: 1,
+        brandImageUrl: 1,
+        productCount: 1
+      }
+    },
+    {
+      $limit:5
+
+    }
+  ]);
+
+  console.log(popularBrands)
+ 
 
        
     Sale.find({}, (err, sales) => {
@@ -56,7 +137,7 @@ const loadDashboard = async(req, res) => {
         });
       });
       
-      console.log(chartData);
+      //console.log(chartData);
       
        months        = []
        odersByMonth  = []
@@ -77,17 +158,17 @@ const loadDashboard = async(req, res) => {
       const thisMonthOrder = odersByMonth[odersByMonth.length-1]
       const thisMonthSales = revnueByMonth[revnueByMonth.length-1]
 
-      console.log(thisMonthOrder, thisMonthSales);
+      //console.log(thisMonthOrder, thisMonthSales);
 
      
 
-      console.log(months);
-      console.log(odersByMonth);
-      console.log(revnueByMonth);
-      console.log(totalRevnue);
-      console.log(totalSales);
+      // console.log(months);
+      // console.log(odersByMonth);
+      // console.log(revnueByMonth);
+      // console.log(totalRevnue);
+      // console.log(totalSales);
 
-      res.render('admin/home', { bestSellings , popuarProducts , bestSellingCategory , revnueByMonth, months, odersByMonth, totalRevnue, totalSales, thisMonthOrder, thisMonthSales , layout:'adminlayout'})
+      res.render('admin/home', { popularBrands , bestSellings  , bestSellingCategory , revnueByMonth, months, odersByMonth, totalRevnue, totalSales, thisMonthOrder, thisMonthSales , layout:'adminlayout'})
 
     })
     
@@ -104,14 +185,23 @@ const loadDashboard = async(req, res) => {
     
     const startDate = new Date(stDate);
     const endDate = new Date(new Date(edDate).setHours(23, 59, 59, 999));    
-    const orders = await Order.find({
-        date: {
-            $gte: startDate,
-            $lte: endDate,
-        },
-        status: 'Delivered' // Filter by status
-    })
-        .sort({ date: 'desc' });
+    const orders = await Order.aggregate([
+      { 
+        $match: { 
+          date: { 
+            $gte: startDate, 
+            $lte: endDate 
+          }, 
+          status: 'Delivered' 
+        }
+      },
+      { 
+        $sort: { 
+          date: -1 
+        }
+      }
+    ]);
+    
     
     const formattedOrders = orders.map((order) => ({
         date: moment(order.date).format('YYYY-MM-DD'),
@@ -125,10 +215,10 @@ const loadDashboard = async(req, res) => {
     formattedOrders.forEach((element) => {
         salesData.push({
             date: element.date,
-            orderId: element._doc.orderId,
-            total: element._doc.total,
-            payMethod: element._doc.paymentMethod,
-            proName: element._doc.product,
+            orderId: element.orderId,
+            total: element.total,
+            payMethod: element.paymentMethod,
+            proName: element.product,
         })
     })
     

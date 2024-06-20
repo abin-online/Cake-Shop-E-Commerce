@@ -1,3 +1,7 @@
+ <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.2/dist/sweetalert2.min.css">
+    <!-- SweetAlert2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.2/dist/sweetalert2.all.min.js"></script>
+
 <aside class="navbar-aside" id="offcanvas_aside">
     <div class="aside-top">
         <a href="/admin/home" class="brand-wrap">
@@ -72,20 +76,17 @@
                         <span class="text"> Banner </span>
                     </a>
                 </li>
-            {{!-- <li class="menu-item">
-                <a class="menu-link" href="page-reviews.html"> <i class="icon material-icons md-comment"></i>
+                     <li class="menu-item">
+                <a class="menu-link" href="/admin/reviews"> <i class="icon material-icons md-comment"></i>
                     <span class="text">Reviews</span>
                 </a>
             </li>
-            <li class="menu-item">
-                <a class="menu-link" href="page-brands.html"> <i class="icon material-icons md-stars"></i>
+            <li class="menu-item ">
+                <a class="menu-link" href="/admin/brands"> <i class="icon material-icons md-stars"></i>
                     <span class="text">Brands</span> </a>
             </li>
-            <li class="menu-item">
-                <a class="menu-link" disabled href="#"> <i class="icon material-icons md-pie_chart"></i>
-                    <span class="text">Statistics</span>
-                </a>
-            </li> --}}
+           
+
         </ul>
         <hr>
         <ul class="menu-aside">
@@ -107,25 +108,13 @@
 </aside>
 
 
-       {{#each bannerData}}
-          <tr>
-            
-            <td>{{this.title}}</td>
-            <td><img style="width 40px; height: 40px; " src="/uploads/{{this.image}}" alt=" image"></td>
-            <td>
-              {{!-- <a href="/admin/edit_category/{{this.id}}" onclick="return confirm ('Are you sure want to edit?')"
-                type="button" class="btn btn-warning">Edit</a> --}}
-              <a href="/admin/delete_banner?id={{this.id}}" onclick="return confirm ('Are you sure want to delete?')"
-                type="button" class="btn btn-danger">Delete</a>
-            </td>
-          </tr>
-          {{/each}}
+   
 
 <main class="main-wrap">
 
     <section class="content-main">
         <div class="content-header">
-            <h2 class="content-title">Coupons list</h2>
+            <h2 class="content-title">Banners list</h2>
             <div>
                 <a href="/admin/add_banner" class="btn btn-primary"><i class="material-icons md-plus"></i>Add Banner</a>
             </div>
@@ -151,41 +140,47 @@
                     <table class="table table-hover ">
                         <thead>
                             <tr>
-                                <th class="text-center">Coupon Code</th>
-                                <th class="text-center">Discount Percentage</th>
-                                <th class="text-center">Expiry Date</th>
+                                <th class="text-center">Banner Name</th>
+                                <th class="text-center">Line 2</th>
+                                <th class="text-center">Line 3</th>
+                                <th class="text-center">Line 4</th>
                                 <th class="text-center">Action</th>
                             </tr>
                         </thead>
-                         {{#each couponData}}
+                         {{#each bannerData}}
                         <tbody>
                             <tr >
                                 <td width="20%" class="text-center">
                                         <div class="info pl-3">
-                                            <h6 class="mb-0 title">{{this._doc.code}}</h6>
+                                            <h6 class="mb-0 title">{{this.line1}}</h6>
                                         </div>
                                 </td>
-                                <td class="text-center" width="20%">{{this._doc.discount}}%</td>
-                                 <td class="text-center" width="20%">{{this.expiryDate}}</td>
+                                <td class="text-center" width="20%">{{this.line2}}</td>
+                                 <td class="text-center" width="20%">{{this.line3}}</td>
+                                 <td class="text-center" width="20%">{{this.line3}}</td>
 
 
                                 <td class="text-center" width="20%">
                                     {{!-- <a href="/admin/delete_cpn?id={{this._doc._id}}" id = "delete" onclick="return confirm ('Are you sure want to delete?')" type="button" class="btn btn-primary">
                                         Delete
                                     </a> --}}
-                                     {{#if this._doc.isListed}}
+{{#if this.active}}
+    <div class="col-lg-3 col-sm-3 col-3 text-center banner-button">
+        <a href="javascript:void(0);" data-banner-id="{{this._id}}" onclick="toggleBannerStatus('{{this._id}}', true)" class="btn btn-pill font-sm rounded btn-brand"  style="width: 90px">
+            <i class="material-icons md-edit"></i>Block
+        </a>
+    </div>
+{{else}}
+    <div class="col-lg-3 col-sm-3 col-3 text-center banner-button">
+        <a href="javascript:void(0);" data-banner-id="{{this._id}}" onclick="toggleBannerStatus('{{this._id}}', false)" class="btn btn-pill font-sm rounded btn-brand" style="width: 90px">
+            <i class="material-icons md-edit"></i>Unblock
+        </a>
+    </div>
+{{/if}}
 
-                                <a data-product-id="{{this._id}}" id="blockprod"  class="btn btn-pill font-sm rounded btn-brand">
-                                    <i class="material-icons md-edit"></i>UnList
+                            <a href="/admin/edit_banner/{{this._id}}"  class="btn btn-pill font-sm rounded btn-brand"  style="width: 90px">
+                                    <i class="material-icons md-edit"></i> Edit
                                 </a>
-                         
-                            {{else}}
-                      
-                                <a data-product-id="{{this._id}}" id="blockprod" class="btn btn-pill font-sm rounded btn-brand">
-                                    <i class="material-icons md-edit"></i>List
-                                </a>
-                        
-                            {{/if}}
                                 </td>
 
                             </tr>
@@ -228,3 +223,51 @@
         </div>
     </footer>
 </main>
+
+<style>
+    .btn-brand {
+        width: 100px; /* Adjust the width as needed */
+    }
+</style>
+
+<script>
+    function toggleBannerStatus(bannerId, status) {
+        const action = status ? 'Block' : 'Unblock';
+        const actionUrl = '/admin/toggle_banner';
+
+        Swal.fire({
+            title: `Are you sure you want to ${action} this banner?`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: `${action}`
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    type: 'POST',
+                    url: actionUrl,
+                    contentType: 'application/json',
+                    data: JSON.stringify({ id: bannerId }),
+                    success: function (response) {
+                        Swal.fire({
+                            title: 'Done!',
+                            text: `Banner successfully ${action}ed!`,
+                            icon: 'success',
+                            confirmButtonText: 'okay'
+                        }).then(() => {
+                            window.location.reload();
+                        });
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(`Error ${action}ing banner:`, error);
+                        Swal.fire("Error", "Something went wrong. Please try again later.", "error");
+                    }
+                });
+            }
+        });
+    }
+</script>
+
+
+

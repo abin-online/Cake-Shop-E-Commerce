@@ -35,14 +35,16 @@ router.get('/auth/google/callback', passport.authenticate('google', { failureRed
 router.get('/', userController.loadHome)
 router.post('/', userController.doLogin)
 
-router.get('/product', logedin, userController.getProduct)
+router.get('/product', userController.getProduct)
 router.post('/product', userController.getProductsPage);
-router.get('/productview', logedin, userController.ProductView)
-router.post('/products_filter', logedin, userController.productSearch)
+router.get('/productview', userController.ProductView)
+router.post('/products_filter',  userController.productSearch)
 router.post('/sort_product_name', logedin, userController.sortProductByName)
 router.post('/sort_product_price', logedin, userController.sortProductByPrice)
 
-router.get('/search', userController.searchProducts);
+
+
+router.get('/about' , userController.aboutPage)
 
 
 router.get('/category_fil', category.catFilter)
