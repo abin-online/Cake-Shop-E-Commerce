@@ -71,10 +71,9 @@
                 </div>
                 <div class="header-right">
                     <div class="search-style-2">
-                        <form action="#">
                     
-                             <input type="text" onchange="searchProducts()" id="searchField" placeholder="Search for items..." name="search-product">
-                        </form>
+                    <input type="text" onkeyup="searchProducts()" id="searchInput" name="search" class="search-product"
+                                placeholder="Search for items...">
                     </div>
                     <div class="header-action-right">
                         <div class="header-action-2">
@@ -90,7 +89,7 @@
                                 </a>
 
                             </div>
-                            <div class="header-action-icon-2">
+                            <div id = "data" class="header-action-icon-2">
                                 <a class="mini-cart-icon" href="/cart?id={{userData._id}}">
                                     <img alt="Evara" src="/assets/imgs/theme/icons/icon-cart.svg">
                                     {{#if userData}}

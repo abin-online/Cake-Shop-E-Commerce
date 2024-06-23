@@ -1,4 +1,13 @@
 
+<style>
+/* Font Awesome library for star icons */
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css');
+
+.checked {
+    color: orange; /* Color for checked stars */
+}
+</style>
+
 <main class="main">
     <div class="page-header breadcrumb-wrap">
         <div class="container">
@@ -111,24 +120,29 @@
                                         </div> --}}
                                         <div class="product-extra-link2">
 
-                                            
+                                         
 								  {{#if proData.stock}}
             {{#if productExistInCart}}
                 <button onclick="window.location.href='/cart?id={{userData._id}}'" class="button button-add-to-cart">Go to cart</button>
             {{else}}
+                {{#if userData}}
                 <span id="cart_btn">
                     <button onclick="addToCartBtn('{{proData._id}}')" id="add_to_cart_btn" class="button button-add-to-cart">Add to cart</button>
                 </span>
+                {{else}}
+                    <button onclick="window.location.href='/cart?id={{userData._id}}'" id="add_to_cart_btn" class="button button-add-to-cart">Add to cart</button>
+                {{/if}}
             {{/if}}
         {{else}}
+            {{#if userData}}
             <div onclick="outofStock()">
-                <button disabled id="add_to_cart_btn" class="button button-add-to-cart">Out Of Stock</button>
+                <button id="add_to_cart_btn" class="button button-add-to-cart">Out Of Stock</button>
             </div>
+            {{else}}
+                    <button onclick="window.location.href='/cart?id={{userData._id}}'" id="add_to_cart_btn" class="button button-add-to-cart">Out Of Stock</button>
+            {{/if}}
         {{/if}}
-                                            {{!-- <a aria-label="Add To Wishlist" class="action-btn hover-up"
-                                                href="shop-wishlist.html"><i class="fi-rs-heart"></i></a>
-                                            <a aria-label="Compare" class="action-btn hover-up"
-                                                href="shop-compare.html"><i class="fi-rs-shuffle"></i></a> --}}
+      
                                         </div>
                                     </div>
                                     <ul class="product-meta font-xs color-grey mt-50">
@@ -192,9 +206,9 @@
                                         </div>
                                         <!--comment form-->
                                         {{#if userCanReview}}
+                                        
                                         <div class="comment-form">
                                             <h4 class="mb-15">Add a review</h4>
-                                            <div class="product-rate d-inline-block mb-30">
                                             </div>
                                             <div class="row">
                                                 <div class="col-lg-8 col-md-12">
@@ -207,12 +221,12 @@
                                                             </div>
                                                             <div class="col-sm-6">
                                                                 <div class="form-group">
-                                                                    <input class="form-control" name="name" id="name" type="text" placeholder="Name" value = "{{userData.name}}">
+                                                                    <input class="form-control" name="name" id="name" type="text" placeholder="Name" value = "{{userData.name}}" hidden>
                                                                 </div>
                                                             </div>
                                                             <div class="col-sm-6">
                                                                 <div class="form-group">
-                                                                    <input class="form-control" name="email" id="email" type="email" placeholder="Email" value = "{{userData.email}}">
+                                                                    <input class="form-control" name="email" id="email" type="email" placeholder="Email" value = "{{userData.email}}" hidden>
                                                                 </div>
                                                             </div>
                                                             <div class="col-sm-6" style="display: none;">
@@ -229,6 +243,7 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        
                                         {{else}}
                                         <div class="comment-form">
                                             <h4 class="mb-15">Purchase and review our product</h4>
@@ -297,4 +312,17 @@ const addToCartBtn = (proId) => {
         }
     
 </script>
-    
+
+<script>
+function toggleStars(starCount) {
+    // Remove 'checked' class from all stars
+    let stars = document.querySelectorAll('.fa.fa-star');
+    stars.forEach((star, index) => {
+        if (index < starCount) {
+            star.classList.add('checked'); // Add 'checked' class up to starCount
+        } else {
+            star.classList.remove('checked'); // Remove 'checked' class for stars after starCount
+        }
+    });
+}
+</script>

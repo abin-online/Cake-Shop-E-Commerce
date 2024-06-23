@@ -145,7 +145,7 @@ const getCategory = async (req, res) => {
 
 
 
-    console.log(proData)
+    // console.log(proData)
     let catUpdtMsg = "Category updated successfully..!!";
 
     if (req.session.categoryUpdate) {
@@ -223,45 +223,7 @@ const editCategory = async (req, res) => {
   }
 };
 
-/// To update Category post///
 
-// const updateCategory = async (req, res) => {
-//   try {
-//     const catName = req.body.name;
-//     const image = req.file;
-//     const catId = req.params.id;
-
-//     const cat = await Category.findById(catId);
-//     const catImg = cat.imageUrl;
-//     let updImge;
-
-//     if (image) {
-//       updImge = image.filename;
-//     } else {
-//       updImge = catImg;
-//     }
-
-
-//     const catExist = await Category.findOne({ category: catName });
-
-//     if (!catExist) {
-//       await Category.findByIdAndUpdate(
-//         catId,
-//         {
-//           category: req.body.name,
-//           imageUrl: updImge,
-//         },
-//         { new: true }
-//       );
-
-//       req.session.categoryUpdate = true;
-//       res.redirect("/admin/category");
-//     } else {
-//       // req.session.catExist = true
-//       res.redirect("/admin/category");
-//     }
-//   } catch (error) {}
-// };
 
 const updateCategory = async (req, res) => {
   try {
@@ -300,22 +262,12 @@ const updateCategory = async (req, res) => {
     }
   } catch (error) { }
 };
-/// To delete category ///
 
-// const deleteCategory = async (req, res) => {
-//   let catId = req.params.id;
 
-//   try {
-//     await Category.findByIdAndDelete(catId);
-//     res.redirect("/admin/category");
-//   } catch (error) {
-//     console.log(error);
-//   }
-// };
 
 const deleteCategory = async (req, res) => {
   try {
-    const {id}=req.body
+    const id = req.body.id
       // const catId = req.params.id
       let user = await Category.findById(id)
       let newListed = user.isListed
@@ -489,7 +441,7 @@ const addNewProduct = async (req, res) => {
 
     await product.save();
     req.session.productSave = true;
-    res.redirect("/admin/new_product");
+    res.redirect("/admin/product");
   } catch (error) {
     console.log(error);
   }
@@ -577,7 +529,7 @@ const deleteProduct = async (req, res) => {
 };
 
 const blockProduct = async (req, res) => {
-  const {id} =req.body
+  const id =req.body.id
   // const proId = req.params.id;
   const prodData = await Product.findById(id);
   const isBlocked = prodData.is_blocked;
@@ -678,7 +630,7 @@ const addCouponPost = async (req, res) => {
 
 const listCoupon = async (req, res) => {
   try {
-    const {id}=req.body
+    const id=req.body.id
       // const catId = req.params.id
       let coupon = await Coupon.findById(id)
       console.log(coupon)
@@ -699,7 +651,7 @@ const listCoupon = async (req, res) => {
 //for review block
 const listReview = async (req, res) => {
   try {
-    const {id}=req.body
+    const id=req.body.id
       // const catId = req.params.id
       let review = await Reviews.findById(id)
       console.log(review)
@@ -721,7 +673,7 @@ const listReview = async (req, res) => {
 //for banner block
 const listBanner = async (req, res) => {
   try {
-    const {id}=req.body
+    const id=req.body.id
       // const catId = req.params.id
       let banner = await Banner.findById(id)
       console.log(banner)

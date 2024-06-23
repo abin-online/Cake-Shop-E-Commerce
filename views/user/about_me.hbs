@@ -5,6 +5,7 @@
     <link rel="shortcut icon" type="image/x-icon" href="/assetsAdmin/imgs/theme/favicon.svg">
     <!-- Template CSS -->
     <link href="/assetsAdmin/css/main.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <main class="main">
         <div class="page-header breadcrumb-wrap">
             <div class="container">
@@ -69,17 +70,13 @@
                                 <div class="row" style="max-width:920px">
                                     <div class="col-md">
                                         <article class="box mb-3 bg-light">
-                                            <a class="btn float-end btn-light btn-sm rounded font-md" href="/changePassword">Change</a>
+                                            <a class="btn float-end btn-light btn-sm rounded font-md" id = "changePasswordButton" href="/changePassword">Change</a>
                                             <h6>Password</h6>
                                             <small class="text-muted d-block" style="width:70%">You can reset or change your password by clicking here</small>
                                         </article>
                                     </div> <!-- col.// -->
                                     <div class="col-md">
-                                        <article class="box mb-3 bg-light">
-                                            <a class="btn float-end btn-light rounded btn-sm font-md" href="#">Deactivate</a>
-                                            <h6>Remove account</h6>
-                                            <small class="text-muted d-block" style="width:70%">Once you delete your account, there is no going back.</small>
-                                        </article>
+                                        
                                     </div> <!-- col.// -->
                                 </div> <!-- row.// -->
                             </section> <!-- content-body .// -->
@@ -97,6 +94,34 @@
     <script src="/assetsAdmin/js/vendors/jquery.fullscreen.min.js"></script>
     <!-- Main Script -->
     <script src="/assetsAdmin/js/main.js" type="text/javascript"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+  // Function to show the SweetAlert confirmation dialog
+  function showChangePasswordConfirmation() {
+    Swal.fire({
+      title: "Do you want to change your password?",
+      text: "",
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes',
+      cancelButtonText: 'No'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Redirect to the change password page
+        window.location.href = '/changePassword';
+      }
+    });
+  }
+
+  // Attach the event listener to the "Change" button
+  document.getElementById('changePasswordButton').addEventListener('click', function(event) {
+    event.preventDefault(); // Prevent the default anchor behavior
+    showChangePasswordConfirmation(); // Show the confirmation dialog
+  });
+</script>
 
 
 

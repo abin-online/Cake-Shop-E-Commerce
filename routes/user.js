@@ -7,7 +7,6 @@ const profile = require('../controller/user/profile')
 const cart = require('../controller/user/cart')
 const checkout = require('../controller/user/checkout')
 const orders = require('../controller/user/orders')
-const category = require('../controller/user/category')
 const wishlist = require('../controller/user/wishlist');
 const resetProfile = require('../controller/user/resetProfilePassword')
 const wallet = require('../controller/user/wallet')
@@ -35,21 +34,18 @@ router.get('/auth/google/callback', passport.authenticate('google', { failureRed
 router.get('/', userController.loadHome)
 router.post('/', userController.doLogin)
 
+
+/////// shop
 router.get('/product', userController.getProduct)
-router.post('/product', userController.getProductsPage);
+router.post('/search',userController.searchSortFilter)
 router.get('/productview', userController.ProductView)
 router.post('/products_filter',  userController.productSearch)
-router.post('/sort_product_name', logedin, userController.sortProductByName)
-router.post('/sort_product_price', logedin, userController.sortProductByPrice)
+
 
 
 
 router.get('/about' , userController.aboutPage)
 
-
-router.get('/category_fil', category.catFilter)
-router.post('/category_fil', category.catFilter)
-router.get('/category', category.categoryFilter)
 
 router.get('/login', isLogout, userController.userLogin)
 
@@ -63,7 +59,7 @@ router.post('/submit_otp', userController.submitOtp)
 router.get('/resend_otp', isLogout, userController.resendOtp)
 
 router.get('/profile', logedin, isBlocked, profile.loadProfile)
-router.get('/adresses', logedin, isBlocked, profile.manageAdress)
+router.get('/adresses', logedin, isBlocked, profile.manageAddress)
 router.get('/add_new_adress', logedin, isBlocked, profile.addNewAddress)
 router.post('/add_new_adress', logedin, isBlocked, profile.addNewAddressPost)
 router.get('/edit_address/:id', logedin, isBlocked, profile.editAddress)
@@ -139,80 +135,6 @@ router.post('/verify_Payment', logedin, isBlocked, wallet.verifyPayment)
 
 router.post('/addReview', logedin, isBlocked, review.addNewReviewPost)
 router.post('/editReview/:id', logedin, isBlocked, review.editReviewPost)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// router.post("/api/payment/verify",(req,res)=>{
-
-//     let body=req.body.response.razorpay_order_id + "|" + req.body.response.razorpay_payment_id;
-
-//      var crypto = require("crypto");
-//      var expectedSignature = crypto.createHmac('sha256','BHpzGbf03O8ttvTONBk2LokC')
-//       .update(body.toString())
-//       .digest('hex');
-//       console.log("sig received " ,req.body.response.razorpay_signature);
-//       console.log("sig generated " ,expectedSignature);
-//      var response = {"signatureIsValid":"false"}
-//      if(expectedSignature === req.body.response.razorpay_signature)
-//       response={"signatureIsValid":"true"}
-//          res.send(response);
-//      });
-
-
-
-
-
-
 
 
 

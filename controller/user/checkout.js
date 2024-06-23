@@ -13,15 +13,23 @@ const loadCheckout = async (req, res) => {
     // const userData = req.session.user
     // const userId   = userData._id
 
-    const userData = req.session.user
-    const userId = userData._id
-    const user = await User.findOne({ _id: userId }).lean()
+    const sessionData = req.session.user
+    const userId = sessionData._id
+    // const user = await User.findOne({ _id: userId }).lean()
 
 
-    const addressData = await Address.find({ userId: userId }).lean()
+    // const addressData = await Address.find({ userId: userId }).lean()
 
-    const userDataa = await User.findOne({ _id: userId }).populate("cart.product").lean()
-    const cart = userDataa.cart
+    // const userDataa = await User.findOne({ _id: userId }).populate("cart.product").lean()
+
+    const [user, addressData, userData , availableCoupons ] = await Promise.all([
+        User.findOne({ _id: userId }).lean(),
+        Address.find({ userId: userId }).lean(),
+        User.findOne({ _id: userId }).populate("cart.product").lean(),
+        Coupon.find({ expiryDate: { $gte: new Date() },usedBy: { $nin: [userId] }}).lean()
+      ]);
+      
+    const cart = userData.cart
 
 
     let subTotal = 0
@@ -32,10 +40,7 @@ const loadCheckout = async (req, res) => {
 
 
     const now = new Date();
-    const availableCoupons = await Coupon.find({
-        expiryDate: { $gte: now },
-        usedBy: { $nin: [userId] }
-    }).lean();
+    
     console.log(availableCoupons)
 
     const couponList = await Coupon.find({}).lean()
