@@ -471,9 +471,9 @@ const resendOtp = async (req, res) => {
 }
 
 
-//User login
 
 
+//user login controller
 const doLogin = async (req, res) => {
 
     try {
