@@ -10,6 +10,8 @@ const Category = require('../../model/categoryModel')
 let months        = []
 let odersByMonth  = []
 let revnueByMonth = []
+let categories = []
+let revenues = []
 let totalRevnue = 0
 let totalSales  = 0
 
@@ -102,7 +104,50 @@ const loadDashboard = async(req, res) => {
 
   console.log(popularBrands)
  
+  const categoryRevenue = await Order.aggregate([
+    // Step 1: Match delivered orders
+    { $unwind: "$product" }, // Step 2: Unwind products array
+    { 
+      $lookup: { // Step 3: Lookup product details from products collection
+        from: "products",
+        localField: "product.id",
+        foreignField: "_id",
+        as: "productDetails"
+      }
+    },
+    { $unwind: "$productDetails" },
+    { 
+      $group: { // Step 4: Group by category and calculate total revenue
+        _id: "$productDetails.category",
+        totalRevenue: { $sum: { $multiply: ["$product.quantity", "$productDetails.price"] } }
+      }
+    },
+    { 
+      $lookup: { // Step 5: Lookup category details from categories collection
+        from: "categories",
+        localField: "_id",
+        foreignField: "_id",
+        as: "categoryDetails"
+      }
+    },
+    { $unwind: "$categoryDetails" },
+    { 
+      $project: { // Step 6: Project final result
+        _id: 0,
+        category: "$categoryDetails.category",
+        totalRevenue: 1
+      }
+    },
+    { $sort: { totalRevenue: -1 } } // Optional: Sort by total revenue in descending order
+  ]);
 
+ categories = categoryRevenue.map(item => item.category);
+ revenues = categoryRevenue.map(item => item.totalRevenue);
+
+  console.log(categories)
+  
+
+  console.log("//////////////////////////////////////////////////////////",categoryRevenue)
        
     Sale.find({}, (err, sales) => {
       if (err) {
@@ -110,7 +155,7 @@ const loadDashboard = async(req, res) => {
         return;
       }
     
-      console.log(sales,'salessssssssssssssssss');
+      // console.log(sales,'salessssssssssssssssss');
       
       const salesByMonth = {};
       
@@ -158,6 +203,7 @@ const loadDashboard = async(req, res) => {
       const thisMonthOrder = odersByMonth[odersByMonth.length-1]
       const thisMonthSales = revnueByMonth[revnueByMonth.length-1]
 
+  
       //console.log(thisMonthOrder, thisMonthSales);
 
      
@@ -168,7 +214,7 @@ const loadDashboard = async(req, res) => {
       // console.log(totalRevnue);
       // console.log(totalSales);
 
-      res.render('admin/home', { popularBrands , bestSellings  , bestSellingCategory , revnueByMonth, months, odersByMonth, totalRevnue, totalSales, thisMonthOrder, thisMonthSales , layout:'adminlayout'})
+      res.render('admin/home', { popularBrands , bestSellings  , bestSellingCategory , revnueByMonth, months, odersByMonth, totalRevnue, totalSales, thisMonthOrder, thisMonthSales , categoryRevenue, layout:'adminlayout'})
 
     })
     
@@ -243,10 +289,17 @@ const loadDashboard = async(req, res) => {
 
  const getChartData = (req, res) => {
     try {
+      console.log("Months:", months);
+      console.log("Revenue By Month:", revnueByMonth);
+      console.log("Orders By Month:", odersByMonth);
+      console.log("Categories:", categories);
+      console.log("Revenues:", revenues);
         res.json({
             months: months,
             revnueByMonth: revnueByMonth,
-            odersByMonth : odersByMonth
+            odersByMonth : odersByMonth,
+            cat: categories,
+            revenue: revenues
         })
     } catch (error) {
         
