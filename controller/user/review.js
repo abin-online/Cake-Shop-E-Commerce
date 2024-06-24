@@ -19,6 +19,7 @@ addNewReviewPost: async(req, res) => {
             comment     : req.body.comment, 
             email       : req.body.email,
             // date        : Date.now, 
+            rating: req.body.rating,
             is_default  : false,
         })
 

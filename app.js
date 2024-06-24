@@ -120,9 +120,6 @@ Handlebars.registerHelper('formatTime', function (timestamp) {
 });
 
 
-// hbs.registerHelper("json", function (context) {
-//   return JSON.stringify(context)
-// })
 
 
 app.use(session({

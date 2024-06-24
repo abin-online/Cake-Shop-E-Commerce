@@ -261,7 +261,7 @@ const ProductView = async (req, res) => {
             }
 
         ]);
-        console.log(reviews)
+        console.log("Reviewsssssssss",reviews)
 
         if (reviews.length == 0) {
             reviewExist = false
@@ -272,6 +272,14 @@ const ProductView = async (req, res) => {
 
         let productExist  //store the user data if the product exist in the respective user's cart
         let productExistInCart //
+
+        let totalRating = 0
+        reviews.forEach((rev)=>{
+            totalRating = totalRating + rev.rating;
+        })
+
+        let avgRating = Math.round(totalRating / reviews.length)
+        console.log(avgRating)
 
         if (userData) {
 
@@ -327,9 +335,9 @@ const ProductView = async (req, res) => {
 
         if (userData) {
             console.log(userCanReview)
-            res.render('user/productview', { proData, userData, productExistInCart, reviews, userCanReview, reviewExist })
+            res.render('user/productview', {avgRating , proData, userData, productExistInCart, reviews, userCanReview, reviewExist })
         } else {
-            res.render('user/productview', { proData, reviews, reviewExist })
+            res.render('user/productview', {avgRating , proData, reviews, reviewExist })
         }
     } catch (error) {
         console.log(error);

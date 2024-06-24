@@ -1,11 +1,18 @@
 
-<style>
-/* Font Awesome library for star icons */
-@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css');
 
-.checked {
-    color: orange; /* Color for checked stars */
-}
+
+<style>
+    /* Font Awesome library for star icons */
+    @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css');
+
+    .checked {
+        color: orange; /* Color for checked stars */
+    }
+
+    .fa-star {
+        font-size: 24px; /* Adjust the font size to make the stars bigger */
+        cursor: pointer; /* Change cursor to pointer when hovering over stars */
+    }
 </style>
 
 <main class="main">
@@ -54,13 +61,49 @@
                                         <div class="pro-details-brand">
                                             {{!-- <span> Brands: <a href="shop-grid-right.html">Bootstrap</a></span> --}}
                                         </div>
+
                                         <div class="product-rate-cover text-end">
-                                            <div class="product-rate d-inline-block">
-                                                <div class="product-rating" style="width:90%">
-                                                </div>
-                                            </div>
-                                            <span class="font-small ml-5 text-muted"> (25 reviews)</span>
+                                            {{#ifeq avgRating 1}}
+                                                <span class="fa fa-star checked" ></span>
+                                                <span class="fa fa-star" ></span>
+                                                <span class="fa fa-star" ></span>
+                                                <span class="fa fa-star" ></span>
+                                                <span class="fa fa-star" ></span>
+                                            {{/ifeq}}
+                                            {{#ifeq avgRating 2}}
+                                                <span class="fa fa-star checked" ></span>
+                                                <span class="fa fa-star checked" ></span>
+                                                <span class="fa fa-star" ></span>
+                                                <span class="fa fa-star" ></span>
+                                                <span class="fa fa-star" ></span>
+                                            {{/ifeq}}
+                                            {{#ifeq avgRating 3}}
+                                                <span class="fa fa-star checked" ></span>
+                                                <span class="fa fa-star checked" ></span>
+                                                <span class="fa fa-star checked" ></span>
+                                                <span class="fa fa-star" ></span>
+                                                <span class="fa fa-star" ></span>
+                                            {{/ifeq}}
+                                            {{#ifeq avgRating 4}}
+                                                <span class="fa fa-star checked" ></span>
+                                                <span class="fa fa-star checked" ></span>
+                                                <span class="fa fa-star checked" ></span>
+                                                <span class="fa fa-star checked" ></span>
+                                                <span class="fa fa-star" ></span>
+                                            {{/ifeq}}
+                                            {{#ifeq avgRating 5}}
+                                                <span class="fa fa-star checked" ></span>
+                                                <span class="fa fa-star checked" ></span>
+                                                <span class="fa fa-star checked" ></span>
+                                                <span class="fa fa-star checked" ></span>
+                                                <span class="fa fa-star checked" ></span>
+                                            {{/ifeq}}
+                                            
+
+                                            
+                                            <span class="font-small ml-5 text-muted"> ( {{reviews.length}} reviews)</span>
                                         </div>
+
                                     </div>
                                     <div class="clearfix product-price-cover">
                                         <div class="product-price primary-color float-left">
@@ -82,42 +125,8 @@
                                             <li><i class="fi-rs-credit-card mr-5"></i> Cash on Delivery available</li>
                                         </ul>
                                     </div>
-                                    {{!-- <div class="attr-detail attr-color mb-15">
-                                        <strong class="mr-10">Color</strong>
-                                        <ul class="list-filter color-filter">
-                                            <li><a href="#" data-color="Red"><span class="product-color-red"></span></a>
-                                            </li>
-                                            <li><a href="#" data-color="Yellow"><span
-                                                        class="product-color-yellow"></span></a></li>
-                                            <li class="active"><a href="#" data-color="White"><span
-                                                        class="product-color-white"></span></a></li>
-                                            <li><a href="#" data-color="Orange"><span
-                                                        class="product-color-orange"></span></a></li>
-                                            <li><a href="#" data-color="Cyan"><span
-                                                        class="product-color-cyan"></span></a></li>
-                                            <li><a href="#" data-color="Green"><span
-                                                        class="product-color-green"></span></a></li>
-                                            <li><a href="#" data-color="Purple"><span
-                                                        class="product-color-purple"></span></a></li>
-                                        </ul>
-                                    </div> --}}
-                                    {{!-- <div class="attr-detail attr-size">
-                                        <strong class="mr-10">Size</strong>
-                                        <ul class="list-filter size-filter font-small">
-                                            <li><a href="#">S</a></li>
-                                            <li class="active"><a href="#">M</a></li>
-                                            <li><a href="#">L</a></li>
-                                            <li><a href="#">XL</a></li>
-                                            <li><a href="#">XXL</a></li>
-                                        </ul>
-                                    </div> --}}
                                     <div class="bt-1 border-color-1 mt-30 mb-30"></div>
                                     <div class="detail-extralink">
-                                        {{!-- <div class="detail-qty border radius">
-                                            <a href="#" class="qty-down"><i class="fi-rs-angle-small-down"></i></a>
-                                            <span class="qty-val">1</span>
-                                            <a href="#" class="qty-up"><i class="fi-rs-angle-small-up"></i></a>
-                                        </div> --}}
                                         <div class="product-extra-link2">
 
                                          
@@ -207,18 +216,34 @@
                                         <!--comment form-->
                                         {{#if userCanReview}}
                                         
-                                        <div class="comment-form">
-                                            <h4 class="mb-15">Add a review</h4>
-                                            </div>
+                                     
                                             <div class="row">
                                                 <div class="col-lg-8 col-md-12">
                                                     <form class="form-contact comment_form" action="/addReview" method = "post" id="commentForm">
+                                                              <div>
+                                            <h4 class="mb-15">Rate this product</h4>
+                                            </div>                                                           
+<div class="rating">
+    <span class="fa fa-star" onclick="toggleStars(1)"></span>
+    <span class="fa fa-star" onclick="toggleStars(2)"></span>
+    <span class="fa fa-star" onclick="toggleStars(3)"></span>
+    <span class="fa fa-star" onclick="toggleStars(4)"></span>
+    <span class="fa fa-star" onclick="toggleStars(5)"></span>
+
+    <!-- Hidden input field to store the selected rating -->
+    <input type="hidden" id="rating" name="rating" value="0">
+</div>
+                                                    
+                                                       <div class="comment-form">
+                                            <h4 class="mb-15">Add a review</h4>
+                                            </div>
                                                         <div class="row">
                                                             <div class="col-12">
                                                                 <div class="form-group">
                                                                     <textarea class="form-control w-100" name="comment" id="comment" cols="30" rows="9" placeholder="Write Comment"></textarea>
                                                                 </div>
                                                             </div>
+
                                                             <div class="col-sm-6">
                                                                 <div class="form-group">
                                                                     <input class="form-control" name="name" id="name" type="text" placeholder="Name" value = "{{userData.name}}" hidden>
@@ -229,9 +254,9 @@
                                                                     <input class="form-control" name="email" id="email" type="email" placeholder="Email" value = "{{userData.email}}" hidden>
                                                                 </div>
                                                             </div>
-                                                            <div class="col-sm-6" style="display: none;">
+                                                            <div class="col-sm-6" >
                                                                 <div class="form-group">
-                                                                    <input class="form-control" name="proId" id="proId" type="text" placeholder="" value = "{{proData._id}}">
+                                                                    <input class="form-control" name="proId" id="proId" type="text" placeholder="" value = "{{proData._id}}" hidden>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -316,7 +341,7 @@ const addToCartBtn = (proId) => {
 <script>
 function toggleStars(starCount) {
     // Remove 'checked' class from all stars
-    let stars = document.querySelectorAll('.fa.fa-star');
+    let stars = document.querySelectorAll('.rating .fa.fa-star');
     stars.forEach((star, index) => {
         if (index < starCount) {
             star.classList.add('checked'); // Add 'checked' class up to starCount
@@ -324,5 +349,10 @@ function toggleStars(starCount) {
             star.classList.remove('checked'); // Remove 'checked' class for stars after starCount
         }
     });
+
+    // Update the hidden input field with the selected rating
+    document.getElementById('rating').value = starCount;
 }
 </script>
+
+
