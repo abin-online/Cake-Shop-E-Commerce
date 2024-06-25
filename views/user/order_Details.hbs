@@ -298,6 +298,7 @@ const amount = parseInt({{myOrderDetails.total}} * 100)
         if (willDelete.isConfirmed) {
             changeStatus(orderId, 'cancel', 'Cancelled');
             Swal.fire("Your order was canceled!");
+            document.getElementById('cancel_btn').innerHTML = '';
         } else {
             Swal.fire("Your order was not canceled!");
         }
@@ -385,18 +386,7 @@ const retryPayment = async (id , status) => {
 
   const changeStatus = async (id, status, status2) => {
   try {
-    // Declare variables for wallet and updatedWallet
-    // let obj = {};
-    //let n = myOrderDetails.product.length;
-
-    //for(let i = 1; i <= n; i++) {
-    //    obj[`qty${i}`] = myOrderDetails.product[i].quantity;
-    //    obj[`id${i}`] = myOrderDetails.product[i].id;
-    //}
-
-    //
-    
-    console.log(obj);
+   
 
     
     let wallet = Number(document.getElementsByName('user_wallet')[0].value);

@@ -13,6 +13,7 @@ const Handlebars = require('handlebars');
 const { handlebars } = require('hbs')
 const { ObjectId } = require('mongodb')
 const { ProductView } = require('./userController')
+const { Console } = require('console')
 
 
 
@@ -208,6 +209,23 @@ const filterOrders = async (req, res) => {
       );
       }
 
+      let canceledOrder = await Orders.findOne({ _id: id });
+
+      for (const product of canceledOrder.product) {
+        await Product.updateOne(
+            { _id: product.id },
+            { $inc: { stock: product.quantity }}
+        );
+}
+
+
+      for (const product of canceledOrder.product) {
+            await Product.updateOne(
+                { _id: product.id },
+                { $inc: { stock: product.quantity }}
+            );
+    }
+
       await Orders.findByIdAndUpdate(id, { $set: { status: 'Cancelled' } }, { new: true });
 
       res.json('sucess')
@@ -224,8 +242,18 @@ const filterOrders = async (req, res) => {
     try {
         const id = req.query.id
         
-
+      console.log("order id",id)
         await Orders.findByIdAndUpdate(id, { $set: { status: 'Returned' } }, { new: true });
+
+        let returnedOrder = await Orders.findOne({ _id: id });
+        console.log(returnedOrder)
+
+        for (const product of returnedOrder.product) {
+              await Product.updateOne(
+                  { _id: product.id },
+                  { $inc: { stock: product.quantity }}
+              );
+      }
 
         res.json('sucess')
     } catch (error) {

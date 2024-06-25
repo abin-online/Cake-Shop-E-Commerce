@@ -120,8 +120,6 @@ Handlebars.registerHelper('formatTime', function (timestamp) {
 });
 
 
-
-
 app.use(session({
   secret: process.env.SECRETKEY,
   saveUninitialized: true,

@@ -213,8 +213,7 @@
 
 
         products.forEach((product) => {
-            const productHtml = `
-            <div class="col-lg-4 col-md-4 col-12 col-sm-6">
+            const productHtml = `<div class="col-lg-4 col-md-4 col-12 col-sm-6">
                 <div class="product-cart-wrap mb-30">
                     <div class="product-img-action-wrap">
                         <div class="product-img product-img-zoom">
@@ -224,32 +223,24 @@
                             </a>
                         </div>
                         <div class="product-action-1">
-                            <a aria-label="Quick view" class="action-btn hover-up"
-                                data-bs-toggle="modal" data-bs-target="#quickViewModal">
+                            <a aria-label="Quick view" class="action-btn hover-up" href="/productview?id=${product._id}">
                                 <i class="fi-rs-search"></i></a>
-                            <a aria-label="Add To Wishlist" class="action-btn hover-up"
-                                href="shop-wishlist.html"><i class="fi-rs-heart"></i></a>
-                            <a aria-label="Compare" class="action-btn hover-up"
-                                href="shop-compare.html"><i class="fi-rs-shuffle"></i></a>
                         </div>
                         <div class="product-badges product-badges-position product-badges-mrg">
-                            <span class="hot">Hot</span>
                         </div>
                     </div>
                     <div class="product-content-wrap">
                         <div class="product-category">
-                            <a href="shop-grid-right.html">${product.category.category}</a>
+                            ${product.category.category}
                         </div>
-                        <h2><a href="/productDetails/${product._id}">${product.name}</a>
+                        <h2><a href="/productview?id=${product._id}">${product.name}</a>
+                        <input type="hidden" id="name${product._id}" value="${product.name}">
+                        <input type="hidden" id="id" value="${product._id}">
                         </h2>
-                        <div class="rating-result" title="90%">
-                            <span><span>90%</span></span>
-                        </div>
                         <div class="product-price">
                             <span>₹${product.price}</span>
-                            <span class="old-price">₹245.8</span>
                         </div>
-<div class="product-action-1 show">
+                        <div class="product-action-1 show">
                             <span id="click${product._id}">
                             <a onclick="addToWishlist('${product._id}')" id="icon-2" aria-label="Add To Wishlist"
                                 class="wish action-btn hover-up" href="#"><i class="fi-rs-heart"></i></a>
@@ -257,8 +248,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        `;
+            </div>`;
             productList.append(productHtml);
         });
     };
@@ -346,6 +336,7 @@
     
 /// Add to wishlist ////////////
 
+
 const addToWishlist = async (id) => {
 
     const proName = document.getElementById('name' + id).value
@@ -389,6 +380,7 @@ const removeFromWishlist = async (id) => {
         alertify.success(`${proName} Removed from wishlist`)
     }
 }
+
 
 
 </script>
