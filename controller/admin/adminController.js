@@ -361,7 +361,7 @@ const newProduct = async (req, res) => {
     ])
     console.log(brandData);
     
-    console.log(catogories , "...........................poda")
+    console.log(catogories)
     if (req.session.productSave) {
       res.render("admin/addproduct", { brandData , productSaveMsg, catogories,layout:'adminlayout' });
       req.session.productSave = false;

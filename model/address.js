@@ -19,7 +19,7 @@ const addressSchema = new mongoose.Schema({
 
     adressLine1: {
         type: String,
-         required: true
+        required: true
     },
 
     

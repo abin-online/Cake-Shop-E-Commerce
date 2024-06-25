@@ -61,13 +61,13 @@ module.exports = {
         try {
             const userData = req.session.user;
             const id = userData._id;
-
+            console.log(req.body)
             const address = new Address({
                 userId: id,
                 name: req.body.name,
                 mobile: req.body.mobile,
-                addressLine1: req.body.address1,
-                addressLine2: req.body.address2,
+                adressLine1: req.body.address1,
+                adressLine2: req.body.address2,
                 city: req.body.city,
                 state: req.body.state,
                 pin: req.body.pin,
