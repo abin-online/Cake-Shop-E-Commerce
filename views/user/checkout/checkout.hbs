@@ -210,6 +210,9 @@
     </div>
   </section>
 </main>
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css"/>
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css"/>
+<script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
 
 <script>
 
@@ -366,6 +369,10 @@ const Cod = async () => {
     try {
         const selectAddress = document.querySelector('#selectedAddress').value;
         const subTotal = Number(document.getElementsByName('subTotal')[0].value);
+
+       if (!selectAddress) {
+    alertify.alert('Warning', 'Please select an address.');
+}
 
         // Prepare the request body based on the payment status
         let requestBody = {
