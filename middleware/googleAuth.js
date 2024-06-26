@@ -3,7 +3,7 @@ const GoogleStrategy = require('passport-google-oauth2').Strategy;
 passport.use(new GoogleStrategy({
     clientID: process.env.CLIENT_ID,
     clientSecret: process.env.CLIENT_SECRET,
-    callbackURL:  "https://cakekart.shop/auth/google/callback",
+    callbackURL:  "/auth/google/callback",
     passReqToCallback: true
 },
     async function (request, accessToken, refreshToken, profile, done) {
