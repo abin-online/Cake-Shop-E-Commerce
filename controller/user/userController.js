@@ -318,13 +318,13 @@ const ProductView = async (req, res) => {
                         product: 1
                     }
                 }
-            ]);;
+            ]);
             console.log("Orders:", orders);
 
 
             if (orders.length > 0) {
                 userCanReview = true;
-                console.log("I found", orders[0].product.name);
+                // console.log("I found", orders[0].product.name);
             }
 
             console.log(userCanReview)

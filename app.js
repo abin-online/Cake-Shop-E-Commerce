@@ -16,12 +16,15 @@ const multer = require('multer')
 const swal=require('sweetalert')
 const moment = require('moment');
 
- require('dotenv').config()
+moment.defaultFormat
+
+
+require('dotenv').config()
 
  mongoose.set('strictQuery', false);
  mongoose.connect(process.env.MONGODB, { useNewUrlParser: true, useUnifiedTopology: true })
  .then(() => {
-   console.log('MongoDB connected');
+   console.log('connected');
  })
  .catch(err => {
    console.error('MongoDB connection error:', err);
@@ -29,13 +32,16 @@ const moment = require('moment');
 
 const userRouter = require('./routes/user');
 const adminRouter = require('./routes/admin');
+const { diffIndexes } = require('./model/adminModel');
+const { setDefaultAutoSelectFamily } = require('net');
+const { loadDashboard } = require('./controller/admin/dashBoards');
+const { addMoneyToWallet } = require('./controller/user/wallet');
 // const { handlebars } = require('hbs');
 
 const app = express();
 
 
 let hbss = exphbs.create({})
-
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
@@ -118,6 +124,7 @@ Handlebars.registerHelper('formatDate', function (timestamp) {
 Handlebars.registerHelper('formatTime', function (timestamp) {
   return moment(timestamp).format(' h:mm A');
 });
+
 
 
 app.use(session({

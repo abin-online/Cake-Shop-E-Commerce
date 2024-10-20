@@ -6,7 +6,7 @@ const swal    =require('sweetalert')
 
 
 
-//////////////  Add to cart /////////////
+//////////////  Add to cart ////////////
 
 
 
@@ -16,6 +16,8 @@ const addToCart = async (req, res) => {
     const userData  = req.session.user
     const proId     = req.query.id
     const userId    = userData._id
+
+
 
     const product = await Product.findById(proId).lean()
 

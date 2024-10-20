@@ -267,6 +267,7 @@ const loadDashboard = async(req, res) => {
             proName: element.product,
         })
     })
+
     
     
     let grandTotal = 0
@@ -307,10 +308,6 @@ const loadDashboard = async(req, res) => {
  }
 
  
-
-
-
-
 module.exports = {
     loadDashboard,
     // currentMonthOrder,

@@ -12,6 +12,9 @@ const Brand       = require('../../model/brandModel')
 const moment      = require("moment");
 const mongoose    = require('mongoose');
 const coupon = require("../../model/coupon");
+const adminModel = require("../../model/adminModel");
+
+
 
 
 
@@ -30,10 +33,11 @@ const adminLogin = (req, res) => {
 const adminDoLogin = async (req, res) => {
   try {
     adminData = {
+
+ 
       email: process.env.ADMIN_EMAIL,
       password: process.env.ADMIN_PASSWORD
     };
-
     let adminEmail = req.body.email;
     let adminPassword = req.body.password;
 
