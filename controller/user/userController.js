@@ -42,7 +42,7 @@ const loadHome = async (req, res) => {
             Product.find().limit(8).lean(),
             Product.find({ is_blocked: false }).sort({ _id: -1 }).limit(8).lean(),
             Category.find({ isListed: true }).lean(),
-            Banners.find().lean(),
+            Banners.find({active: true}).lean(),
             Order.aggregate([
                 { $match: { status: "Delivered" } },
                 { $unwind: "$product" },
@@ -235,6 +235,8 @@ const aboutPage = async (req, res) => {
 
 const ProductView = async (req, res) => {
     try {
+
+        let reviewed
         const proId = req.query.id
         const proData = await Product.findById(proId).lean()
         console.log(proData)
@@ -306,8 +308,15 @@ const ProductView = async (req, res) => {
             ]);
             console.log("Orders:", orders);
 
+            reviewed = await Review.find({
+                userId: userData._id, 
+                productId : new ObjectId(proId)
+            })
 
-            if (orders.length > 0) {
+            console.log("..................",reviewed)
+
+
+            if (orders.length > 0 && reviewed.length != 1 ) {
                 userCanReview = true;
                 // console.log("I found", orders[0].product.name);
             }
@@ -320,7 +329,7 @@ const ProductView = async (req, res) => {
 
         if (userData) {
             console.log(userCanReview)
-            res.render('user/productview', {avgRating , proData, userData, productExistInCart, reviews, userCanReview, reviewExist   })
+            res.render('user/productview', {avgRating , proData, userData, productExistInCart, reviews, userCanReview, reviewExist , reviewed   })
         } else {
             res.render('user/productview', {avgRating , proData, reviews, reviewExist  })
         }

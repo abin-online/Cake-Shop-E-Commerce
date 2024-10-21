@@ -1,3 +1,7 @@
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cropperjs/dist/cropper.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+</head>
 
     <main class="main">
                
@@ -39,7 +43,7 @@
                     <div class="col-lg-2 col-md-4 mb-md-3 mb-lg-0" style="text-align: center;">
                             <div class="banner-features wow fadeIn animated hover-up">
                             <img src="assets/imgs/theme/icons/feature-{{increment @index}}.png" alt="">
-                            <h4 class="bg-1">{{this.code}}</h4>
+                            <h4 class="bg-1 coupon-code" onclick="copyCode('{{this.code}}')">{{this.code}}</h4>
                     </div>
                     </div>
                     {{/each}}
@@ -1507,7 +1511,23 @@
         </div>
     </div> --}}
     <!-- Vendor JS-->
-    
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/cropperjs/dist/cropper.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        window.copyCode = function(code) {
+            navigator.clipboard.writeText(code).then(() => {
+                Swal.fire("Copied!", "Coupon code copied to clipboard!", "success");
+            }).catch(err => {
+                console.error('Could not copy code: ', err);
+                Swal.fire("Error!", "Failed to copy coupon code.", "error");
+            });
+        };
+    });
+</script>
 
    
 </body>

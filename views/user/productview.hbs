@@ -270,7 +270,19 @@
                                         </div>
                                         
                                         {{else}}
+                                        {{#if reviewed}}
                                         <div class="comment-form">
+                                            <h4 class="mb-15">Already reviewed</h4>
+                                            <div class="product-rate d-inline-block mb-30">
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-lg-8 col-md-12">
+                                                    
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {{else}}
+                                                                                <div class="comment-form">
                                             <h4 class="mb-15">Purchase and review our product</h4>
                                             <div class="product-rate d-inline-block mb-30">
                                             </div>
@@ -280,6 +292,7 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        {{/if}}
                                         {{/if}}
                                     </div>
                     </div>
