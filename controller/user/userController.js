@@ -56,7 +56,7 @@ const loadHome = async (req, res) => {
             ])
         ]);
 
-        // Now you can work with the results
+        // work with the results
         console.log(loadProData);
         console.log(newProduct);
         console.log(loadCatData);
@@ -219,20 +219,9 @@ const searchSortFilter = async (req, res) => {
 };
 
 
-
-
-
-
-
-
-
-
 const aboutPage = async (req, res) => {
     try {
         const userData = req.session.user
-
-
-
 
         console.log(userData)
         res.render('user/aboutPage', { userData })
@@ -250,10 +239,6 @@ const ProductView = async (req, res) => {
         const proData = await Product.findById(proId).lean()
         console.log(proData)
         const userData = req.session.user
-
-
-
-
         let reviewExist = true //variable to check review exist or not
         const reviews = await Review.aggregate([
             {
@@ -335,9 +320,9 @@ const ProductView = async (req, res) => {
 
         if (userData) {
             console.log(userCanReview)
-            res.render('user/productview', {avgRating , proData, userData, productExistInCart, reviews, userCanReview, reviewExist })
+            res.render('user/productview', {avgRating , proData, userData, productExistInCart, reviews, userCanReview, reviewExist   })
         } else {
-            res.render('user/productview', {avgRating , proData, reviews, reviewExist })
+            res.render('user/productview', {avgRating , proData, reviews, reviewExist  })
         }
     } catch (error) {
         console.log(error);

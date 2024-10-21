@@ -31,27 +31,6 @@
                 </a>
 
             </li>
-            {{!-- <li class="menu-item has-submenu">
-                <a class="menu-link" href="page-sellers-cards.html"> <i class="icon material-icons md-store"></i>
-                    <span class="text">Sellers</span>
-                </a>
-                <div class="submenu">
-                    <a href="page-sellers-cards.html">Sellers cards</a>
-                    <a href="page-sellers-list.html">Sellers list</a>
-                    <a href="page-seller-detail.html">Seller profile</a>
-                </div>
-            </li> --}}
-            {{!-- <li class="menu-item has-submenu">
-                <a class="menu-link" href="page-form-product-1.html"> <i class="icon material-icons md-add_box"></i>
-                    <span class="text">Add product</span>
-                </a>
-                <div class="submenu">
-                    <a href="page-form-product-1.html">Add product 1</a>
-                    <a href="page-form-product-2.html">Add product 2</a>
-                    <a href="page-form-product-3.html">Add product 3</a>
-                    <a href="page-form-product-4.html">Add product 4</a>
-                </div>
-            </li> --}}
             <li class="menu-item">
                 <a class="menu-link" href="/admin/category"> <i class="icon material-icons md-category"></i>
                     <span class="text">Category</span>
@@ -127,11 +106,6 @@
                     </div>
 
                     <div class="col-lg-2 col-md-3 col-6">
-                        {{!-- <select class="form-select">
-                            <option>Show 20</option>
-                            <option>Show 30</option>
-                            <option>Show 40</option>
-                        </select> --}}
                     </div>
                 </div>
             </header> <!-- card-header end// -->
@@ -155,30 +129,27 @@
                                             <h6 class="mb-0 title">{{this.line1}}</h6>
                                         </div>
                                 </td>
-                                <td class="text-center" width="20%">{{this.line2}}</td>
-                                 <td class="text-center" width="20%">{{this.line3}}</td>
-                                 <td class="text-center" width="20%">{{this.line3}}</td>
+                                <td class="text-center" width="18%">{{this.line2}}</td>
+                                 <td class="text-center" width="18%">{{this.line3}}</td>
+                                 <td class="text-center" width="18%">{{this.line3}}</td>
 
 
-                                <td class="text-center" width="20%">
-                                    {{!-- <a href="/admin/delete_cpn?id={{this._doc._id}}" id = "delete" onclick="return confirm ('Are you sure want to delete?')" type="button" class="btn btn-primary">
-                                        Delete
-                                    </a> --}}
+                                <td class="text-center" width="26%">
 {{#if this.active}}
-    <div class="col-lg-3 col-sm-3 col-3 text-center banner-button">
-        <a href="javascript:void(0);" data-banner-id="{{this._id}}" onclick="toggleBannerStatus('{{this._id}}', true)" class="btn btn-pill font-sm rounded btn-brand"  style="width: 90px">
+   
+        <a href="javascript:void(0);" data-banner-id="{{this._id}}" onclick="toggleBannerStatus('{{this._id}}', true)" class="btn btn-pill font-sm rounded btn-brand"  style="width: 100px">
             <i class="material-icons md-edit"></i>Block
         </a>
-    </div>
+
 {{else}}
-    <div class="col-lg-3 col-sm-3 col-3 text-center banner-button">
-        <a href="javascript:void(0);" data-banner-id="{{this._id}}" onclick="toggleBannerStatus('{{this._id}}', false)" class="btn btn-pill font-sm rounded btn-brand" style="width: 90px">
+        <a href="javascript:void(0);" data-banner-id="{{this._id}}" onclick="toggleBannerStatus('{{this._id}}', false)" class="btn btn-pill font-sm rounded btn-brand" style="width: 100px">
             <i class="material-icons md-edit"></i>Unblock
         </a>
-    </div>
+    
 {{/if}}
 
-                            <a href="/admin/edit_banner/{{this._id}}"  class="btn btn-pill font-sm rounded btn-brand"  style="width: 90px">
+
+                            <a href="/admin/edit_banner/{{this._id}}"  class="btn btn-pill font-sm rounded btn-brand"  style="width: 100px">
                                     <i class="material-icons md-edit"></i> Edit
                                 </a>
                                 </td>

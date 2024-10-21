@@ -136,22 +136,17 @@
                                     <td>{{this.name}}</td>
                                     <td>{{this.comment}}</td>
                                     <td>{{formatDate this.createdAt}}</td>
-                                    <td width="20%" > 
+                                    <td  class="text-center" > 
 
-                                        {{#if this.isListed}}
-    <div class="col-lg-3 col-sm-3 col-3 text-center review-button">
-        <a href="javascript:void(0);" data-review-id="{{this._id}}" onclick="toggleReviewStatus('{{this._id}}', true)" class="btn btn-pill font-sm rounded btn-brand">
-            <i class="material-icons md-edit"></i>Block
-        </a>
-    </div>
-{{else}}
-    <div class="col-lg-3 col-sm-3 col-3 text-center review-button">
-        <a href="javascript:void(0);" data-review-id="{{this._id}}" onclick="toggleReviewStatus('{{this._id}}', false)" class="btn btn-pill font-sm rounded btn-brand">
-            <i class="material-icons md-edit"></i>Unblock
-        </a>
-    </div>
-{{/if}}
-
+                                    {{#if this.isListed}}
+                                    <a href="javascript:void(0);" data-review-id="{{this._id}}" onclick="toggleReviewStatus('{{this._id}}', true)" class="btn btn-pill font-sm rounded btn-brand" style="width: :100px;">
+                                        <i class="material-icons md-edit"></i>Block
+                                    </a>
+                                    {{else}}
+                                    <a href="javascript:void(0);" data-review-id="{{this._id}}" onclick="toggleReviewStatus('{{this._id}}', false)" class="btn btn-pill font-sm rounded btn-brand" style="width: :100px;">
+                                        <i class="material-icons md-edit"></i>Unblock
+                                        </a>
+                                    {{/if}}
                                     </td>
                                 </tr>
                                 {{/each}}

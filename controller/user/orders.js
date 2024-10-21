@@ -134,7 +134,7 @@ const filterOrders = async (req, res) => {
 
         console.log("mAYYII",myOrderDetails);
        
-        res.render('user/order_Details', { myOrderDetails, orderedProDet, userData, address })
+        res.render('user/order_Details', { myOrderDetails, orderedProDet, userData, address  })
     } catch (error) {
         console.log(error);
     }

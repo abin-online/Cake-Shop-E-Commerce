@@ -1,31 +1,28 @@
-const Admin       = require("../../model/adminModel");
-const adminHelper = require("../../helpers/admin_helper");
-const User        = require("../../model/userModel");
-const Category    = require("../../model/categoryModel");
-const Product     = require("../../model/productModel");
-const Coupon      = require("../../model/coupon");
-const Orders      = require("../../model/order");
-const Address     = require("../../model/address");
-const Banner      = require('../../model/banner');
-const Reviews     = require('../../model/review')
-const Brand       = require('../../model/brandModel')
-const moment      = require("moment");
-const mongoose    = require('mongoose');
-const coupon = require("../../model/coupon");
-const adminModel = require("../../model/adminModel");
+const User = require("../../model/userModel");
+const Category = require("../../model/categoryModel");
+const Product = require("../../model/productModel");
+const Coupon = require("../../model/coupon");
+const Orders = require("../../model/order");
+const Address = require("../../model/address");
+const Banner = require('../../model/banner');
+const Reviews = require('../../model/review')
+const Brand = require('../../model/brandModel')
+const moment = require("moment");
+const mongoose = require('mongoose');
 
 
 
 
 
 
-let adminData 
+
+let adminData
 let catSaveMsg = "Category added suceessfully..!!";
 
 ///Admin home page ///
 
 const adminLogin = (req, res) => {
-  res.render("admin/login", {  layout:'loginlayout'});
+  res.render("admin/login", { layout: 'loginlayout' });
 };
 
 /////Admin Login//////
@@ -34,7 +31,7 @@ const adminDoLogin = async (req, res) => {
   try {
     adminData = {
 
- 
+
       email: process.env.ADMIN_EMAIL,
       password: process.env.ADMIN_PASSWORD
     };
@@ -45,15 +42,15 @@ const adminDoLogin = async (req, res) => {
     //adminData = await Admin.findOne({ email: adminEmail });
 
     if (adminData) {
-      if (adminPassword === adminData.password ) {
+      if (adminPassword === adminData.password) {
         req.session.aLoggedIn = true;
         req.session.admin = adminData;
         res.redirect("/admin/home");
       } else {
-        res.render("admin/login", { message: "incorrect email or password" ,layout:'loginlayout'});
+        res.render("admin/login", { message: "incorrect email or password", layout: 'loginlayout' });
       }
     } else {
-      res.render("admin/login", { message: "incorrect email or password" , layout:'loginlayout'});
+      res.render("admin/login", { message: "incorrect email or password", layout: 'loginlayout' });
     }
   } catch (error) {
     console.log(error);
@@ -78,7 +75,7 @@ const adminLogout = async (req, res) => {
 
 const loadHome = (req, res) => {
   try {
-    res.render("admin/home",{layout:'adminlayout'});
+    res.render("admin/home", { layout: 'adminlayout' });
   } catch (error) {
     console.log(error);
   }
@@ -90,18 +87,18 @@ const loadHome = (req, res) => {
 const loadUsersData = async (req, res) => {
   try {
     var page = 1
-    if(req.query.page){
+    if (req.query.page) {
       page = req.query.page
     }
     const limit = 1;
-    let allUsersData =  await User.find()
-    .skip((page - 1) * limit)
-    .limit(limit * 1)
-    .lean();
+    let allUsersData = await User.find()
+      .skip((page - 1) * limit)
+      .limit(limit * 1)
+      .lean();
     const count = await User.find({}).count();
-    const totalPages = Math.ceil(count/limit)
-    const pages = Array.from({length: totalPages}, (_, i) => i + 1); 
-    res.render("admin/manage_users", { allUsersData,  pages , currentPage: page ,layout: 'adminlayout' });
+    const totalPages = Math.ceil(count / limit)
+    const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
+    res.render("admin/manage_users", { allUsersData, pages, currentPage: page, layout: 'adminlayout' });
   } catch (error) {
     console.log(error);
   }
@@ -144,19 +141,14 @@ const getCategory = async (req, res) => {
     const count = await Category.find({}).count();
     const totalPages = Math.ceil(count / limit)
     const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
-        
-// const proData = await Category.aggregate([{$lookup: {from: 'products' , foreignField : 'category' , localField : '_id', as: "catDetails" }},{$project: {category:1, count: {$size : '$catDetails'} }}])  
 
-
-
-    // console.log(proData)
     let catUpdtMsg = "Category updated successfully..!!";
 
     if (req.session.categoryUpdate) {
-      res.render("admin/category", { allCtegoryData, pages , currentPage: page,catUpdtMsg, layout: 'adminlayout' });
+      res.render("admin/category", { allCtegoryData, pages, currentPage: page, catUpdtMsg, layout: 'adminlayout' });
       req.session.categoryUpdate = false;
     } else {
-      res.render("admin/category", { allCtegoryData, pages , currentPage: page, layout: 'adminlayout' });
+      res.render("admin/category", { allCtegoryData, pages, currentPage: page, layout: 'adminlayout' });
     }
   } catch (error) {
     console.log(error);
@@ -170,13 +162,13 @@ const addCategory = (req, res) => {
     let catExistMsg = "Category alredy Exist..!!";
 
     if (req.session.categorySave) {
-      res.render("admin/add_category", { catSaveMsg, layout:'adminlayout' });
+      res.render("admin/add_category", { catSaveMsg, layout: 'adminlayout' });
       req.session.categorySave = false;
     } else if (req.session.catExist) {
-      res.render("admin/add_category", { catExistMsg, layout:'adminlayout' });
+      res.render("admin/add_category", { catExistMsg, layout: 'adminlayout' });
       req.session.catExist = false;
     } else {
-      res.render("admin/add_category",{layout:'adminlayout'});
+      res.render("admin/add_category", { layout: 'adminlayout' });
     }
   } catch (error) {
     console.log(error);
@@ -205,7 +197,7 @@ const addNewCategory = async (req, res) => {
       req.session.catExist = true;
       res.redirect("/admin/add_category");
     }
-  } catch (error) {}
+  } catch (error) { }
 };
 
 /// To edit category ///
@@ -217,10 +209,10 @@ const editCategory = async (req, res) => {
     const catData = await Category.findById({ _id: catId }).lean();
 
     if (req.session.catExist) {
-      res.render("admin/edit_category", { catData, catExistMsg, layout:'adminlayout' });
+      res.render("admin/edit_category", { catData, catExistMsg, layout: 'adminlayout' });
       // req.session.catExist = false
     } else {
-      res.render("admin/edit_category", { catData, layout:'adminlayout' });
+      res.render("admin/edit_category", { catData, layout: 'adminlayout' });
     }
   } catch (error) {
     console.log(error);
@@ -272,21 +264,21 @@ const updateCategory = async (req, res) => {
 const deleteCategory = async (req, res) => {
   try {
     const id = req.body.id
-      // const catId = req.params.id
-      let user = await Category.findById(id)
-      let newListed = user.isListed
+    // const catId = req.params.id
+    let user = await Category.findById(id)
+    let newListed = user.isListed
 
-      await Category.findByIdAndUpdate(id, {
-          isListed: !newListed
-      },
+    await Category.findByIdAndUpdate(id, {
+      isListed: !newListed
+    },
       { new: true })
 
-      res.redirect('/admin/category')
+    res.redirect('/admin/category')
 
 
 
   } catch (error) {
-      console.log(error)
+    console.log(error)
 
   }
 }
@@ -302,7 +294,7 @@ const deleteCategory = async (req, res) => {
 const getProduct = async (req, res) => {
   try {
     var page = 1
-    if(req.query.page){
+    if (req.query.page) {
       page = req.query.page
     }
     const limit = 10;
@@ -322,7 +314,7 @@ const getProduct = async (req, res) => {
         $skip: (page - 1) * limit
       },
       {
-          $limit: limit * 1
+        $limit: limit * 1
       }
     ]);
 
@@ -330,10 +322,10 @@ const getProduct = async (req, res) => {
     console.log(count)
 
     // console.log(products);
-    const totalPages = Math.ceil(count/limit)  // Example value
-    const pages = Array.from({length: totalPages}, (_, i) => i + 1);
+    const totalPages = Math.ceil(count / limit)  // Example value
+    const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
 
-    res.render("admin/products", { productData,pages , currentPage: page, layout:'adminlayout' });
+    res.render("admin/products", { productData, pages, currentPage: page, layout: 'adminlayout' });
   } catch (error) {
     console.log(error);
   }
@@ -353,9 +345,9 @@ const newProduct = async (req, res) => {
         }
       }
     ]);
-    
+
     console.log(catogories);
-    
+
     const brandData = await Brand.aggregate([
       {
         $match: {
@@ -364,13 +356,13 @@ const newProduct = async (req, res) => {
       }
     ])
     console.log(brandData);
-    
+
     console.log(catogories)
     if (req.session.productSave) {
-      res.render("admin/addproduct", { brandData , productSaveMsg, catogories,layout:'adminlayout' });
+      res.render("admin/addproduct", { brandData, productSaveMsg, catogories, layout: 'adminlayout' });
       req.session.productSave = false;
     } else {
-      res.render("admin/addproduct", {brandData , catogories, layout:'adminlayout' });
+      res.render("admin/addproduct", { brandData, catogories, layout: 'adminlayout' });
     }
   } catch (error) {
     console.log(error);
@@ -402,17 +394,17 @@ const getOrders = async (req, res) => {
       };
     });
 
-    const totalPages = Math.ceil(await Orders.countDocuments()/PAGE_SIZE)  // Example value
-    const pages = Array.from({length: totalPages}, (_, i) => i + 1);
+    const totalPages = Math.ceil(await Orders.countDocuments() / PAGE_SIZE)  // Example value
+    const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
 
     console.log(ordersData);
 
     res.render("admin/orders", {
-    
-      ordersData, pages ,
+
+      ordersData, pages,
       currentPage: page,
       // totalPages: Math.ceil(await Orders.countDocuments() / PAGE_SIZE),
-      layout:'adminlayout'
+      layout: 'adminlayout'
     });
   } catch (error) {
     console.log(error);
@@ -431,15 +423,15 @@ const addNewProduct = async (req, res) => {
       const image = file.filename;
       images.push(image);
     });
-    const { name, price, description, category, stock , brand} = req.body;
+    const { name, price, description, category, stock, brand } = req.body;
     const product = new Product({
-      name        : name,
-      price       : price,
-      description : description,
-      category    : category,
-      brand       : brand,
-      stock       : stock,
-      imageUrl    : images,
+      name: name,
+      price: price,
+      description: description,
+      category: category,
+      brand: brand,
+      stock: stock,
+      imageUrl: images,
       isWishlisted: false
     });
 
@@ -456,16 +448,16 @@ const addNewProduct = async (req, res) => {
 const editProduct = async (req, res) => {
   try {
     let proId = req.params.id;
-    
-    const proData = await Product.findById({ _id: proId }).lean()
-    const catogories = await Category.find({isListed:true}).lean()
-    const brandData  = await Brand.find({isListed:true}).lean()
 
-    console.log(".........................................................oo",proData);
+    const proData = await Product.findById({ _id: proId }).lean()
+    const catogories = await Category.find({ isListed: true }).lean()
+    const brandData = await Brand.find({ isListed: true }).lean()
+
+    console.log(".........................................................oo", proData);
     console.log(catogories);
 
 
-    res.render("admin/edit_product", {brandData , proData, catogories, layout:'adminlayout' })
+    res.render("admin/edit_product", { brandData, proData, catogories, layout: 'adminlayout' })
   } catch (error) {
     console.log(error);
   }
@@ -475,10 +467,10 @@ const editProduct = async (req, res) => {
 
 const updateProduct = async (req, res) => {
   try {
-    const proId   = req.params.id;
+    const proId = req.params.id;
     const product = await Product.findById(proId);
     const exImage = product.imageUrl;
-    const files   = req.files;
+    const files = req.files;
     let updImages = [];
 
     if (files && files.length > 0) {
@@ -489,19 +481,19 @@ const updateProduct = async (req, res) => {
       updImages = exImage;
     }
 
-    const { name, price, description, category, stock , brand} = req.body;
+    const { name, price, description, category, stock, brand } = req.body;
     await Product.findByIdAndUpdate(
       proId,
       {
-        name        : name,
-        price       : price,
-        description : description,
-        category    : category,
-        stock       : stock,
-        is_blocked  : false,
-        brand       : brand,
+        name: name,
+        price: price,
+        description: description,
+        category: category,
+        stock: stock,
+        is_blocked: false,
+        brand: brand,
 
-        imageUrl    : updImages,
+        imageUrl: updImages,
       },
       { new: true }
     );
@@ -533,7 +525,7 @@ const deleteProduct = async (req, res) => {
 };
 
 const blockProduct = async (req, res) => {
-  const id =req.body.id
+  const id = req.body.id
   // const proId = req.params.id;
   const prodData = await Product.findById(id);
   const isBlocked = prodData.is_blocked;
@@ -551,19 +543,19 @@ const blockProduct = async (req, res) => {
 const loadCoupon = async (req, res) => {
   try {
     var page = 1
-    if(req.query.page){
+    if (req.query.page) {
       page = req.query.page
     }
     const limit = 5;
     let coupon = await Coupon.find()
-    .skip((page - 1) * limit)
-    .limit(limit * 1)
+      .skip((page - 1) * limit)
+      .limit(limit * 1)
     const count = await Coupon.find({}).count();
-    const totalPages = Math.ceil(count/limit)
-    const pages = Array.from({length: totalPages}, (_, i) => i + 1); 
+    const totalPages = Math.ceil(count / limit)
+    const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
     console.log(coupon)
-  
-    
+
+
     const now = moment();
 
     const couponData = coupon.map((cpn) => {
@@ -574,8 +566,8 @@ const loadCoupon = async (req, res) => {
         expiryDate: formattedDate,
       };
     });
-console.log(couponData,"copondAtaaaaaaaaaaa")
-    res.render("admin/coupon", { couponData, pages , currentPage : page , layout:'adminlayout' });
+    console.log(couponData, "copondAtaaaaaaaaaaa")
+    res.render("admin/coupon", { couponData, pages, currentPage: page, layout: 'adminlayout' });
   } catch (error) {
     console.log(error);
   }
@@ -587,15 +579,15 @@ const addCoupon = (req, res) => {
     const couponExMsg = "Coupon alredy exist..!!";
 
     if (req.session.coupon) {
-      res.render("admin/add_coupon", { couponMsg, layout:'adminlayout' });
+      res.render("admin/add_coupon", { couponMsg, layout: 'adminlayout' });
       req.session.coupon = false;
     } else if (req.session.exCoupon) {
-      res.render("admin/add_coupon", { couponExMsg, layout:'adminlayout' });
+      res.render("admin/add_coupon", { couponExMsg, layout: 'adminlayout' });
       req.session.exCoupon = false;
     } else {
-      res.render("admin/add_coupon",{layout:'adminlayout'});
+      res.render("admin/add_coupon", { layout: 'adminlayout' });
     }
-    
+
   } catch (error) {
     console.log(error);
   }
@@ -603,7 +595,7 @@ const addCoupon = (req, res) => {
 
 const addCouponPost = async (req, res) => {
   try {
-    const { code, percent, expDate , max} = req.body;
+    const { code, percent, expDate, max } = req.body;
 
     const cpnExist = await Coupon.findOne({ code: code });
 
@@ -618,7 +610,7 @@ const addCouponPost = async (req, res) => {
       await coupon.save();
       req.session.coupon = true;
       res.redirect("/admin/coupons");
-      
+
     } else {
       req.session.exCoupon = true;
       res.redirect("/admin/add_coupon");
@@ -634,42 +626,42 @@ const addCouponPost = async (req, res) => {
 
 const listCoupon = async (req, res) => {
   try {
-    const id=req.body.id
-      // const catId = req.params.id
-      let coupon = await Coupon.findById(id)
-      console.log(coupon)
-      let newListed = coupon.status
-      console.log(newListed)
-      await Coupon.findByIdAndUpdate(id, {
-          status: !newListed
-      },
+    const id = req.body.id
+    // const catId = req.params.id
+    let coupon = await Coupon.findById(id)
+    console.log(coupon)
+    let newListed = coupon.status
+    console.log(newListed)
+    await Coupon.findByIdAndUpdate(id, {
+      status: !newListed
+    },
       { new: true })
-      res.redirect('/admin/coupons')
+    res.redirect('/admin/coupons')
 
 
   } catch (error) {
-      console.log(error)
+    console.log(error)
 
   }
 }
 //for review block
 const listReview = async (req, res) => {
   try {
-    const id=req.body.id
-      // const catId = req.params.id
-      let review = await Reviews.findById(id)
-      console.log(review)
-      let newListed = review.isListed
-      console.log(newListed)
-      await Reviews.findByIdAndUpdate(id, {
-          isListed: !newListed
-      },
+    const id = req.body.id
+    // const catId = req.params.id
+    let review = await Reviews.findById(id)
+    console.log(review)
+    let newListed = review.isListed
+    console.log(newListed)
+    await Reviews.findByIdAndUpdate(id, {
+      isListed: !newListed
+    },
       { new: true })
-      res.redirect('/admin/reviews')
+    res.redirect('/admin/reviews')
 
 
   } catch (error) {
-      console.log(error)
+    console.log(error)
 
   }
 }
@@ -677,19 +669,19 @@ const listReview = async (req, res) => {
 //for banner block
 const listBanner = async (req, res) => {
   try {
-    const id=req.body.id
-      // const catId = req.params.id
-      let banner = await Banner.findById(id)
-      console.log(banner)
-      let newListed = banner.active
-      console.log(newListed)
-      await Banner.findByIdAndUpdate(id, {
-          active: !newListed
-      },
+    const id = req.body.id
+    // const catId = req.params.id
+    let banner = await Banner.findById(id)
+    console.log(banner)
+    let newListed = banner.active
+    console.log(newListed)
+    await Banner.findByIdAndUpdate(id, {
+      active: !newListed
+    },
       { new: true })
-      res.redirect('/admin/banners')
+    res.redirect('/admin/banners')
   } catch (error) {
-      console.log(error)
+    console.log(error)
 
   }
 }
@@ -735,7 +727,7 @@ const orderDetails = async (req, res) => {
       orderedProDet,
       userData,
       address,
-      layout:'adminlayout'
+      layout: 'adminlayout'
     });
   } catch (error) {
     console.log(error);
@@ -762,7 +754,7 @@ const changeOrderStatus = async (req, res) => {
 
 
 
-const deleteProdImage =  async (req, res) => {
+const deleteProdImage = async (req, res) => {
   try {
 
     const { id, image } = req.query
@@ -781,19 +773,19 @@ const deleteProdImage =  async (req, res) => {
 
 const loadBanner = async (req, res) => {
   try {
-    
+
     const bannerData = await Banner.find().lean()
     console.log(bannerData)
-    res.render('admin/banners' , {bannerData, layout:'adminlayout'})
+    res.render('admin/banners', { bannerData, layout: 'adminlayout' })
   } catch (error) {
     console.log(error)
   }
 }
 
-const addBanner =  (req, res) => {
+const addBanner = (req, res) => {
   try {
-   
-    res.render('admin/add_banner', { layout:'adminlayout'})
+
+    res.render('admin/add_banner', { layout: 'adminlayout' })
   } catch (error) {
     console.log(error);
   }
@@ -802,34 +794,34 @@ const addBanner =  (req, res) => {
 
 const addBannerPost = async (req, res) => {
   try {
-    const {line1 , line2 , line3 , line4 } = req.body
-    const image  = req.file.filename 
+    const { line1, line2, line3, line4 } = req.body
+    const image = req.file.filename
 
-    const banner = new Banner ({
-      line1 : line1,
-      line2 : line2,
-      line3 : line3,
-      line4 : line4,
-      image : image,
+    const banner = new Banner({
+      line1: line1,
+      line2: line2,
+      line3: line3,
+      line4: line4,
+      image: image,
     })
 
     await banner.save()
     res.redirect('/admin/banners')
-  } catch (error) { 
+  } catch (error) {
     console.log(error)
   }
 }
 
 
-const editBanner = async (req, res)=>{
+const editBanner = async (req, res) => {
   try {
     const id = req.params.id
     const bannerData = await Banner.findById({ _id: id }).lean()
 
-    res.render("admin/editBanner" , {bannerData , layout:'adminlayout'})
-    
+    res.render("admin/editBanner", { bannerData, layout: 'adminlayout' })
+
   } catch (error) {
-    
+
   }
 }
 
@@ -850,7 +842,7 @@ const deleteBanner = async (req, res) => {
 
 
 
-const loadReviews = async (req , res)=> {
+const loadReviews = async (req, res) => {
   try {
 
     const reviews = await Reviews.aggregate([
@@ -867,18 +859,18 @@ const loadReviews = async (req , res)=> {
       }
     ])
     console.log(reviews)
-  
 
-console.log("REVIEWSSSSSSSSSSS" ,reviews)
 
-    res.render('admin/reviews' , {reviews , layout: 'adminlayout' })
-    
+    console.log("REVIEWSSSSSSSSSSS", reviews)
+
+    res.render('admin/reviews', { reviews, layout: 'adminlayout' })
+
   } catch (error) {
-    
+
   }
 };
 
-const loadBrands = async (req, res)=>{
+const loadBrands = async (req, res) => {
   try {
 
     const brandData = await Product.aggregate([
@@ -912,15 +904,15 @@ const loadBrands = async (req, res)=>{
         }
       }
     ])
-    
+
     console.log(brandData);
-    
-    
-    
-    res.render('admin/brands' , { brandData , layout: 'adminlayout' })
-    
+
+
+
+    res.render('admin/brands', { brandData, layout: 'adminlayout' })
+
   } catch (error) {
-    
+
   }
 }
 
@@ -1113,5 +1105,5 @@ module.exports = {
   updateBrand,
   deleteBrand,
   listBanner
- 
+
 };
