@@ -124,18 +124,6 @@ const getProduct = async (req, res) => {
         const totalPages = Math.ceil(count / limit);
         const proCount = count
 
-        // const user = await User.findById(userId).populate('wishlist').lean()
-        // const wishItem = user.wishlist
-
-
-        // for (let i of wishItem) {
-        //   i.ID = userData._id
-        //   productExist = await User.find({ _id: userId, "cart.product": new ObjectId(i._id) }).lean();
-        //   if (productExist.length === 0) i.productExistInCart = false
-        //   else i.productExistInCart = true
-        // }
-        // console.log(wishItem)
-
         const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
 
         const newProduct = await Product.find({ is_blocked: false }).sort({ _id: -1 }).limit(3).lean()
