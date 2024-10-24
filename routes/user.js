@@ -39,7 +39,6 @@ router.post('/', userController.doLogin)
 router.get('/product', userController.getProduct)
 router.post('/search',userController.searchSortFilter)
 router.get('/productview', userController.ProductView)
-router.post('/products_filter',  userController.productSearch)
 
 
 

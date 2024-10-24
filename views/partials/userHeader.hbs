@@ -5,8 +5,8 @@
     <!-- SweetAlert2 JS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 </head>
-<header class="header-area header-style-1 header-height-2">
-    <div class="header-top header-top-ptb-1 d-none d-lg-block">
+
+<div class="header-top header-top-ptb-1 d-none d-lg-block">
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-xl-3 col-lg-4">
@@ -114,8 +114,7 @@
                                                 class="material-icons md-account_balance_wallet"></i>Orders</a>
                                         <a class="dropdown-item" href="/adresses"><i
                                                 class="material-icons md-receipt"></i>Address</a>
-                                        <a class="dropdown-item" href=""><i
-                                                class="material-icons md-help_outline"></i>Help center</a>
+
                                         <div class="dropdown-divider"></div>
                                         <a class="dropdown-item text-danger" id="logoutLink">
                                             <i class="material-icons md-exit_to_app"></i>Logout
@@ -130,112 +129,158 @@
             </div>
         </div>
     </div>
-    <div class="header-bottom header-bottom-bg-color sticky-bar">
-        <div class="container">
-            <div class="header-wrap header-space-between position-relative">
-                <div class="logo logo-width-1 d-block d-lg-none">
-                    <a href="index.html"><img src="assets/imgs/theme/logo.svg" alt="logo"></a>
-                </div>
-                <div class="header-nav d-none d-lg-flex">
-                    <div class="main-categori-wrap d-none d-lg-block">
-                        {{!-- <a class="categori-button-active" href="#">
-                            <span class="fi-rs-apps"></span> Browse Categories
-                        </a> --}}
-                        <div class="categori-dropdown-wrap categori-dropdown-active-large">
-                           
-                            <div class="more_categories">Show more...</div>
-                        </div>
+
+
+<div class="header-bottom header-bottom-bg-color sticky-bar">
+    <div class="container">
+        <div class="header-wrap header-space-between position-relative">
+            <!-- Logo for Mobile View -->
+            <div class="logo logo-width-1 d-block d-lg-none">
+                <a href="/">CAKE_KART</a>
+            </div>
+            
+            <!-- Mobile-Friendly Navigation -->
+            <div class="header-action-right d-block d-lg-none">
+                <div class="header-action-2">
+                    <div class="header-action-icon-2">
+                        <a href="/wishlist?id={{userData._id}}">
+                            <img alt="Evara" src="/assets/imgs/theme/icons/icon-heart.svg">
+                            {{#if userData}}
+                                <span class="pro-count white">{{userData.wishlist.length}}</span>
+                            {{else}}
+                                <span class="pro-count white">0</span>
+                            {{/if}}
+                        </a>
                     </div>
-                    <div class="main-menu main-menu-padding-1 main-menu-lh-2 d-none d-lg-block">
-                        <nav>
-                            <ul>
-                                <li><a class="active" href="/">Home <i class="fi-rs-angle-down"></i></a>
-                                    
-                                </li>
-                                <li>
-                                    <a href="/about">About</a>
-                                </li>
-                                <li><a href="/product">Shop <i class="fi-rs-angle-down"></i></a>
-                                    
-                                </li>
-                               
-                            </ul>
-                        </nav>
+
+                    <div class="header-action-icon-2">
+                        <a class="mini-cart-icon" href="/cart?id={{userData._id}}">
+                            <img alt="Evara" src="/assets/imgs/theme/icons/icon-cart.svg">
+                            {{#if userData}}
+                                <span class="pro-count white">{{userData.cart.length}}</span>
+                            {{else}}
+                                <span class="pro-count white">0</span>
+                            {{/if}}
+                        </a>
                     </div>
-                </div>
-                <div class="hotline d-none d-lg-block">
-                    <p><i class="fi-rs-headset"></i><span>Hotline</span> 1900 - 888 </p>
-                </div>
-                <p class="mobile-promotion">Happy <span class="text-brand">Mother's Day</span>. Big Sale Up to 40%</p>
-                <div class="header-action-right d-block d-lg-none">
-                    <div class="header-action-2">
-                        <div class="header-action-icon-2">
-                            <a href="shop-wishlist.html">
-                                <img alt="Evara" src="assets/imgs/theme/icons/icon-heart.svg">
-                                <span class="pro-count white">4</span>
-                            </a>
-                        </div>
-                        <div class="header-action-icon-2">
-                            <a class="mini-cart-icon" href="shop-cart.html">
-                                <img alt="Evara" src="assets/imgs/theme/icons/icon-cart.svg">
-                                <span class="pro-count white">2</span>
-                            </a>
-                            <div class="cart-dropdown-wrap cart-dropdown-hm2">
-                                <ul>
-                                    <li>
-                                        <div class="shopping-cart-img">
-                                            <a href="shop-product-right.html"><img alt="Evara"
-                                                    src="assets/imgs/shop/thumbnail-3.jpg"></a>
-                                        </div>
-                                        <div class="shopping-cart-title">
-                                            <h4><a href="shop-product-right.html">Plain Striola Shirts</a></h4>
-                                            <h3><span>1 × </span>$800.00</h3>
-                                        </div>
-                                        <div class="shopping-cart-delete">
-                                            <a href="#"><i class="fi-rs-cross-small"></i></a>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="shopping-cart-img">
-                                            <a href="shop-product-right.html"><img alt="Evara"
-                                                    src="assets/imgs/shop/thumbnail-4.jpg"></a>
-                                        </div>
-                                        <div class="shopping-cart-title">
-                                            <h4><a href="shop-product-right.html">Macbook Pro 2022</a></h4>
-                                            <h3><span>1 × </span>$3500.00</h3>
-                                        </div>
-                                        <div class="shopping-cart-delete">
-                                            <a href="#"><i class="fi-rs-cross-small"></i></a>
-                                        </div>
-                                    </li>
-                                </ul>
-                                <div class="shopping-cart-footer">
-                                    <div class="shopping-cart-total">
-                                        <h4>Total <span>$383.00</span></h4>
-                                    </div>
-                                    <div class="shopping-cart-button">
-                                        <a href="shop-cart.html">View cart</a>
-                                        <a href="shop-checkout.html">Checkout</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="header-action-icon-2 d-block d-lg-none">
-                            <div class="burger-icon burger-icon-white">
-                                <span class="burger-icon-top"></span>
-                                <span class="burger-icon-mid"></span>
-                                <span class="burger-icon-bottom"></span>
-                            </div>
+
+                    <!-- Burger Icon for Mobile -->
+                    <div class="header-action-icon-2 d-block d-lg-none">
+                        <div class="burger-icon burger-icon-white" id="burgerMenu">
+                            <span class="burger-icon-top"></span>
+                            <span class="burger-icon-mid"></span>
+                            <span class="burger-icon-bottom"></span>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <!-- Desktop View Navigation -->
+            <div class="header-nav d-none d-lg-flex">
+                <div class="main-menu main-menu-padding-1 main-menu-lh-2">
+                    <nav>
+                        <ul>
+                            <li><a class="active" href="/">Home</a></li>
+                            <li><a href="/about">About</a></li>
+                            <li><a href="/product">Shop</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+
+            <!-- Hotline and Promotion Text -->
+            <div class="hotline d-none d-lg-block">
+                <p><i class="fi-rs-headset"></i><span>Hotline</span> 1900 - 888</p>
+            </div>
         </div>
     </div>
-</header>
+</div>
+
+<!-- Mobile Header Dropdown -->
+<div class="mobile-header-active mobile-header-wrapper-style">
+    <div class="mobile-header-wrapper-inner">
+        <div class="mobile-header-top">
+            <div class="mobile-header-logo">
+                <a href="/"><img src="assets/imgs/theme/logo.svg" alt="logo"></a>
+            </div>
+            <div class="mobile-menu-close close-style-wrap close-style-position-inherit">
+                <button class="close-style search-close">
+                    <i class="icon-top"></i>
+                    <i class="icon-bottom"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="mobile-header-content-area">
+            <!-- Search -->
+            <div class="mobile-search search-style-3 mobile-header-border">
+                <input type="text" onkeyup="searchProducts()" id="searchInput" name="search" class="search-product"
+                                placeholder="Search for items...">
+            </div>
+            <a  href="/product">
+                            <span class="fi-rs-apps"></span> Shop now
+                        </a>
+
+            <!-- Mobile Menu -->
+            <div class="mobile-menu-wrap mobile-header-border">
+                <div class="main-categori-wrap mobile-header-border">
+                   
+                </div>
+                <nav>
+                    <ul class="mobile-menu">
+                        
+                        {{#if userData}}
+                        <li class="menu-item-has-children"><span class="menu-expand"></span><a href="/">Home</a>
+                        </li>
+                        <li class="menu-item-has-children"><span class="menu-expand"></span><a href="/profile">Profile</a>
+                        </li>
+
+                        <li class="menu-item-has-children"><span class="menu-expand"></span><a href="/adresses">Address</a>
+                        </li>
+                        
+                        <li class="menu-item-has-children"><span class="menu-expand"></span><a href="/wallet">Wallet</a>
+                        </li>
+                        <li class="menu-item-has-children"><span class="menu-expand"></span><a href="/logout">Logout </a>
+                        </li>
+                        {{else}}
+                        <div class="single-mobile-header-info">
+                        <a href="/logout">Log In / Sign Up </a>
+                        </div>
+                        {{/if}}
+                        
+                    </ul>
+                </nav>
+            </div>
+            
+            <!-- Mobile Footer -->
+            <div class="mobile-header-info-wrap mobile-header-border">
+                <div class="single-mobile-header-info mt-30">
+                    <a href="https://maps.app.goo.gl/W2cYTMWAn5e2Dbyb8"> Our location </a>
+                </div>
+
+                <div class="single-mobile-header-info">
+                    <a href="#">(+01) - 2345 - 6789 </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 
 
 <script>
+
+    // JavaScript to Toggle Mobile Menu
+    document.getElementById("burgerMenu").addEventListener("click", function() {
+        var mobileNav = document.getElementById("mobileNav");
+        if (mobileNav.style.display === "none" || mobileNav.style.display === "") {
+            mobileNav.style.display = "block";
+        } else {
+            mobileNav.style.display = "none";
+        }
+    });
+
 
     document.getElementById('logoutLink').addEventListener('click', function(event) {
     event.preventDefault(); // Prevent the default action

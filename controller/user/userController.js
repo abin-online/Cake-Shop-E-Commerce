@@ -199,8 +199,8 @@ const searchSortFilter = async (req, res) => {
     ]);
 
     // Now you can work with products and totalProducts
-    console.log(products);
-    console.log(totalProducts);
+    // console.log(products);
+    // console.log(totalProducts);
 
 
     res.json({ products, totalProducts });
@@ -555,37 +555,6 @@ const doSignup = async (req, res) => {
 
 
 
-const productSearch = async (req, res) => {
-    const { search, catId } = req.body
-
-
-
-    if (catId) {
-
-        try {
-            const products = await Product.find({ category: catId, name: { $regex: search, $options: 'i' } })
-                .populate('category', 'category');
-            res.json(products);
-        } catch (error) {
-            console.log(error);
-            return res.status(500).send();
-        }
-
-
-    } else {
-        try {
-            const products = await Product.find({ name: { $regex: search, $options: 'i' } })
-                .populate('category', 'category');
-
-
-            res.json(products);
-        } catch (error) {
-            console.log(error);
-            return res.status(500).send();
-        }
-
-    }
-}
 
 
 
@@ -611,7 +580,6 @@ module.exports = {
     doLogin,
     getOtp,
     resendOtp,
-    productSearch,
     searchSortFilter,
     googleCallback,
     aboutPage
