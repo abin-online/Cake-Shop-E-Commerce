@@ -12,7 +12,7 @@
                 <div class="col-xl-3 col-lg-4">
                     <div class="header-info">
                         <ul>
-                            <li><i class="fi-rs-smartphone"></i> <a href="#">(+01) - 2345 - 6789</a></li>
+                            <li><i class="fi-rs-smartphone"></i> <a href="#"><span id="currentTime"></span></a></li>
                             <li><i class="fi-rs-marker"></i><a href="https://maps.app.goo.gl/W2cYTMWAn5e2Dbyb8">Our location</a></li>
                         </ul>
                     </div>
@@ -259,7 +259,7 @@
                 </div>
 
                 <div class="single-mobile-header-info">
-                    <a href="#">(+01) - 2345 - 6789 </a>
+                    <span id="currentTime"></span>
                 </div>
             </div>
         </div>
@@ -300,6 +300,28 @@
         }
     });
 });
+
+
+function formatAMPM(date) {
+    let hours = date.getHours();
+    let minutes = date.getMinutes();
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12;
+    hours = hours ? hours : 12; // Convert 0 hour to 12
+    minutes = minutes < 10 ? '0' + minutes : minutes; // Add leading zero to minutes
+    const strTime = hours + ':' + minutes + ' ' + ampm;
+    return strTime;
+}
+
+function showCurrentTime() {
+    const now = new Date();
+    const currentTime = formatAMPM(now);
+    document.getElementById('currentTime').textContent = currentTime;
+}
+
+// Call function initially and set interval to update every minute
+showCurrentTime();
+setInterval(showCurrentTime, 60000);
 
 
 
