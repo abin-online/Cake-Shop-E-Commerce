@@ -1,3 +1,6 @@
+Here’s an updated version of your README for the **Cake Shop E-Commerce** application, incorporating the suggestions mentioned earlier:
+
+```markdown
 # 🍰 Cake Shop E-Commerce
 
 ## Overview
@@ -53,13 +56,6 @@ To set up and run this project, you'll need the following:
    Create a `.env` file in the root directory and configure the following variables:
 
    ```plaintext
-<<<<<<< HEAD
-   PORT=3000
-   MONGODB_URI=mongodb://localhost:27017/your-database
-   SECRETKEY=your-secret-key
-   RAZORPAY_KEY_ID=your-razorpay-key
-   RAZORPAY_KEY_SECRET=your-razorpay-secret
-=======
    PORT=3000                           # Port on which the app will run
    MONGODB_URI=mongodb://localhost:27017/your-database   # MongoDB connection string
    SECRETKEY=your-secret-key            # Secret key for session management and JWTs
@@ -69,9 +65,9 @@ To set up and run this project, you'll need the following:
    CLIENT_SECRET=#######                # OAuth Client Secret (if applicable)
    USER_EMAIL=#######                   # Email for system notifications or email service
    USER_PASSWORD=######                 # Password for system email account
-
->>>>>>> be65f52a6181d5cbc37af7ca9990cdc017149d45
    ```
+
+   > You can copy `.env.example` to `.env` if this file is included in the repository.
 
 4. **Start the Application**
 
@@ -93,7 +89,7 @@ To set up and run this project, you'll need the following:
    docker-compose up -d
    ```
 
-   This will start the application and MongoDB services as defined in the `docker-compose.yml` file.
+   This will start the application and MongoDB services as defined in the `docker-compose.yml` file. Run this command from the root project directory where `docker-compose.yml` is located.
 
 ## 🧩 Project Structure
 
@@ -101,10 +97,9 @@ To set up and run this project, you'll need the following:
 - **/controllers**: Application logic and request handling
 - **/routes**: Defines API endpoints and routing
 - **/public**: Static assets like images, stylesheets, and scripts
-- **/views**: EJS templates for dynamic web pages
-- **/config**: database connection settings
 - **/views**: HBS (Handlebars) templates for dynamic web pages
-- **/helpers**: Helper functions and utilities:
+- **/config**: Database connection settings
+- **/helpers**: Helper functions and utilities
 
 ## ⚙️ Deployment on AWS EC2
 
@@ -127,3 +122,6 @@ Refer to [AWS EC2 Documentation](https://docs.aws.amazon.com/ec2/) for detailed 
 
 
 This README now offers a thorough guide for users and developers alike. Let me know if there’s anything else you’d like to add or modify!
+``` 
+
+Feel free to make further adjustments or additions based on your preferences!
