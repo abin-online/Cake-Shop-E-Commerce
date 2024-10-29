@@ -89,7 +89,9 @@ To set up and run this project, you'll need the following:
 - **/routes**: Defines API endpoints and routing
 - **/public**: Static assets like images, stylesheets, and scripts
 - **/views**: EJS templates for dynamic web pages
-- **/config**: Configuration files for database and environment settings
+- **/config**: database connection settings
+- **/views**: HBS (Handlebars) templates for dynamic web pages
+- **/helpers**: Helper functions and utilities:
 
 ## ⚙️ Deployment on AWS EC2
 
