@@ -4,6 +4,7 @@ const PDFDocument = require('pdfkit');
 const fs = require('fs');
 
 
+
 //Email verification
 
 const verifyEmail = async(email)=>{
@@ -16,7 +17,7 @@ const verifyEmail = async(email)=>{
             secure: false,
             requireTLS: true,
             auth:{
-                user: process.env.USER_EMAIL,
+                user: process.env.USER_EMAIL ,
                 pass: process.env.USER_PASSWORD
             }
         })
