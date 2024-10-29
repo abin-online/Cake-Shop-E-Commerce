@@ -1,0 +1,29 @@
+services:
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db  # Persist MongoDB data
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: my-node-app
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    environment:
+      SECRETKEY: secret
+      MONGODB: mongodb://mongo:27017/Project_Ecommerce
+      NODE_TLS_REJECT_UNAUTHORIZED: "0"  # Ignore self-signed certificate errors (development only)
+    depends_on:
+      - mongo
+    volumes:
+      - ./public/images/products:/app/public/images/products  # Persist uploaded images
+
+volumes:
+  mongo_data:
