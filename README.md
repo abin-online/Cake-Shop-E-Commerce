@@ -1,6 +1,3 @@
-Here’s an updated version of your README for the **Cake Shop E-Commerce** application, incorporating the suggestions mentioned earlier:
-
-```markdown
 # 🍰 Cake Shop E-Commerce
 
 ## Overview
@@ -119,7 +116,6 @@ Refer to [AWS EC2 Documentation](https://docs.aws.amazon.com/ec2/) for detailed 
 - [MongoDB Documentation](https://www.mongodb.com/docs/)
 - [Razorpay Documentation](https://razorpay.com/docs/)
 - [Docker Documentation](https://docs.docker.com/)
+```
 
-
-This README now offers a thorough guide for users and developers alike. Let me know if there’s anything else you’d like to add or modify!
-``` 
+Let me know if you need any more changes!
