@@ -123,5 +123,3 @@ Refer to [AWS EC2 Documentation](https://docs.aws.amazon.com/ec2/) for detailed 
 
 This README now offers a thorough guide for users and developers alike. Let me know if there’s anything else you’d like to add or modify!
 ``` 
-
-Feel free to make further adjustments or additions based on your preferences!
