@@ -22,6 +22,7 @@
     "handlebars": "^4.7.7",
     "hbs": "^4.2.0",
     "http-errors": "~1.6.3",
+    "memorystore": "^1.6.7",
     "moment": "^2.29.4",
     "mongodb": "^5.0.0",
     "mongoose": "^6.9.0",
