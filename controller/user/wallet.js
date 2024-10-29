@@ -1,9 +1,11 @@
 const  User  = require('../../model/userModel')
+const path = require("path");
+require('dotenv').config({path: path.resolve(__dirname,".env")});
 const razorpay = require("razorpay")
 
 let instance = new razorpay({
-    key_id: process.env.RAZORPAY_ID,
-    key_secret: process.env.RAZORPAY_SECRET
+    key_id: process.env.RAZORPAY_ID ,
+    key_secret: process.env.RAZORPAY_SECRET 
 })
 
 

@@ -5,7 +5,9 @@ const Coupon = require('../../model/coupon')
 const Product = require('../../model/productModel')
 const Category = require('../../model/categoryModel')
 const Razorpay = require('razorpay');
-const { log } = require('handlebars')
+//const { log } = require('handlebars')
+require('dotenv').config();
+
 
 
 const loadCheckout = async (req, res) => {

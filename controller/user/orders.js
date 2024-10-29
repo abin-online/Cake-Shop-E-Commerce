@@ -267,29 +267,12 @@ const filterOrders = async (req, res) => {
 
     const id = req.query.id
 
-    
-    // let Order = await Orders.find({_id: ObjectId(id)})
-
-    //   var instance = new Razorpay({
-    //       key_id: process.env.RAZORPAY_ID,
-    //       key_secret: process.env.RAZORPAY_SECRET
-    //   })
-
-    //   const order = await instance.orders.create({
-    //       amount: Order[0].total,
-    //       currency: 'INR',
-    //       receipt: 'Abin Babu',
-    //   })
-
-      await Orders.findByIdAndUpdate(id, { $set: { status: 'pending' } }, { new: true });
+    await Orders.findByIdAndUpdate(id, { $set: { status: 'pending' } }, { new: true });
 
       res.json({
           razorPaySucess: true,
           order
       })
-
-
-  
     
   } catch (error) {
     
