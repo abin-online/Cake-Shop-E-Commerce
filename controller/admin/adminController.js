@@ -11,11 +11,6 @@ const moment = require("moment");
 const mongoose = require('mongoose');
 
 
-
-
-
-
-
 let adminData
 let catSaveMsg = "Category added suceessfully..!!";
 
@@ -32,8 +27,8 @@ const adminDoLogin = async (req, res) => {
     adminData = {
 
 
-      email: process.env.ADMIN_EMAIL,
-      password: process.env.ADMIN_PASSWORD
+      email: process.env.ADMIN_EMAIL || ADMIN_EMAIL,
+      password: process.env.ADMIN_PASSWORD || ADMIN_PASSWORD
     };
     let adminEmail = req.body.email;
     let adminPassword = req.body.password;
