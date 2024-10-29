@@ -53,11 +53,24 @@ To set up and run this project, you'll need the following:
    Create a `.env` file in the root directory and configure the following variables:
 
    ```plaintext
+<<<<<<< HEAD
    PORT=3000
    MONGODB_URI=mongodb://localhost:27017/your-database
    SECRETKEY=your-secret-key
    RAZORPAY_KEY_ID=your-razorpay-key
    RAZORPAY_KEY_SECRET=your-razorpay-secret
+=======
+   PORT=3000                           # Port on which the app will run
+   MONGODB_URI=mongodb://localhost:27017/your-database   # MongoDB connection string
+   SECRETKEY=your-secret-key            # Secret key for session management and JWTs
+   RAZORPAY_KEY_ID=your-razorpay-key    # Razorpay API key for payment processing
+   RAZORPAY_KEY_SECRET=your-razorpay-secret   # Razorpay secret key for payment processing
+   CLIENT_ID=#####                      # OAuth Client ID (if applicable)
+   CLIENT_SECRET=#######                # OAuth Client Secret (if applicable)
+   USER_EMAIL=#######                   # Email for system notifications or email service
+   USER_PASSWORD=######                 # Password for system email account
+
+>>>>>>> be65f52a6181d5cbc37af7ca9990cdc017149d45
    ```
 
 4. **Start the Application**

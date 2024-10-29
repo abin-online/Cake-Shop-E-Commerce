@@ -17,9 +17,8 @@ This project contains a Docker setup for a Node.js application that uses MongoDB
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/your-username/your-repo.git
-   cd your-repo
-   ```
+   git clone https://github.com/abin-online/Cake-Shop-E-Commerce.git
+   cd Cake-Shop-E-Commerce
 
 2. **Set up environment variables**: Define the `.env` file in the project root as per your application's requirements (e.g., `SECRETKEY`).
 
