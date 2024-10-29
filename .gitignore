@@ -1,2 +1,8 @@
-node_modules
+# Ignore node_modules
+node_modules/
+
+# Ignore environment variable file
 .env
+
+# Ignore images in public folder
+public/images/
