@@ -1,43 +1,31 @@
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
-const createError = require('http-errors');
 const express = require('express');
 const handlebars = require('express-handlebars');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
-const mongoose = require('mongoose')
 const hbs = require('hbs')
 const session = require('express-session')
-const exphbs = require('express-handlebars')
 const nocache = require('nocache')
 const multer = require('multer')
-const swal=require('sweetalert')
 const moment = require('moment');
-const Handlebars = require('./helpers/handlebarsHelper');
+require('./helpers/handlebarsHelper');
+require('dotenv').config()
 
 moment.defaultFormat
 
+//express app
+const app = express();
 
-require('dotenv').config()
+//db connection
+require('./config/dbConnection')
 
- mongoose.set('strictQuery', false);
- mongoose.connect(process.env.MONGODB, { useNewUrlParser: true, useUnifiedTopology: true })
- .then(() => {
-   console.log('connected');
- })
- .catch(err => {
-   console.error('MongoDB connection error:', err);
- });
-
+//routes
 const userRouter = require('./routes/user');
 const adminRouter = require('./routes/admin');
 
-const app = express();
-
-
-let hbss = exphbs.create({})
-
+//configure handlebars
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 
@@ -51,6 +39,8 @@ app.engine('hbs', handlebars.engine({
 
 hbs.registerPartials(path.join(__dirname,'/views/partials'))
 
+
+//session configuration
 app.use(session({
   secret: process.env.SECRETKEY,
   saveUninitialized: true,
@@ -59,31 +49,36 @@ app.use(session({
 }));
 
 
+//middlware
 app.use(nocache());
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
-
 app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
 
+//define routes
 app.use('/admin', adminRouter);
 app.use('/', userRouter);
 
+//error handling
 // catch 404 and forward to error handler
-
 app.use(function(req, res, next) {
   res.status(404).render('404');
 });
 
-
-
+//general error handler
 app.use(function(err, req, res, next) {
   res.status(500);
   res.render('error', { error: err });
 });
  
 
-app.listen(process.env.PORT)
+// Start the server
+const PORT = process.env.PORT
+//const PORT = "3001"
+
+app.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
+});
