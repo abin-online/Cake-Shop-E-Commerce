@@ -128,83 +128,59 @@
                 </div>
             </div>
             <div class="card mb-4">
-                <header class="card-header">
-                    <div class="row align-items-center">
-                        <div class="col col-check flex-grow-0">
-                            <div class="form-check ms-2">
-                                <input class="form-check-input" type="checkbox" value="">
-                            </div>
-                        </div>
-                        
-                        <div class="col-md-2 col-6">
-                            <input type="date" value="02.05.2021" class="form-control">
-                        </div>
-                        
-                    </div>
-                </header> <!-- card-header end// -->
-                <div class="card-body">
-                   
-               <!---category tab-->
-           {{#each allCtegoryData}}
-                    <article class="itemlist">
-                        <div class="row align-items-center">
-                            <div class="col col-check flex-grow-0">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="">
+    <div class="card-body ">
+        <div class="table-responsive ">
+            <table class="table table-hover ">
+                <thead>
+                    <tr>
+                        <th>Category</th>
+                        <th class="text-center">Status</th>
+                        <th class="text-center">Actions</th>
+                    </tr>
+                </thead>
+                {{#each allCtegoryData}}
+                <tbody>
+                    <tr>
+                        <td width="40%" class="text-center">
+                            <a href="#" class="itemside">
+                                <div class="left">
+                                    <img src="/images/products/{{this.imageUrl}}" class="img-sm img-thumbnail"
+                                        alt="Item">
                                 </div>
-                            </div>
-                            <div class="col-lg-3 col-sm-3 col-3 flex-grow-1 col-name jsutify-content-center text-align-center">
-                                <a class="itemside" href="#">
-                                    <div class="d-flex aligin-items-center justify-content-center">
-                                        <img src="/images/products/{{this.imageUrl}}" class="img-sm img-thumbnail" alt="Item">
-                                    </div>
-                                    
-                                </a>
-                            </div>
-                            <div class="col-lg-2 col-sm-2 col-2 flex-grow-1 col-name text-align-center">
-                                <a class="itemside" href="#">
-                                    
-                                    <div class="info">
-                                        <h6 class="mb-0">{{this.category}}</h6>
-                                    </div>
-                                </a>
-                            </div>
-                            {{!-- <div class="col-lg-2 col-sm-2 col-4 col-price"> <span>$76.99</span> </div> --}}
-                            
-                            <div class="col-lg-1 col-sm-1 col-1 col-status">
+                                <div class="info pl-3">
+                                    <h6 class="mb-0 title">{{this.category}}</h6>
+                                </div>
+                            </a>
+                        </td>
+                        <td class="text-center" width="20%">
                             {{#if this.isListed}}
                             <span class="badge rounded-pill alert-success">Listed</span>
                             {{else}}
                             <span class="badge rounded-pill alert-danger">Unlisted</span>
                             {{/if}}
-                            </div>
-                            <div class="col-lg-1 col-sm-1 col-1 col-date text-end">
-                                <a href="/admin/edit_category/{{this._id}}" class="btn btn-pill font-sm rounded btn-brand">
-                                    <i class="material-icons md-edit"></i> Edit
-                                </a>
-                            </div>
+                        </td>
+                        <td class="text-center" width="40%">
+                            <a style="width: 72px;" href="/admin/edit_category/{{this._id}}" class="btn btn-sm font-sm rounded btn-brand">
+                                <i class="material-icons md-edit"></i> Edit
+                            </a>
                             {{#if this.isListed}}
-                            <div class="col-lg-1 col-sm-1 col-1 col-date text-end">
-                                <a data-product-id="{{this._id}}" id="blockprod"  class="btn btn-pill font-sm rounded btn-brand">
-                                    <i class="material-icons md-edit"></i>UnList
-                                </a>
-                            </div>
+                            <a style="width: 72px;" data-product-id="{{this._id}}" id="blockprod" class="btn btn-sm font-sm btn-light">
+                                Unlist
+                            </a>
                             {{else}}
-                            <div class="col-lg-1 col-sm-1 col-1 col-date text-end">
-                                <a data-product-id="{{this._id}}" id="blockprod" class="btn btn-pill font-sm rounded btn-brand">
-                                    <i class="material-icons md-edit"></i>List
-                                </a>
-                            </div>
+                            <a style="width: 72px;" data-product-id="{{this._id}}" id="blockprod" class="btn btn-sm font-sm btn-light">
+                                List
+                            </a>
                             {{/if}}
-                        </div> <!-- row .// -->
-                    </article> 
-                    {{/each}}
-                    <!---end category tab-->
-               
-
-
-                </div> <!-- card-body end// -->
-            </div> <!-- card end// -->
+                        </td>
+                    </tr>
+                </tbody>
+                {{/each}}
+            </table> <!-- table-responsive.// -->
+        </div>
+    </div> <!-- card-body end// -->
+</div>
+ <!-- card end// -->
             <div class="pagination-area mt-30 mb-50">
                 <nav aria-label="Page navigation example">
                     <ul class="pagination justify-content-start">
