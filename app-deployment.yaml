@@ -1,3 +1,4 @@
+# app-deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -17,6 +18,27 @@ spec:
           image: abinbabu2001/newproject
           ports:
             - containerPort: 3000
-          envFrom:
-            - secretRef:
-                name: app-secrets
+          env:
+            - name: CLIENT_ID
+              value: "835730199693-c0gtsek489emv0sr2fqfjj9nb9tk42i9.apps.googleusercontent.com"
+            - name: CLIENT_SECRET
+              value: "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"
+            - name: ADMIN_EMAIL
+              value: "admin@gmail.com"
+            - name: ADMIN_PASSWORD
+              value: "123"
+            - name: PORT
+              value: "3000"
+            - name: USER_EMAIL
+              value: "abinbabuonline@gmail.com"
+            - name: USER_PASSWORD
+              value: "suyv zykg lhvb erfp"
+            - name: RAZORPAY_ID
+              value: "rzp_test_RgbHBDrROekluj"
+            - name: RAZORPAY_SECRET
+              value: "uRixJRQVnd8RCggLiHa5SEaG"
+            - name: MONGODB
+              value: "mongodb://mongo-db:27017/Project_Ecommerce"
+            - name: SECRETKEY
+              value: "secret"
+
