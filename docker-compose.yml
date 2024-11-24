@@ -1,29 +1,31 @@
+version: "3"
+
 services:
-  mongo:
+  mongo_db:
+    container_name: database_container
     image: mongo:latest
-    container_name: mongo
-    ports:
-      - "27017:27017"
+    restart: always
     volumes:
-      - mongo_data:/data/db  # Persist MongoDB data
+      - mongo_db:/data/db
 
   app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: my-node-app
+    build: .
     ports:
-      - "3000:3000"
-    env_file:
-      - .env
+      - 3000:3000
     environment:
+      CLIENT_ID: 835730199693-c0gtsek489emv0sr2fqfjj9nb9tk42i9.apps.googleusercontent.com
+      CLIENT_SECRET: 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
+      ADMIN_EMAIL: admin@gmail.com
+      ADMIN_PASSWORD: 123
+      PORT: 3000
+      USER_EMAIL: abinbabuonline@gmail.com
+      USER_PASSWORD: suyv zykg lhvb erfp
+      RAZORPAY_ID: rzp_test_RgbHBDrROekluj
+      RAZORPAY_SECRET: uRixJRQVnd8RCggLiHa5SEaG
+      MONGODB: mongodb://mongo_db:27017/Project_Ecommerce
       SECRETKEY: secret
-      MONGODB: mongodb://mongo:27017/Project_Ecommerce
-      NODE_TLS_REJECT_UNAUTHORIZED: "0"  # Ignore self-signed certificate errors (development only)
     depends_on:
-      - mongo
-    volumes:
-      - ./public/images/products:/app/public/images/products  # Persist uploaded images
+      - mongo_db
 
 volumes:
-  mongo_data:
+  mongo_db: {}
