@@ -12,18 +12,8 @@ services:
     build: .
     ports:
       - 3000:3000
-    environment:
-      CLIENT_ID: 835730199693-c0gtsek489emv0sr2fqfjj9nb9tk42i9.apps.googleusercontent.com
-      CLIENT_SECRET: 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
-      ADMIN_EMAIL: admin@gmail.com
-      ADMIN_PASSWORD: 123
-      PORT: 3000
-      USER_EMAIL: abinbabuonline@gmail.com
-      USER_PASSWORD: suyv zykg lhvb erfp
-      RAZORPAY_ID: rzp_test_RgbHBDrROekluj
-      RAZORPAY_SECRET: uRixJRQVnd8RCggLiHa5SEaG
-      MONGODB: mongodb://mongo_db:27017/Project_Ecommerce
-      SECRETKEY: secret
+    env_file:
+      - .env
     depends_on:
       - mongo_db
 
