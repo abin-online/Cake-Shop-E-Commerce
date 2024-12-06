@@ -37,15 +37,15 @@ app.engine('hbs', handlebars.engine({
 }));
 
 
-hbs.registerPartials(path.join(__dirname,'/views/partials'))
+hbs.registerPartials(path.join(__dirname, '/views/partials'))
 
 
 //session configuration
 app.use(session({
   secret: process.env.SECRETKEY,
   saveUninitialized: true,
-   cookie: { maxAge: 600000000 },
-  resave: false 
+  cookie: { maxAge: 600000000 },
+  resave: false
 }));
 
 
@@ -64,19 +64,25 @@ app.use('/', userRouter);
 
 //error handling
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   res.status(404).render('404');
 });
 
 //general error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   res.status(500);
   res.render('error', { error: err });
 });
- 
+
 
 // Start the server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, '0.0.0.0', () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
+  console.log(`Server is running on http://localhost:${PORT}`);
+  console.log(`  ██████╗  █████╗ ██╗  ██╗███████╗     ██╗  ██╗  █████╗ ██████╗ ████████╗`);
+  console.log(` ██╔════╝ ██╔══██╗██║ ██╔╝██╔════╝     ██║ ██╔╝ ██╔══██╗██╔══██╗╚══██╔══╝`);
+  console.log(` ██║      ███████║█████╔╝ █████╗       █████╔╝  ███████║██████╔╝   ██║   `);
+  console.log(` ██║      ██╔══██║██╔═██╗ ██╔══╝       ██╔═██╗  ██╔══██║██╔═██╗    ██║   `);
+  console.log(` ╚██████╗ ██║  ██║██║  ██╗███████╗     ██║  ██╗ ██║  ██║██║  ██╗   ██║   `);
+  console.log(`  ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝     ╚═╝  ╚═╝ ╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝   `);
 });
