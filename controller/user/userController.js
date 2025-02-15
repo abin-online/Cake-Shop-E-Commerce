@@ -19,10 +19,8 @@ let userOtp
 let hashedPassword
 let userRegData
 let otpError = ''
-let isLogedin = false
 let userData
 let userEmail
-let productSearched = false
 let message2
 
 
@@ -471,6 +469,7 @@ const doLogin = async (req, res) => {
         let password = req.body.password
 
         userData = await User.findOne({ email: email });
+        console.log(userData)
         if (userData) {
             console.log(userData.password)
             console.log(email)
@@ -480,7 +479,10 @@ const doLogin = async (req, res) => {
 
 
         if (userData) {
-            if (await argon2.verify(userData.password, password)) {
+            let argonVerification = false;
+            argonVerification = await argon2.verify(userData.password, password)
+            console.log(argonVerification)
+            if (argonVerification) {
 
                 const isBlocked = userData.isBlocked
 
