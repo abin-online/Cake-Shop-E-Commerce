@@ -1,7 +1,7 @@
-const User    = require('../../model/userModel')
+const User = require('../../model/userModel')
 const Product = require('../../model/productModel')
-const Swal    = require('sweetalert2')
-const swal    =require('sweetalert')
+const Swal = require('sweetalert2')
+const swal = require('sweetalert')
 
 
 
@@ -12,10 +12,10 @@ const swal    =require('sweetalert')
 
 const addToCart = async (req, res) => {
   try {
-    
-    const userData  = req.session.user
-    const proId     = req.query.id
-    const userId    = userData._id
+
+    const userData = req.session.user
+    const proId = req.query.id
+    const userId = userData._id
 
 
 
@@ -24,20 +24,20 @@ const addToCart = async (req, res) => {
     const existed = await User.findOne({ _id: userId, 'cart.product': proId }).lean()
 
     if (existed) {
-           await User.findOneAndUpdate(
+      await User.findOneAndUpdate(
         { _id: userId, 'cart.product': proId },
-        { $inc: {'cart.$.quantity': 1 }},
+        { $inc: { 'cart.$.quantity': 1 } },
         { new: true }
       )
-        res.json({message : 'Item alredy in cart'})
-     
+      res.json({ message: 'Item alredy in cart' })
+
     } else {
-         await Product.findByIdAndUpdate(proId,  {isOnCart: true})
-         await User.findByIdAndUpdate( userId,
-        { $push: { cart: {product: product._id,}}},
+      await Product.findByIdAndUpdate(proId, { isOnCart: true })
+      await User.findByIdAndUpdate(userId,
+        { $push: { cart: { product: product._id, } } },
         { new: true }
       )
-        res.json({message : 'Item added to cart'})
+      res.json({ message: 'Item added to cart' })
     }
 
   } catch (error) {
@@ -51,17 +51,17 @@ const addToCart = async (req, res) => {
 
 const loadCart = async (req, res) => {
 
-  const user=req.session.user
-  const id = user._id    
+
+  const id = user._id
   const userData = await User.findById(id).lean();
   console.log(req.session.user)
   console.log(req.session.user)
   console.log(req.session.user)
-  
+
 
   try {
-  
-    const userId   = req.query.id
+
+    const { userId } = req.params
 
 
     const user = await User.findOne({ _id: userId }).populate('cart.product').lean()
@@ -70,18 +70,18 @@ const loadCart = async (req, res) => {
     console.log(objectIdString);
 
 
-     let subTotal = 0
-     cart.forEach((val)=>{
-     val.total = val.product.price * val.quantity
-     subTotal += val.total
-     })
+    let subTotal = 0
+    cart.forEach((val) => {
+      val.total = val.product.price * val.quantity
+      subTotal += val.total
+    })
 
 
-  if(user.cart.length === 0){
-    res.render('user/empty_cart', {userData , objectIdString})
-  }else{
-    res.render('user/cart', { userData, cart, subTotal , objectIdString})
-  }
+    if (user.cart.length === 0) {
+      res.render('user/empty_cart', { userData, objectIdString })
+    } else {
+      res.render('user/cart', { userData, cart, subTotal, objectIdString })
+    }
   } catch (error) {
     res.render('error')
   }
@@ -90,38 +90,38 @@ const loadCart = async (req, res) => {
 
 
 const removeCart = async (req, res) => {
- try {
-  const userData = req.session.user
-  const userId   = userData._id
-  const proId    = req.query.proId
-  const cartId   = req.query.cartId
+  try {
+    const userData = req.session.user
+    const userId = userData._id
+    const proId = req.query.proId
+    const cartId = req.query.cartId
 
-  await Product.findOneAndUpdate(
-    { _id: proId },
-    { $set: { isOnCart: false } },
-    { new: true }
-  );
-  
- await User.updateOne({_id: userId}, {$pull: {cart: {_id: cartId}}})
+    await Product.findOneAndUpdate(
+      { _id: proId },
+      { $set: { isOnCart: false } },
+      { new: true }
+    );
 
-  res.json('item removed')
- } catch (error) {
-  console.log(error);
- }
+    await User.updateOne({ _id: userId }, { $pull: { cart: { _id: cartId } } })
+
+    res.json('item removed')
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 
 
-const updateCart = async (req, res)=>{
+const updateCart = async (req, res) => {
   try {
     const userData = req.session.user
-    const data = await User.find({_id:userData._id},{_id:0, cart:1}).lean()
+    const data = await User.find({ _id: userData._id }, { _id: 0, cart: 1 }).lean()
 
-    data[0].cart.forEach((val,i)=>{
+    data[0].cart.forEach((val, i) => {
       val.quantity = req.body.datas[i].quantity
     })
 
-    await User.updateOne({_id:userData._id},{$set:{cart:data[0].cart}})
+    await User.updateOne({ _id: userData._id }, { $set: { cart: data[0].cart } })
     res.json('from backend ,cartUpdation json')
 
   } catch (error) {
@@ -138,11 +138,11 @@ const updateCart = async (req, res)=>{
 
 module.exports = {
   addToCart,
-  loadCart, 
+  loadCart,
   removeCart,
   // cartUpdation,
   updateCart,
-  
+
 };
 
 

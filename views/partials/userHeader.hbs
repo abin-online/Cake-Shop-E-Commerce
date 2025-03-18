@@ -90,7 +90,7 @@
 
                             </div>
                             <div id = "data" class="header-action-icon-2">
-                                <a class="mini-cart-icon" href="/cart?id={{userData._id}}">
+                                <a class="mini-cart-icon" href="/cart/{{userData._id}}">
                                     <img alt="Evara" src="/assets/imgs/theme/icons/icon-cart.svg">
                                     {{#if userData}}
                                     <span class="pro-count blue">{{userData.cart.length}}</span>
@@ -154,7 +154,7 @@
                     </div>
 
                     <div class="header-action-icon-2">
-                        <a class="mini-cart-icon" href="/cart?id={{userData._id}}">
+                        <a class="mini-cart-icon" href="/cart/{{userData._id}}">
                             <img alt="Evara" src="/assets/imgs/theme/icons/icon-cart.svg">
                             {{#if userData}}
                                 <span class="pro-count white">{{userData.cart.length}}</span>

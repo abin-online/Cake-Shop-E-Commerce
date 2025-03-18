@@ -45,7 +45,7 @@
                                     <td class="text-right" data-title="Cart">
                                         {{#if this.stock}}
                                         {{#if this.productExistInCart}}
-                                        <button onclick="window.location.href='/cart?id={{this.ID}}'" class="btn btn-sm"><i class=class="fi-rs-heart"></i>Go to cart</button>
+                                        <button onclick="window.location.href='/cart/{{this.ID}}'" class="btn btn-sm"><i class=class="fi-rs-heart"></i>Go to cart</button>
                                         {{else}}
                                         <span id="cart_btn{{this._id}}">
                                         <button onclick="addToCartBtn('{{this._id}}')" id="add_to_cart_btn" class="btn btn-sm">
@@ -110,7 +110,7 @@ let data = await response.json()
 console.log(data, 'from add to cart btn....')
 
 document.getElementById(`cart_btn${proId}`).innerHTML = 
-`<button onclick="window.location.href='/cart?id={{userData._id}}'" class="btn btn-sm"><i class=class="fi-rs-heart"></i>Go to cart</button>`
+`<button onclick="window.location.href='/cart/{{userData._id}}'" class="btn btn-sm"><i class=class="fi-rs-heart"></i>Go to cart</button>`
 
 
 if(data){

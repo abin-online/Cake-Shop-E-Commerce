@@ -132,14 +132,14 @@
                                          
 								  {{#if proData.stock}}
             {{#if productExistInCart}}
-                <button onclick="window.location.href='/cart?id={{userData._id}}'" class="button button-add-to-cart">Go to cart</button>
+                <button onclick="window.location.href='/cart/{{userData._id}}'" class="button button-add-to-cart">Go to cart</button>
             {{else}}
                 {{#if userData}}
                 <span id="cart_btn">
                     <button onclick="addToCartBtn('{{proData._id}}')" id="add_to_cart_btn" class="button button-add-to-cart">Add to cart</button>
                 </span>
                 {{else}}
-                    <button onclick="window.location.href='/cart?id={{userData._id}}'" id="add_to_cart_btn" class="button button-add-to-cart">Add to cart</button>
+                    <button onclick="window.location.href='/cart/{{userData._id}}'" id="add_to_cart_btn" class="button button-add-to-cart">Add to cart</button>
                 {{/if}}
             {{/if}}
         {{else}}
@@ -148,7 +148,7 @@
                 <button id="add_to_cart_btn" class="button button-add-to-cart">Out Of Stock</button>
             </div>
             {{else}}
-                    <button onclick="window.location.href='/cart?id={{userData._id}}'" id="add_to_cart_btn" class="button button-add-to-cart">Out Of Stock</button>
+                    <button onclick="window.location.href='/cart/{{userData._id}}'" id="add_to_cart_btn" class="button button-add-to-cart">Out Of Stock</button>
             {{/if}}
         {{/if}}
       
@@ -323,7 +323,7 @@ const addToCartBtn = (proId) => {
             console.log(data, 'from add to cart btn....');
 
             document.getElementById('cart_btn').innerHTML = 
-                `<button onclick="window.location.href='/cart?id={{userData._id}}'" class="button button-add-to-cart">Go to cart</button>`;
+                `<button onclick="window.location.href='/cart/{{userData._id}}'" class="button button-add-to-cart">Go to cart</button>`;
 
             if (data) {
                 swal("Awww 🥳!", `${productName} added to Cart! `, "success");

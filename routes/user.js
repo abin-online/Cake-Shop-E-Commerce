@@ -92,7 +92,7 @@ router.post('/profileResetPassword', logedin, resetProfile.resetPasswordProfile)
 
 
 //cart
-router.get('/cart', logedin, isBlocked, cart.loadCart)
+router.get('/cart/:userId', logedin, isBlocked, cart.loadCart)
 router.get('/add_to_cart', logedin, isBlocked, cart.addToCart)
 router.get('/remove', isLogin, isBlocked, cart.removeCart)
 router.post('/cart_updation', logedin, isBlocked, cart.updateCart)
