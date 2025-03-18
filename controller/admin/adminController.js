@@ -724,12 +724,12 @@ const listBanner = async (req, res) => {
     const banner = await Banner.findById(id);
     
     if (!banner) {
-      return res.status(404).json({ message: "Banner not found" });
+      return res.status(404).json({ message: "Banner not found" }); // 🚨 Ensure function stops here
     }
 
     console.log(id, banner);
 
-    const newStatus = banner.status; // This should be 'active' instead of 'status'?
+    const newStatus = banner.active; // Ensure 'active' is the correct field
     const updatedBanner = await Banner.findByIdAndUpdate(
       id, 
       { active: !newStatus }, 
@@ -738,10 +738,10 @@ const listBanner = async (req, res) => {
 
     console.log(updatedBanner);
     
-    res.status(200).json({ message: "Banner updated", banner: updatedBanner });
+    return res.status(200).json({ message: "Banner updated", banner: updatedBanner }); // 🚨 Always return after sending response
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Internal Server Error" });
+    return res.status(500).json({ message: "Internal Server Error" }); // 🚨 Ensure return here too
   }
 };
 
