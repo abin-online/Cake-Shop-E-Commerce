@@ -83,6 +83,7 @@ const loadCart = async (req, res) => {
     res.render('user/cart', { userData, cart, subTotal , objectIdString})
   }
   } catch (error) {
+    console.log(error)
     res.render('error')
   }
 }
