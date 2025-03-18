@@ -47,6 +47,10 @@ Handlebars.registerHelper('ifeq', function (a, b, options) {
   Handlebars.registerHelper('add', function (a, b) {
     return a+b
   });
+
+  Handlebars.registerHelper('subtract', function(a, b) {
+    return a - b;
+});
   
   Handlebars.registerHelper('increment', function(index) {
     return index + 1;
@@ -60,7 +64,26 @@ Handlebars.registerHelper('ifeq', function (a, b, options) {
         return options.inverse(this); // Return if not first
     }
   });
+
+  Handlebars.registerHelper('range', function(start, end) {
+    const range = [];
+    for (let i = start; i <= end; i++) {
+        range.push(i);
+    }
+    return range;
+});
   
+  Handlebars.registerHelper('eq', function(a, b) {
+    return a === b;
+  });
+
+  Handlebars.registerHelper('gt', function (a, b) {
+    return a > b;
+});
+
+Handlebars.registerHelper('lt', function (a, b) {
+    return a < b;
+});
   
   Handlebars.registerHelper('formatDate', function (timestamp) {
     return moment(timestamp).format(' D,MMMM, YYYY');

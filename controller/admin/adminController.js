@@ -9,6 +9,7 @@ const Reviews = require('../../model/review')
 const Brand = require('../../model/brandModel')
 const moment = require("moment");
 const mongoose = require('mongoose');
+const HttpStatus = require("../../constants/httpStatus");
 
 
 let adminData
@@ -81,23 +82,63 @@ const loadHome = (req, res) => {
 
 const loadUsersData = async (req, res) => {
   try {
-    var page = 1
-    if (req.query.page) {
-      page = req.query.page
+    const page = parseInt(req.query.page) || 1;
+    const limit = 5;
+
+    const searchQuery = req.query.search || '';
+    const statusFilter = req.query.status;
+
+    const query = {};
+
+    if (searchQuery) {
+      query.name = { $regex: searchQuery, $options: 'i' }; // Case-insensitive search
     }
-    const limit = 1;
-    let allUsersData = await User.find()
+
+    if (statusFilter === 'Active') {
+      query.isBlocked = false;
+    } else if (statusFilter === 'Disabled') {
+      query.isBlocked = true;
+    }
+
+    const allUsersData = await User.find(query)
       .skip((page - 1) * limit)
-      .limit(limit * 1)
+      .limit(limit)
       .lean();
-    const count = await User.find({}).count();
-    const totalPages = Math.ceil(count / limit)
-    const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
-    res.render("admin/manage_users", { allUsersData, pages, currentPage: page, layout: 'adminlayout' });
+
+    const count = await User.countDocuments(query);
+    const totalPages = Math.ceil(count / limit);
+
+    // Pagination Logic with Dots
+    const pageNumbers = [];
+    if (totalPages <= 5) {
+      pageNumbers.push(...Array.from({ length: totalPages }, (_, i) => i + 1));
+    } else {
+      if (page > 2) pageNumbers.push(1);
+      if (page > 3) pageNumbers.push('...');
+      if (page > 1) pageNumbers.push(page - 1);
+
+      pageNumbers.push(page);
+
+      if (page < totalPages) pageNumbers.push(page + 1);
+      if (page < totalPages - 2) pageNumbers.push('...');
+      if (page !== totalPages) pageNumbers.push(totalPages);
+    }
+
+    res.render("admin/manage_users", {
+      allUsersData,
+      pageNumbers,
+      currentPage: page,
+      searchQuery,
+      statusFilter,
+      layout: 'adminlayout'
+    });
+
   } catch (error) {
-    console.log(error);
+    console.error(error);
+    res.status(500).send("Internal Server Error");
   }
 };
+
 
 
 
@@ -370,41 +411,56 @@ const newProduct = async (req, res) => {
 const getOrders = async (req, res) => {
   try {
     const PAGE_SIZE = 5;
-    const page = parseInt(req.query.page) || 1;
-    const skip = (page - 1) * PAGE_SIZE;
+    const page = Math.max(parseInt(req.query.page) || 1, 1);
+
+    const totalOrders = await Orders.countDocuments();
+    const totalPages = Math.ceil(totalOrders / PAGE_SIZE);
+    const safePage = Math.min(page, totalPages);
+
+    const skip = (safePage - 1) * PAGE_SIZE;
 
     const orders = await Orders.find()
       .sort({ date: -1 })
       .skip(skip)
       .limit(PAGE_SIZE);
 
-    const now = moment();
+    const ordersData = orders.map((order) => ({
+      ...order.toObject(),
+      date: moment(order.date).format("MMMM D, YYYY")
+    }));
 
-    const ordersData = orders.map((order) => {
-      const formattedDate = moment(order.date).format("MMMM D, YYYY");
+    // Pagination Logic - No Duplicate Pages
+    const pageNumbers = [];
+    if (totalPages <= 5) {
+      pageNumbers.push(...Array.from({ length: totalPages }, (_, i) => i + 1));
+    } else {
+      if (safePage > 2) pageNumbers.push(1); // Add 1 only once if current page > 2
+      if (safePage > 3) pageNumbers.push('...');
+      if (safePage > 1) pageNumbers.push(safePage - 1);
 
-      return {
-        ...order.toObject(),
-        date: formattedDate,
-      };
-    });
+      pageNumbers.push(safePage);
 
-    const totalPages = Math.ceil(await Orders.countDocuments() / PAGE_SIZE)  // Example value
-    const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
-
-    console.log(ordersData);
+      if (safePage < totalPages) pageNumbers.push(safePage + 1);
+      if (safePage < totalPages - 2) pageNumbers.push('...');
+      if (safePage !== totalPages) pageNumbers.push(totalPages); // Only add totalPages if it's not already included
+    }
 
     res.render("admin/orders", {
-
-      ordersData, pages,
-      currentPage: page,
-      // totalPages: Math.ceil(await Orders.countDocuments() / PAGE_SIZE),
+      ordersData,
+      currentPage: safePage,
+      pageNumbers,
+      totalPages,
       layout: 'adminlayout'
     });
   } catch (error) {
-    console.log(error);
+    console.error("Error fetching orders:", error);
+    res.status(HttpStatus.InternalServerError).send("Internal Server Error");
   }
 };
+
+
+
+
 
 
 ////// Add new Product post/////////////
@@ -664,34 +720,16 @@ const listReview = async (req, res) => {
 //for banner block
 const listBanner = async (req, res) => {
   try {
-    const id = req.body.id
-    // const catId = req.params.id
-    let banner = await Banner.findById(id)
-    console.log(banner)
-    let newListed = banner.active
-    console.log(newListed)
-    await Banner.findByIdAndUpdate(id, {
-      active: !newListed
-    },
-      { new: true })
-    res.redirect('/admin/banners')
+    const { id } = req.body;
+    const banner = await Banner.findById(id);
+    console.log(id, banner)
+    const newStatus = banner.status
+    const toggle_banner = await Banner.findByIdAndUpdate(id, { active: !newStatus })
+    console.log(toggle_banner)
   } catch (error) {
-    console.log(error)
-
+    console.log(error);
   }
-}
-
-
-
-
-
-
-
-
-
-
-
-
+};
 
 
 const deleteCoupon = async (req, res) => {
@@ -765,17 +803,50 @@ const deleteProdImage = async (req, res) => {
   }
 }
 
-
 const loadBanner = async (req, res) => {
   try {
+    const PAGE_SIZE = 3;
+    const page = parseInt(req.query.page) || 1;
+    const skip = (page - 1) * PAGE_SIZE;
 
-    const bannerData = await Banner.find().lean()
-    console.log(bannerData)
-    res.render('admin/banners', { bannerData, layout: 'adminlayout' })
+    const banners = await Banner.find()
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(PAGE_SIZE).lean();
+
+    const totalBanners = await Banner.countDocuments();
+    const totalPages = Math.ceil(totalBanners / PAGE_SIZE);
+
+    // Pagination Logic
+    let pageNumbers = [];
+    if (totalPages <= 5) {
+      pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
+    } else {
+      if (page <= 3) {
+        pageNumbers = [1, 2, 3, '...', totalPages];
+      } else if (page >= totalPages - 2) {
+        pageNumbers = [1, '...', totalPages - 2, totalPages - 1, totalPages];
+      } else {
+        pageNumbers = [1, '...', page - 1, page, page + 1, '...', totalPages];
+      }
+    }
+
+    console.log(banners)
+    res.render('admin/banners', {
+      banners,
+      totalPages,
+      currentPage: page,
+      pageNumbers,
+      layout: 'adminlayout'
+    });
+
   } catch (error) {
-    console.log(error)
+    console.error("Error loading banners:", error);
+    res.status(500).send("Internal Server Error");
   }
-}
+};
+
+
 
 const addBanner = (req, res) => {
   try {
@@ -839,6 +910,9 @@ const deleteBanner = async (req, res) => {
 
 const loadReviews = async (req, res) => {
   try {
+    const page = parseInt(req.query.page) || 1; // Default to page 1
+    const limit = 5; // Number of reviews per page
+    const skip = (page - 1) * limit; // Skip reviews based on the current page
 
     const reviews = await Reviews.aggregate([
       {
@@ -851,19 +925,27 @@ const loadReviews = async (req, res) => {
       },
       {
         $unwind: "$productDetails"
-      }
-    ])
-    console.log(reviews)
+      },
+      { $skip: skip }, // Pagination logic
+      { $limit: limit } // Number of records per page
+    ]);
 
+    const totalReviews = await Reviews.countDocuments(); // Total number of reviews
+    const totalPages = Math.ceil(totalReviews / limit);
 
-    console.log("REVIEWSSSSSSSSSSS", reviews)
-
-    res.render('admin/reviews', { reviews, layout: 'adminlayout' })
+    res.render('admin/reviews', {
+      reviews,
+      layout: 'adminlayout',
+      currentPage: page,
+      totalPages
+    });
 
   } catch (error) {
-
+    console.error("Error loading reviews:", error);
+    res.status(HttpStatus.InternalServerError).send("Internal Server Error");
   }
 };
+
 
 const loadBrands = async (req, res) => {
   try {

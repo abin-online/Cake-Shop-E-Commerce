@@ -2,102 +2,8 @@
     <!-- SweetAlert2 JS -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.2/dist/sweetalert2.all.min.js"></script>  
   
-  <aside class="navbar-aside" id="offcanvas_aside">
-    <div class="aside-top">
-        <a href="/admin/home" class="brand-wrap">
-            <img src="/assetsAdmin/imgs/theme/logo.svg" class="logo" alt="Evara Dashboard">
-        </a>
-        <div>
-            <button class="btn btn-icon btn-aside-minimize"> <i class="text-muted material-icons md-menu_open"></i>
-            </button>
-        </div>
-    </div>
-    <nav>
-        <ul class="menu-aside">
-            <li class="menu-item ">
-                <a class="menu-link" href="/admin/home"> <i class="icon material-icons md-home"></i>
-                    <span class="text">Dashboard</span>
-                </a>
-            </li>
-            <li class="menu-item ">
-                <a class="menu-link" href="/admin/product"> <i class="icon material-icons md-shopping_bag"></i>
-                    <span class="text">Products</span>
-                </a>
 
-            </li>
-            <li class="menu-item ">
-                <a class="menu-link" href="/admin/orders"> <i class="icon material-icons md-shopping_cart"></i>
-                    <span class="text">Orders</span>
-                </a>
 
-            </li>
-
-            <li class="menu-item ">
-                <a class="menu-link" href="/admin/category"> <i class="icon material-icons md-category"></i>
-                    <span class="text">Category</span>
-                </a>
-
-            </li>
-            
-
-             <li class="menu-item ">
-                    <a class="menu-link" href="/admin/coupons"><i class="icon fa-solid fa-ticket"></i>
-                        <span class="text">Coupons</span>
-                    </a>
-      </li>
-            <li class="menu-item">
-                <a class="menu-link" href="/admin/manage_users"> <i class="icon material-icons md-person"></i>
-                    <span class="text">Users</span>
-                </a>
-
-            </li>
-                         <li class="menu-item">
-                    <a class="menu-link" href="/admin/banners"> <i class="icon material-icons md-local_offer"></i>
-                        <span class="text"> Banner </span>
-                    </a>
-                </li>
-                     <li class="menu-item active">
-                <a class="menu-link " href="/admin/reviews"> <i class="icon material-icons md-comment"></i>
-                    <span class="text">Reviews</span>
-                </a>
-            </li>
-            <li class="menu-item ">
-                <a class="menu-link" href="/admin/brands"> <i class="icon material-icons md-stars"></i>
-                    <span class="text">Brands</span> </a>
-            </li>
-            {{!-- <li class="menu-item">
-                <a class="menu-link" href="/admin/reviews"> <i class="icon material-icons md-comment"></i>
-                    <span class="text">Reviews</span>
-                </a>
-            </li>
-            <li class="menu-item">
-                <a class="menu-link" href="page-brands.html"> <i class="icon material-icons md-stars"></i>
-                    <span class="text">Brands</span> </a>
-            </li>
-            <li class="menu-item">
-                <a class="menu-link" disabled href="#"> <i class="icon material-icons md-pie_chart"></i>
-                    <span class="text">Statistics</span>
-                </a>
-            </li> --}}
-        </ul>
-        <hr>
-        <ul class="menu-aside">
-            <li class="menu-item ">
-                <a class="menu-link" href="#"> <i class="icon material-icons md-settings"></i>
-                    <span class="text">Settings</span>
-                </a>
-            </li>
-            <li class="menu-item">
-                <a class="menu-link btn btn-primary" href="/admin/logout"> <i
-                        class="icon material-icons md-exit_to_app"></i>
-                    Logout
-                </a>
-            </li>
-        </ul>
-        <br>
-        <br>
-    </nav>
-</aside>
   <main class="main-wrap">
         
         <section class="content-main">
@@ -157,17 +63,34 @@
                 <!-- card-body end// -->
             </div>
             <div class="pagination-area mt-30 mb-50">
-                <nav aria-label="Page navigation example">
-                    <ul class="pagination justify-content-start">
-                        <li class="page-item active"><a class="page-link" href="#">01</a></li>
-                        <li class="page-item"><a class="page-link" href="#">02</a></li>
-                        <li class="page-item"><a class="page-link" href="#">03</a></li>
-                        <li class="page-item"><a class="page-link dot" href="#">...</a></li>
-                        <li class="page-item"><a class="page-link" href="#">16</a></li>
-                        <li class="page-item"><a class="page-link" href="#"><i class="material-icons md-chevron_right"></i></a></li>
-                    </ul>
-                </nav>
-            </div>
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-start">
+            
+            {{#if (gt currentPage 1)}}
+                <li class="page-item">
+                    <a class="page-link" href="/admin/reviews?page={{subtract currentPage 1}}">
+                        <i class="material-icons md-chevron_left"></i>
+                    </a>
+                </li>
+            {{/if}}
+
+            {{#each (range 1 totalPages)}}
+                <li class="page-item {{#if (eq this ../currentPage)}}active{{/if}}">
+                    <a class="page-link" href="/admin/reviews?page={{this}}">{{this}}</a>
+                </li>
+            {{/each}}
+
+            {{#if (lt currentPage totalPages)}}
+                <li class="page-item">
+                    <a class="page-link" href="/admin/reviews?page={{add currentPage 1}}">
+                        <i class="material-icons md-chevron_right"></i>
+                    </a>
+                </li>
+            {{/if}}
+        </ul>
+    </nav>
+</div>
+
         </section> <!-- content-main end// -->
         <footer class="main-footer font-xs">
             <div class="row pb-30 pt-15">

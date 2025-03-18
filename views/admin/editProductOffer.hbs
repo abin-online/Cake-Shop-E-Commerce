@@ -1,0 +1,132 @@
+<main class="main-wrap">
+    <section class="content-main">
+        <div class="content-header">
+            <div>
+                <h2 class="content-title card-title">Edit Product Offer</h2>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <form action="/admin/editProductOffer/{{editProductOfferData._id}}" id="editProductOfferForm" role="form" method="post">
+                    <input type="hidden" name="offerId" value="{{editProductOfferData._id}}" />
+                    
+                    <div class="mb-4">
+                        <label for="productName" class="form-label">Product Name:</label>
+                        <select name="productName" id="productName" class="form-select">
+                            {{#each products}}
+                            <option value="{{this.name}}" {{#if (eq this.name ../editProductOfferData.productName)}}selected{{/if}}>
+                                {{this.name}}
+                            </option>
+                            {{/each}}
+                        </select>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="productOfferPercentage" class="form-label">Product Offer Percentage:</label>
+                        <input id="productOfferPercentage" value="{{editProductOfferData.productOfferPercentage}}" name="productOfferPercentage" class="form-control" placeholder="Enter the offer percentage">
+                        <div class="form-text">Choose a percentage to be discounted. Between 5% and 90%.</div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="startDate" class="form-label">Offer Start Date:</label>
+                        <input id="startDate" value="{{startDate}}" name="startDate" type="date" class="form-control">
+                        <div class="form-text">Choose a start date for the offer to be considered.</div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="endDate" class="form-label">Offer Expiry Date:</label>
+                        <input id="endDate" value="{{endDate}}" name="endDate" type="date" class="form-control">
+                        <div class="form-text">Choose an expiry date for the offer to end.</div>
+                    </div>
+
+                    <div class="d-flex g-2">
+                        <div class="m-2">
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                        </div>
+                        <div class="m-2">
+                            <a href="/admin/productOffers" type="button" class="btn btn-primary" id="backbutton">Back</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <footer class="main-footer font-xs">
+        <div class="row pb-30 pt-15">
+            <div class="col-sm-6">
+                <script>document.write(new Date().getFullYear())</script> ©, MobileBazaar.
+            </div>
+            <div class="col-sm-6">
+                <div class="text-sm-end">All rights reserved</div>
+            </div>
+        </div>
+    </footer>
+</main>
+
+
+
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+<script>
+
+
+    $(document).ready(function () {
+        $('#editProductOfferForm').on('submit', function (e) {
+            e.preventDefault(); 
+
+            const formData = $(this).serialize(); 
+
+            $.ajax({
+                url: '/admin/editProductOffer/{{editProductOfferData._id}}',
+                type: 'POST',
+                data: formData,
+                success: function (response) {
+                    Swal.fire({
+                        title: "Success!",
+                        text: response.message,
+                        icon: "success",
+                        confirmButtonText: "OK"
+                    }).then(() => {
+                        window.location.href = "/admin/productOffers"; 
+                    });
+                },
+                error: function (xhr) {
+                    const errorMessage = xhr.responseJSON?.message || "Something went wrong!";
+                    Swal.fire({
+                        title: "Error!",
+                        text: errorMessage,
+                        icon: "error",
+                        confirmButtonText: "OK"
+                    });
+                }
+            });
+        });
+    });
+
+
+    $(document).ready(function () {
+        $('#backbutton').click(function (e) {
+            e.preventDefault();
+            Swal.fire({
+                title: "Leave the Page?",
+                //text: "The Data will not be saved",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#088178",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = "/admin/productOffers";
+                }
+            });
+
+
+        });
+    });
+
+</script>

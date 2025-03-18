@@ -1,140 +1,5 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-<aside class="navbar-aside" id="offcanvas_aside">
-    <div class="aside-top">
-        <a href="/admin/home" class="brand-wrap">
-            <img src="/assetsAdmin/imgs/theme/logo.svg" class="logo" alt="Evara Dashboard">
-        </a>
-        <div>
-            <button class="btn btn-icon btn-aside-minimize"> <i class="text-muted material-icons md-menu_open"></i>
-            </button>
-        </div>
-    </div>
-    <nav>
-        <ul class="menu-aside">
-            <li class="menu-item ">
-                <a class="menu-link" href="/admin/home"> <i class="icon material-icons md-home"></i>
-                    <span class="text">Dashboard</span>
-                </a>
-            </li>
-            <li class="menu-item">
-                <a class="menu-link" href="/admin/product"> <i class="icon material-icons md-shopping_bag"></i>
-                    <span class="text">Products</span>
-                </a>
-
-            </li>
-            <li class="menu-item ">
-                <a class="menu-link" href="/admin/orders"> <i class="icon material-icons md-shopping_cart"></i>
-                    <span class="text">Orders</span>
-                </a>
-
-            </li>
-            <li class="menu-item ">
-                <a class="menu-link" href="/admin/category"> <i class="icon material-icons md-category"></i>
-                    <span class="text">Category</span>
-                </a>
-
-            </li>
-            
-
-             <li class="menu-item ">
-                    <a class="menu-link" href="/admin/coupons"><i class="icon fa-solid fa-ticket"></i>
-                        <span class="text">Coupons</span>
-                    </a>
-      </li>
-            <li class="menu-item active">
-                <a class="menu-link" href="/admin/manage_users"> <i class="icon material-icons md-person"></i>
-                    <span class="text">Users</span>
-                </a>
-
-            </li>
-                         <li class="menu-item">
-                    <a class="menu-link" href="/admin/banners"> <i class="icon material-icons md-local_offer"></i>
-                        <span class="text"> Banner </span>
-                    </a>
-                </li>
-                     <li class="menu-item">
-                <a class="menu-link" href="/admin/reviews"> <i class="icon material-icons md-comment"></i>
-                    <span class="text">Reviews</span>
-                </a>
-            </li>
-            <li class="menu-item ">
-                <a class="menu-link" href="/admin/brands"> <i class="icon material-icons md-stars"></i>
-                    <span class="text">Brands</span> </a>
-            </li>
-        </ul>
-        <hr>
-        <ul class="menu-aside">
-            <li class="menu-item ">
-                <a class="menu-link" href="#"> <i class="icon material-icons md-settings"></i>
-                    <span class="text">Settings</span>
-                </a>
-            </li>
-            <li class="menu-item">
-                <a class="menu-link btn btn-primary" href="/admin/logout"> <i
-                        class="icon material-icons md-exit_to_app"></i>
-                    Logout
-                </a>
-            </li>
-        </ul>
-        <br>
-        <br>
-    </nav>
-</aside>
-       {{!-- <header class="main-header navbar">
-            <div class="col-search">
-                <form class="searchform">
-                    <div class="input-group">
-                        <input list="search_terms" type="text" class="form-control" placeholder="Search term">
-                        <button class="btn btn-light bg" type="button"> <i class="material-icons md-search"></i></button>
-                    </div>
-                    <datalist id="search_terms">
-                        <option value="Products">
-                        <option value="New orders">
-                        <option value="Apple iphone">
-                        <option value="Ahmed Hassan">
-                    </datalist>
-                </form>
-            </div>
-            <div class="col-nav">
-                <button class="btn btn-icon btn-mobile me-auto" data-trigger="#offcanvas_aside"> <i class="material-icons md-apps"></i> </button>
-                <ul class="nav">
-                    <li class="nav-item">
-                        <a class="nav-link btn-icon" href="#">
-                            <i class="material-icons md-notifications animation-shake"></i>
-                            <span class="badge rounded-pill">3</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link btn-icon darkmode" href="#"> <i class="material-icons md-nights_stay"></i> </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="requestfullscreen nav-link btn-icon"><i class="material-icons md-cast"></i></a>
-                    </li>
-                    <li class="dropdown nav-item">
-                        <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownLanguage" aria-expanded="false"><i class="material-icons md-public"></i></a>
-                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownLanguage">
-                            <a class="dropdown-item text-brand" href="#"><img src="assets/imgs/theme/flag-us.png" alt="English">English</a>
-                            <a class="dropdown-item" href="#"><img src="assets/imgs/theme/flag-fr.png" alt="Français">Français</a>
-                            <a class="dropdown-item" href="#"><img src="assets/imgs/theme/flag-jp.png" alt="Français">日本語</a>
-                            <a class="dropdown-item" href="#"><img src="assets/imgs/theme/flag-cn.png" alt="Français">中国人</a>
-                        </div>
-                    </li>
-                    <li class="dropdown nav-item">
-                        <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownAccount" aria-expanded="false"> <img class="img-xs rounded-circle" src="assets/imgs/people/avatar2.jpg" alt="User"></a>
-                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownAccount">
-                            <a class="dropdown-item" href="#"><i class="material-icons md-perm_identity"></i>Edit Profile</a>
-                            <a class="dropdown-item" href="#"><i class="material-icons md-settings"></i>Account Settings</a>
-                            <a class="dropdown-item" href="#"><i class="material-icons md-account_balance_wallet"></i>Wallet</a>
-                            <a class="dropdown-item" href="#"><i class="material-icons md-receipt"></i>Billing</a>
-                            <a class="dropdown-item" href="#"><i class="material-icons md-help_outline"></i>Help center</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item text-danger" href="#"><i class="material-icons md-exit_to_app"></i>Logout</a>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </header> --}}
     <main class="main-wrap">
 
         <section class="content-main">
@@ -143,24 +8,45 @@
 
             </div>
             <div class="card mb-4">
-                <header class="card-header">
-                    <div class="row gx-3">
-                        <div class="col-lg-4 col-md-6 me-auto">
-                            <input type="text" placeholder="Search..." class="form-control">
-                        </div>
-                        <div class="col-lg-2 col-md-3 col-6">
-                            <select class="form-select">
-                                <option>Status</option>
-                                <option>Active</option>
-                                <option>Disabled</option>
-                                <option>Show all</option>
-                            </select>
-                        </div>
-                        <div class="col-lg-2 col-md-3 col-6">
-                            
-                        </div>
-                    </div>
-                </header> <!-- card-header end// -->
+<header class="card-header">
+    <div class="row gx-3">
+        <div class="col-lg-4 col-md-6 me-auto">
+            <form method="GET" action="/admin/manage_users" class="d-flex">
+                <input 
+                    type="text"
+                    name="search"
+                    value="{{searchQuery}}"
+                    placeholder="Search by username..."
+                    class="form-control"
+                />
+                <button type="submit" class="btn btn-primary ms-2">Search</button>
+            </form>
+        </div>
+
+        <div class="col-lg-2 col-md-3 col-6">
+            <form method="GET" action="/admin/manage_users" class="d-flex">
+                <select class="form-select" name="status" onchange="this.form.submit()">
+                    <option value="">Status</option>
+                    <option value="Active" {{#if (eq statusFilter 'Active')}}selected{{/if}}>Active</option>
+                    <option value="Disabled" {{#if (eq statusFilter 'Disabled')}}selected{{/if}}>Disabled</option>
+                    <option value="" {{#if (eq statusFilter '')}}selected{{/if}}>Show all</option>
+                </select>
+                <input type="hidden" name="search" value="{{searchQuery}}">
+            </form>
+        </div>
+
+        <div class="col-lg-2 col-md-3 col-6">
+            <button 
+                class="btn btn-primary ms-2" 
+                onclick="clearFilters()"
+            >
+                Clear Filters
+            </button>
+        </div>
+    </div>
+</header>
+
+ <!-- card-header end// -->
                 <div class="card-body ">
                     <div class="table-responsive ">
                         <table class="table table-hover ">
@@ -216,17 +102,39 @@
                     </div>
                 </div> <!-- card-body end// -->
             </div> <!-- card end// -->
-            <div class="pagination-area mt-15 mb-50">
-                <nav aria-label="Page navigation example">
-                    <ul class="pagination justify-content-start">
-                        {{#each pages}}
-                             <li class="page-item active"><a class="page-link" href="?page={{this}}">{{this}}</a></li>
-                    {{/each}}
-                    
-                        
-                    </ul>
-                </nav>
-            </div>
+<div class="pagination-area mt-15 mb-50">
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-start">
+            {{#if (gt currentPage 1)}}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{subtract currentPage 1}}&search={{searchQuery}}&status={{statusFilter}}">
+                        <i class="material-icons md-chevron_left"></i>
+                    </a>
+                </li>
+            {{/if}}
+
+            {{#each pageNumbers}}
+                {{#if (eq this '...')}}
+                    <li class="page-item"><span class="page-link">...</span></li>
+                {{else}}
+                    <li class="page-item {{#if (eq this ../currentPage)}}active{{/if}}">
+                        <a class="page-link" href="?page={{this}}&search={{../searchQuery}}&status={{../statusFilter}}">{{this}}</a>
+                    </li>
+                {{/if}}
+            {{/each}}
+
+            {{#if (lt currentPage totalPages)}}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{add currentPage 1}}&search={{searchQuery}}&status={{statusFilter}}">
+                        <i class="material-icons md-chevron_right"></i>
+                    </a>
+                </li>
+            {{/if}}
+        </ul>
+    </nav>
+</div>
+
+
         </section> <!-- content-main end// -->
         <footer class="main-footer font-xs">
             <div class="row pb-30 pt-15">
@@ -262,5 +170,21 @@
                 window.location.href = actionUrl;
             }
         });
+    }
+
+    function applyFilters() {
+        const searchValue = document.getElementById('searchInput').value.trim();
+        const statusValue = document.getElementById('statusFilter').value;
+
+        const queryParams = [];
+        if (searchValue) queryParams.push(`search=${encodeURIComponent(searchValue)}`);
+        if (statusValue) queryParams.push(`status=${encodeURIComponent(statusValue)}`);
+
+        const queryString = queryParams.length > 0 ? '?' + queryParams.join('&') : '';
+        window.location.href = `/admin/manage_users${queryString}`;
+    }
+
+    function clearFilters() {
+        window.location.href = `/admin/manage_users`;
     }
 </script>
