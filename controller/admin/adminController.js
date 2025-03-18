@@ -722,14 +722,29 @@ const listBanner = async (req, res) => {
   try {
     const { id } = req.body;
     const banner = await Banner.findById(id);
-    console.log(id, banner)
-    const newStatus = banner.status
-    const toggle_banner = await Banner.findByIdAndUpdate(id, { active: !newStatus })
-    console.log(toggle_banner)
+    
+    if (!banner) {
+      return res.status(404).json({ message: "Banner not found" });
+    }
+
+    console.log(id, banner);
+
+    const newStatus = banner.status; // This should be 'active' instead of 'status'?
+    const updatedBanner = await Banner.findByIdAndUpdate(
+      id, 
+      { active: !newStatus }, 
+      { new: true } // Ensure it returns the updated document
+    );
+
+    console.log(updatedBanner);
+    
+    res.status(200).json({ message: "Banner updated", banner: updatedBanner });
   } catch (error) {
-    console.log(error);
+    console.error(error);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };
+
 
 
 const deleteCoupon = async (req, res) => {
