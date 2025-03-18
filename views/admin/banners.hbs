@@ -52,18 +52,10 @@
 
 
                                 <td class="text-center" width="26%">
-{{#if this.active}}
-   
-        <a href="javascript:void(0);" data-banner-id="{{this._id}}" onclick="toggleBannerStatus('{{this._id}}', true)" class="btn btn-pill font-sm rounded btn-brand"  style="width: 100px">
-            <i class="material-icons md-edit"></i>Block
-        </a>
+<a href="javascript:void(0);" onclick="toggleBannerStatus('{{this._id}}', {{this.active}})" class="btn btn-pill font-sm rounded btn-brand" style="width: 100px">
+    <i class="material-icons md-edit"></i> {{#if this.active}}Block{{else}}Unblock{{/if}}
+</a>
 
-{{else}}
-        <a href="javascript:void(0);" data-banner-id="{{this._id}}" onclick="toggleBannerStatus('{{this._id}}', false)" class="btn btn-pill font-sm rounded btn-brand" style="width: 100px">
-            <i class="material-icons md-edit"></i>Unblock
-        </a>
-    
-{{/if}}
 
 
                             <a href="/admin/edit_banner/{{this._id}}"  class="btn btn-pill font-sm rounded btn-brand"  style="width: 100px">
@@ -140,42 +132,45 @@
 </style>
 
 <script>
-    function toggleBannerStatus(bannerId, status) {
-        const action = status ? 'Block' : 'Unblock';
-        const actionUrl = '/admin/toggle_banner';
+function toggleBannerStatus(bannerId, status) {
+    const action = status ? 'Block' : 'Unblock';
+    const actionUrl = '/admin/toggle_banner';
 
-        Swal.fire({
-            title: `Are you sure you want to ${action} this banner?`,
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: `${action}`
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $.ajax({
-                    type: 'POST',
-                    url: actionUrl,
-                    contentType: 'application/json',
-                    data: JSON.stringify({ id: bannerId }),
-                    success: function (response) {
-                        Swal.fire({
-                            title: 'Done!',
-                            text: `Banner successfully ${action}ed!`,
-                            icon: 'success',
-                            confirmButtonText: 'okay'
-                        }).then(() => {
-                            window.location.reload();
-                        });
-                    },
-                    error: function (xhr, status, error) {
-                        console.error(`Error ${action}ing banner:`, error);
-                        Swal.fire("Error", "Something went wrong. Please try again later.", "error");
-                    }
-                });
-            }
-        });
-    }
+    Swal.fire({
+        title: `Are you sure you want to ${action} this banner?`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: `${action}`
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                type: 'POST',
+                url: actionUrl,
+                contentType: 'application/json',
+                data: JSON.stringify({ id: bannerId, active: !status }), // Send updated active status
+                success: function (response) {
+                    Swal.fire({
+                        title: 'Done!',
+                        text: `Banner successfully ${action}ed!`,
+                        icon: 'success',
+                        confirmButtonText: 'Okay'
+                    }).then(() => {
+                        const btn = $(`[data-banner-id="${bannerId}"]`);
+                        btn.text(status ? 'Unblock' : 'Block');
+                        btn.attr('onclick', `toggleBannerStatus('${bannerId}', ${!status})`);
+                    });
+                },
+                error: function (xhr, status, error) {
+                    console.error(`Error ${action}ing banner:`, error);
+                    Swal.fire("Error", "Something went wrong. Please try again later.", "error");
+                }
+            });
+        }
+    });
+}
+
 </script>
 
 
