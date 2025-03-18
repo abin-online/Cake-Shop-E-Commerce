@@ -52,9 +52,14 @@
 
 
                                 <td class="text-center" width="26%">
-<a href="javascript:void(0);" onclick="toggleBannerStatus('{{this._id}}', {{this.active}})" class="btn btn-pill font-sm rounded btn-brand" style="width: 100px">
+<a href="javascript:void(0);" 
+   data-banner-id="{{this._id}}" 
+   onclick="toggleBannerStatus('{{this._id}}', {{this.active}})" 
+   class="btn btn-pill font-sm rounded btn-brand" 
+   style="width: 100px">
     <i class="material-icons md-edit"></i> {{#if this.active}}Block{{else}}Unblock{{/if}}
 </a>
+
 
 
 
