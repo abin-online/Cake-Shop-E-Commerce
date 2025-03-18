@@ -723,9 +723,7 @@ const listBanner = async (req, res) => {
     const { id } = req.body;
     const banner = await Banner.findById(id);
     
-    if (!banner) {
-      return res.status(404).json({ message: "Banner not found" }); // 🚨 Ensure function stops here
-    }
+   
 
     console.log(id, banner);
 
@@ -738,10 +736,10 @@ const listBanner = async (req, res) => {
 
     console.log(updatedBanner);
     
-    return res.status(200).json({ message: "Banner updated", banner: updatedBanner }); // 🚨 Always return after sending response
+    //return res.status(200).json({ message: "Banner updated", banner: updatedBanner }); // 🚨 Always return after sending response
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ message: "Internal Server Error" }); // 🚨 Ensure return here too
+    //return res.status(500).json({ message: "Internal Server Error" }); // 🚨 Ensure return here too
   }
 };
 
