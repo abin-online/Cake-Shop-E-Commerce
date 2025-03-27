@@ -214,6 +214,9 @@ const loadDashboard = async(req, res) => {
       // console.log(totalRevnue);
       // console.log(totalSales);
 
+
+      
+
       res.render('admin/home', { popularBrands , bestSellings  , bestSellingCategory , revnueByMonth, months, odersByMonth, totalRevnue, totalSales, thisMonthOrder, thisMonthSales , categoryRevenue, layout:'adminlayout'})
 
     })
