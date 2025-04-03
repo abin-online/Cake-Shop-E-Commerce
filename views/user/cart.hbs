@@ -13,87 +13,68 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="table-responsive">
-    <table class="table shopping-summery text-center clean">
-        <thead>
-            <tr class="main-heading">
-                <th scope="col">Image</th>
-                <th scope="col">Name</th>
-                <th scope="col">Price</th>
-                <th scope="col">Quantity</th>
-                <th scope="col">Subtotal</th>
-                <th scope="col">Remove</th>
-            </tr>
-        </thead>
-        <tbody>
-            {{#each cart}}
-            <tr id="row{{this._id}}" class="table_row">
-                <td class="image product-thumbnail">
-                    {{#if this.product._id}}
-                        <a href="/productview?id={{this.product._id}}">
-                            <img src="/images/products/{{this.product.imageUrl.[0]}}" alt="#">
-                        </a>
-                    {{else}}
-                        <img src="/images/default-placeholder.png" alt="Deleted Product">
-                    {{/if}}
-                </td>
-                <td class="product-des product-name">
-                    <h5 class="product-name">
-                        {{#if this.product._id}}
-                            <a href="/productview?id={{this.product._id}}">{{this.product.name}}</a>
-                        {{else}}
-                            <span class="text-danger">Product has been deleted</span>
-                        {{/if}}
-                    </h5>
-                    <p class="font-xs">
-                        {{#if this.product._id}}
-                            {{this.product.description}}
-                        {{else}}
-                            <span class="text-muted">This product is no longer available.</span>
-                        {{/if}}
-                    </p>
-                </td>
-                <td class="price">
-                    {{#if this.product._id}}
-                        <span>{{this.product.price}}</span>
-                    {{else}}
-                        <span class="text-muted">N/A</span>
-                    {{/if}}
-                </td>
-                <td class="column-4">
-                    {{#if this.product._id}}
-                        <div class="wrap-num-product flex-w m-l-auto m-r-0">
-                            <div class="p-3 cl8 hov-btn3 trans-04 flex-c-m" 
-                                 onclick="totalPrice('{{this.product._id}}', 'inc', '{{this.product.stock}}'); stockCheck()">
-                                <i class="fa-solid fa-plus"></i>
-                            </div>
-                            <input disabled id="{{this.product._id}}" class="mtext-104 cl3 txt-center num-product"  
-                                   type="number" name="num-product" value="{{this.quantity}}">
-                            <div class="p-3 cl8 hov-btn3 trans-04 flex-c-m"  
-                                 onclick="totalPrice('{{this.product._id}}','dec')">
-                                <i class="fa-solid fa-minus"></i>
-                            </div>
-                        </div>
-                    {{else}}
-                        <span class="text-muted">Not available</span>
-                    {{/if}}
-                </td>
-                <td class="text-right">
-                    <span>{{#if this.product._id}}{{this.total}}{{else}}0{{/if}}</span>
-                </td>
-                   <input type="hidden" id="product_id{{this.product._id}}" value="{{this.product._id}}">
+                            <table class="table shopping-summery text-center clean">
+                                <thead>
+                                    <tr class="main-heading">
+                                        <th scope="col">Image</th>
+                                        <th scope="col">Name</th>
+                                        <th scope="col">Price</th>
+                                        <th scope="col">Quantity</th>
+                                        <th scope="col">Subtotal</th>
+                                        <th scope="col">Remove</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {{#each cart}}
+                                    <input type="hidden" value="{{this.product}}" name="cart_dataaa">
+                                    <tr id="row{{this.product._id}}" class="table_row">
+                                        <td class="image product-thumbnail">
+                                            <a href="/productview?id={{this.product._id}}">
+                                            <img src="/images/products/{{this.product.imageUrl.[0]}}" alt="#">
+                                            </a>
+                                        </td>
+                                        <td class="product-des product-name">
+                                            <h5 class="product-name"><a href="/productview?id={{this.product._id}}">{{this.product.name}}</a></h5>
+                                            <p class="font-xs">{{this.description}}
+                                            </p>
+                                        </td>
+                                        <td id="price" class="price" value="{{this.product.price}}"><span>{{this.product.price}}</span></td>
+                                        <input type="hidden" name="productprice" value="{{this.product.price}}">
+                                        <input type="hidden" name="productId" value="{{this.product._id}}">
+
+<td class="column-4" >
+										<div class="wrap-num-product flex-w m-l-auto m-r-0">
+
+                                    <div class="p-3 cl8 hov-btn3 trans-04 flex-c-m" 
+     onclick="totalPrice('{{this.product._id}}', 'inc', '{{this.product.stock}}'); stockCheck()">
+
+												<i class="fa-solid fa-plus"></i>
+											</div>
+											<input  disabled="" id="{{this.product._id}}"  class="mtext-104 cl3 txt-center num-product"  type="number" name="num-product" value="{{this.quantity}}">
+											<div class="p-3 cl8 hov-btn3 trans-04 flex-c-m"  onclick="totalPrice('{{this.product._id}}','dec')">
+												<i class="fa-solid fa-minus"></i>
+											</div>
+										</div>
+										
+									</td>
+
+                                        <td class="text-right" data-title="Cart">
+                                            <span id="total" name="productTotal" value="{{this.total}}">{{this.total}}</span>
+                                        </td>
+                                    <input type="hidden" id="product_id{{this.product._id}}" value="{{this.product._id}}">
 									
 									<input type="hidden" name="cart_id" value="{{this._id}}">
-                <td class="action">
-                    <a onclick="removeCartalert('{{this._id}}', '{{objectIdString}}')" class="text-danger">
-                        <i class="fi-rs-trash"></i> Remove
-                    </a>
-                </td>
-            </tr>
-            {{/each}}
-        </tbody>
-    </table>
-</div>
-
+                                        <td class="action" data-title="Remove"><a onclick="removeCartalert('{{this.product._id}}' , {{objectIdString}})" class="text-muted"><i class="fi-rs-trash"></i></a></td>
+                                    </tr>
+                                    {{/each}}
+                                    {{!-- <tr>
+                                        <td colspan="6" class="text-end">
+                                            <a onclick="//removeCartalert('{{this.product._id}}')" class="text-muted"> </a>
+                                        </td>
+                                    </tr> --}}
+                                </tbody>
+                            </table>
+                        </div>
                         {{!-- <div class="cart-action text-end">
                             <a class="btn  mr-10 mb-sm-15"><i class="fi-rs-shuffle mr-10"></i>Update Cart</a>
                             <a class="btn "><i class="fi-rs-shopping-bag mr-10"></i>Continue Shopping</a>
