@@ -1,53 +1,37 @@
 <main>
 
-    <button class="nav-link btn btn rounded-pill darkmode m-3 " href="#">
+    <button class="nav-link btn btn rounded-pill darkmode m-3">
         <i class="material-icons md-nights_stay"></i>
     </button>
 
-
     <section class="content-main mt-80 mb-0">
-        {{!-- <button class="nav-link btn btn-outline-primary rounded-pill darkmode" href="#">
-            <i class="material-icons md-nights_stay"></i>
-        </button> --}}
         <div class="card mx-auto card-login">
             <div class="card-body">
                 <h4 class="card-title m-auto mb-4">Login</h4>
-                <form method="post" action="/admin/login">
+                <form method="post" action="/admin/login" onsubmit="return validateForm()">
                     <div class="mb-3">
-                        <input class="form-control" placeholder="Username or email"  id="email" name="email" type="email" required>
+                        <input class="form-control" placeholder="Username or email" id="email" name="email" type="email" required>
                         <div class="error" style="color: red;" id="emailError"></div>
-                    </div> <!-- form-group// -->
+                    </div>
                     <div class="mb-3">
                         <input class="form-control" placeholder="Password" id="password" name="password" type="password" required>
                         <div class="error" style="color: red;" id="passwordError"></div>
-                    </div> <!-- form-group// -->
+                    </div>
                     <div class="mb-3">
-                       
                         <label class="form-check">
-                            <input type="checkbox" class="form-check-input" id="showPasswordCheckbox"
-                                onchange="togglePasswordVisibility()">
-                            <span class="form-check-label">show password</span>
+                            <input type="checkbox" class="form-check-input" id="showPasswordCheckbox" onchange="togglePasswordVisibility()">
+                            <span class="form-check-label">Show password</span>
                         </label>
-                    </div><!-- form-group form-check .// -->
+                    </div>
                     <div class="mb-4">
                         <button type="submit" class="btn btn-primary w-100"> Login </button>
-                    </div> <!-- form-group// -->
+                    </div>
                 </form>
                 <p class="text-center small text-muted mb-15">CAKE KART ADMIN LOGIN</p>
-                <div class="d-grid gap-3 mb-4">
-                    
-                    {{!-- <a href="#" class="btn w-100 btn-light font-sm">
-                        <svg aria-hidden="true" class="icon-svg" width="20" height="20" viewBox="0 0 20 20">
-                            <path
-                                d="M3 1a2 2 0 00-2 2v12c0 1.1.9 2 2 2h12a2 2 0 002-2V3a2 2 0 00-2-2H3zm6.55 16v-6.2H7.46V8.4h2.09V6.61c0-2.07 1.26-3.2 3.1-3.2.88 0 1.64.07 1.87.1v2.16h-1.29c-1 0-1.19.48-1.19 1.18V8.4h2.39l-.31 2.42h-2.08V17h-2.5z"
-                                fill="#4167B2"></path>
-                        </svg> Sign in using Facebook
-                    </a> --}}
-                </div>
-                {{!-- <p class="text-center mb-4">Don't have account? <a href="#">Sign up</a></p>
-            </div> --}}
+            </div>
         </div>
     </section>
+
     <footer class="main-footer text-center">
         <p class="font-xs">
             <script>
@@ -56,10 +40,12 @@
         </p>
         <p class="font-xs mb-30">All rights reserved</p>
     </footer>
+
 </main>
+
 <script>
     /**
-     * Email validation
+     * Validates email format
      */
     function validate_email() {
         var email = document.getElementById('email').value.trim();
@@ -68,7 +54,6 @@
 
         if (!emailPattern.test(email)) {
             emailError.textContent = "Invalid email. Please try again.";
-            document.getElementById('email').focus();
             return false;
         } else {
             emailError.textContent = "";
@@ -77,16 +62,15 @@
     }
 
     /**
-     * Password validation
+     * Validates password (at least 8 chars, 1 letter, 1 digit)
      */
     function validatePassword() {
         var password = document.getElementById('password').value.trim();
-        var passwordPattern = /^.{8,}$/;;
+        var passwordPattern = /^(?=.*[A-Za-z])(?=.*\d).{8,}$/;
         var passwordError = document.getElementById('passwordError');
 
         if (!passwordPattern.test(password)) {
-            passwordError.textContent = "Invalid password. Password must be at least 8 characters long and contain at least one letter and one digit.";
-            document.getElementById('password').focus();
+            passwordError.textContent = "Invalid password. Must be at least 8 characters long with at least one letter and one digit.";
             return false;
         } else {
             passwordError.textContent = "";
@@ -94,18 +78,34 @@
         }
     }
 
+    /**
+     * Main form validation - Ensures correct email & password before submission
+     */
+    function validateForm() {
+        if (!validate_email()) {
+            document.getElementById('email').focus();
+            return false;
+        }
+        if (!validatePassword()) {
+            document.getElementById('password').focus();
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Toggle password visibility when checkbox is checked
+     */
     function togglePasswordVisibility() {
-                    var passwordInput = document.getElementById('password');
-                    var checkbox = document.getElementById('showPasswordCheckbox');
+        var passwordInput = document.getElementById('password');
+        var checkbox = document.getElementById('showPasswordCheckbox');
+        passwordInput.type = checkbox.checked ? "text" : "password";
+    }
 
-                    if (checkbox.checked) {
-                        passwordInput.type = "text";
-                    } else {
-                        passwordInput.type = "password";
-                    }
-                }
-
-
-
+    /**
+     * Auto-hide error messages after 3 seconds
+     */
+    setTimeout(() => {
+        document.querySelectorAll('.error').forEach(e => e.textContent = "");
+    }, 3000);
 </script>
-
