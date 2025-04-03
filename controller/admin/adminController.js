@@ -28,8 +28,8 @@ const adminDoLogin = async (req, res) => {
     adminData = {
 
 
-      email: process.env.ADMIN_EMAIL || ADMIN_EMAIL,
-      password: process.env.ADMIN_PASSWORD || ADMIN_PASSWORD
+      email: process.env.ADMIN_EMAIL,
+      password: process.env.ADMIN_PASSWORD
     };
     let adminEmail = req.body.email;
     let adminPassword = req.body.password;
@@ -38,7 +38,7 @@ const adminDoLogin = async (req, res) => {
     //adminData = await Admin.findOne({ email: adminEmail });
 
     if (adminData) {
-      if (adminPassword === adminData.password) {
+      if (adminPassword === adminData.password && adminEmail === adminData.email) {
         req.session.aLoggedIn = true;
         req.session.admin = adminData;
         res.redirect("/admin/home");
