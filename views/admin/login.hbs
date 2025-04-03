@@ -8,14 +8,17 @@
         <div class="card mx-auto card-login">
             <div class="card-body">
                 <h4 class="card-title m-auto mb-4">Login</h4>
-                <form method="post" action="/admin/login" onsubmit="return validateForm()">
+                {{#if message}}
+                <div class="alert alert-danger text-center" role="alert">
+                    {{message}}
+                </div>
+                {{/if}}
+                <form method="post" action="/admin/login">
                     <div class="mb-3">
                         <input class="form-control" placeholder="Username or email" id="email" name="email" type="email" required>
-                        <div class="error" style="color: red;" id="emailError"></div>
                     </div>
                     <div class="mb-3">
                         <input class="form-control" placeholder="Password" id="password" name="password" type="password" required>
-                        <div class="error" style="color: red;" id="passwordError"></div>
                     </div>
                     <div class="mb-3">
                         <label class="form-check">
@@ -36,7 +39,7 @@
         <p class="font-xs">
             <script>
                 document.write(new Date().getFullYear())
-            </script> ©, ConsoleHaven.
+            </script> ©, CakeKart.shop.
         </p>
         <p class="font-xs mb-30">All rights reserved</p>
     </footer>
@@ -45,55 +48,6 @@
 
 <script>
     /**
-     * Validates email format
-     */
-    function validate_email() {
-        var email = document.getElementById('email').value.trim();
-        var emailPattern = /^\S+@\S+\.\S+$/;
-        var emailError = document.getElementById('emailError');
-
-        if (!emailPattern.test(email)) {
-            emailError.textContent = "Invalid email. Please try again.";
-            return false;
-        } else {
-            emailError.textContent = "";
-            return true;
-        }
-    }
-
-    /**
-     * Validates password (at least 8 chars, 1 letter, 1 digit)
-     */
-    function validatePassword() {
-        var password = document.getElementById('password').value.trim();
-        var passwordPattern = /^(?=.*[A-Za-z])(?=.*\d).{8,}$/;
-        var passwordError = document.getElementById('passwordError');
-
-        if (!passwordPattern.test(password)) {
-            passwordError.textContent = "Invalid password. Must be at least 8 characters long with at least one letter and one digit.";
-            return false;
-        } else {
-            passwordError.textContent = "";
-            return true;
-        }
-    }
-
-    /**
-     * Main form validation - Ensures correct email & password before submission
-     */
-    function validateForm() {
-        if (!validate_email()) {
-            document.getElementById('email').focus();
-            return false;
-        }
-        if (!validatePassword()) {
-            document.getElementById('password').focus();
-            return false;
-        }
-        return true;
-    }
-
-    /**
      * Toggle password visibility when checkbox is checked
      */
     function togglePasswordVisibility() {
@@ -101,11 +55,4 @@
         var checkbox = document.getElementById('showPasswordCheckbox');
         passwordInput.type = checkbox.checked ? "text" : "password";
     }
-
-    /**
-     * Auto-hide error messages after 3 seconds
-     */
-    setTimeout(() => {
-        document.querySelectorAll('.error').forEach(e => e.textContent = "");
-    }, 3000);
 </script>
