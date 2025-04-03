@@ -65,11 +65,12 @@ const loadCart = async (req, res) => {
 
 
     const user = await User.findOne({ _id: userId }).populate('cart.product').lean()
+    console.log('user    ', user)
     const cart = user.cart; // Get the 'cart' array from the user document
     let objectIdString = user._id.toString().replace('ObjectId("', '').replace('")', '');
     console.log(objectIdString);
 
-
+console.log('cart ', cart)
      let subTotal = 0
      cart.forEach((val)=>{
      val.total = val.product.price * val.quantity
