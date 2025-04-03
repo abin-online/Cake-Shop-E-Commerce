@@ -49,6 +49,7 @@ const verifyEmail = async(email)=>{
 
 const generateOtp = ()=>{
      otp = `${Math.floor(1000 + Math.random() * 9000)}`
+     console.log(otp)
     return otp
 }
 
