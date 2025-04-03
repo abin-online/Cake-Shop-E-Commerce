@@ -72,10 +72,15 @@ const loadCart = async (req, res) => {
 
 console.log('cart ', cart)
      let subTotal = 0
-     cart.forEach((val)=>{
-     val.total = val.product.price * val.quantity
-     subTotal += val.total
-     })
+     cart.forEach((val) => {
+      if (val.product) {
+          val.total = val.product.price * val.quantity;
+          subTotal += val.total;
+      } else {
+          val.product = { name: "Product has been deleted", price: 0, imageUrl: [] };
+          val.total = 0;
+      }
+  });
 
 
   if(user.cart.length === 0){
