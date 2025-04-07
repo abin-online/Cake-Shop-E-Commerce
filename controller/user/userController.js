@@ -66,7 +66,10 @@ const loadHome = async (req, res) => {
         console.log(popularCakes)
 
         //const coupons      = await Coupon.find().limit(6).lean()
+        // const userData = req.session.user
+
         const userData = req.session.user
+
         console.log(userData)
         let coupons = await Coupon.find({
             status: true,
