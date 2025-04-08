@@ -139,7 +139,8 @@
                     <button onclick="addToCartBtn('{{proData._id}}')" id="add_to_cart_btn" class="button button-add-to-cart">Add to cart</button>
                 </span>
                 {{else}}
-                    <button onclick="window.location.href='/cart/{{userData._id}}'" id="add_to_cart_btn" class="button button-add-to-cart">Add to cart</button>
+
+                    <button onclick="window.location.href='/login'" id="add_to_cart_btn" class="button button-add-to-cart">Add to cart</button>
                 {{/if}}
             {{/if}}
         {{else}}
