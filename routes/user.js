@@ -92,15 +92,37 @@ router.post('/profileResetPassword', logedin, resetProfile.resetPasswordProfile)
 
 
 //cart
-router.get('/cart/:userId', logedin, isBlocked, cart.loadCart)
-router.get('/add_to_cart', logedin, isBlocked, cart.addToCart)
-router.get('/remove', isLogin, isBlocked, cart.removeCart)
-router.post('/cart_updation', logedin, isBlocked, cart.updateCart)
+// router.get('/cart/:userId', logedin, isBlocked, cart.loadCart)
+// router.get('/add_to_cart', logedin, isBlocked, cart.addToCart)
+// router.get('/remove', isLogin, isBlocked, cart.removeCart)
+// router.post('/cart_updation', logedin, isBlocked, cart.updateCart)
+
+router.get('/cart', logedin, isBlocked, cart.loadCartPage)
+router.post('/addtocart/:id', logedin, isBlocked, cart.addToCart)
+router.post('/removeFromCart', logedin, isBlocked, cart.removeFromCart)
+router.post('/updatecart', logedin, isBlocked, cart.updateCart)
+router.post('/checkOutOfStock', logedin, isBlocked, cart.checkOutOfStock);
 
 //checkout
-router.get('/checkout', logedin, isBlocked, checkout.loadCheckout)
-router.get('/check_stock', logedin, isBlocked, checkout.checkStock)
-router.post('/place_order', logedin, isBlocked, checkout.placeOrder)
+// router.get('/checkout', logedin, isBlocked, checkout.loadCheckout)
+// router.get('/check_stock', logedin, isBlocked, checkout.checkStock)
+// router.post('/place_order', logedin, isBlocked, checkout.placeOrder)
+
+//checkout
+// router.post('/validate_coupon', logedin, isBlocked, checkout.validateCoupon)
+// router.post('/apply_coupon', logedin, isBlocked, checkout.applyCoupon);
+// router.post('/remove_coupon', logedin, isBlocked, checkout.removeCoupon);
+
+// Checkout Page
+
+router.get('/cart/checkout', logedin, isBlocked, checkout.loadCheckoutPage)
+router.post('/placeOrder', logedin, isBlocked, checkout.placeorder)
+router.get('/orderPlaced', logedin, isBlocked, checkout.orderSuccess)
+router.get('/payment_failed', logedin , isBlocked , orders.payment_failed)
+
+router.post('/validate_coupon', logedin, isBlocked, checkout.validateCoupon)
+router.post('/apply_coupon',logedin, isBlocked, checkout.applyCoupon)
+router.post('/remove_coupon', logedin, isBlocked, checkout.removeCoupon)
 
 //orders
 
@@ -108,8 +130,20 @@ router.get('/my_orders', logedin, isBlocked, orders.myOrders)
 router.get('/order_details', logedin, isBlocked, orders.orderDetails)
 router.get('/order_sucess', logedin, isBlocked, orders.orderSuccess)
 router.get('/payment_failed', logedin , isBlocked , orders.payment_failed)
-router.post('/cancel_order', logedin, isBlocked, orders.cancelOrder)
-router.post('/return_order', logedin, isBlocked, orders.returnOrder)
+
+
+
+router.put('/cancel-order/:id', logedin, isBlocked, orders.cancelOrder);
+
+router.put('/return-order/:id', logedin, isBlocked, orders.returnOrder);
+
+router.put('/cancel-one-product', logedin, isBlocked, orders.cancelOneProduct);
+
+router.put('/return-one-product', logedin, isBlocked, orders.returnOneProduct);
+
+
+
+
 
 router.post('/retry_payment' ,logedin , isBlocked , orders.retryPayment)
 
@@ -117,14 +151,11 @@ router.get('/filter_orders', logedin, isBlocked, orders.filterOrders)
 
 router.get('/get_invoice', logedin, isBlocked, orders.getInvoice)
 
-router.get('/wishlist', logedin, isBlocked, wishlist.loadWishlist)
-router.get('/add_to_wishlist', logedin, isBlocked, wishlist.addToWishList)
-router.get('/remove_from_wishlist', logedin, isBlocked, wishlist.removeFromWishList)
+router.get('/wishlist', logedin, isBlocked, wishlist.showWishlistPage)
+router.post('/addtowishlist', logedin, isBlocked, wishlist.addToWishList)
+router.post('/removeFromWishList', logedin, isBlocked, wishlist.removeFromWishList)
 
-//checkout
-// router.post('/validate_coupon', logedin, isBlocked, checkout.validateCoupon)
-router.post('/apply_coupon', logedin, isBlocked, checkout.applyCoupon);
-router.post('/remove_coupon', logedin, isBlocked, checkout.removeCoupon);
+
 
 
 router.get('/wallet', logedin, isBlocked, wallet.walletpage)

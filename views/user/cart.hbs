@@ -1,329 +1,275 @@
-    <main class="main">
-        <div class="page-header breadcrumb-wrap">
-            <div class="container">
-                <div class="breadcrumb">
-                    <a href="/" rel="nofollow">Home</a>
-                    <span></span> Shop
-                    <span></span> Your Cart
-                </div>
+<main class="main">
+    <div class="page-header breadcrumb-wrap">
+        <div class="container">
+            <div class="breadcrumb">
+                <a href="/" rel="nofollow">Home</a>
+                <span></span> Shop
+                <span></span> Cart
             </div>
         </div>
-        <section class="mt-50 mb-50">
-            <div class="container">
-                <div class="row">
-                    <div class="col-12">
-                        <div class="table-responsive">
-                            <table class="table shopping-summery text-center clean">
-                                <thead>
-                                    <tr class="main-heading">
-                                        <th scope="col">Image</th>
-                                        <th scope="col">Name</th>
-                                        <th scope="col">Price</th>
-                                        <th scope="col">Quantity</th>
-                                        <th scope="col">Subtotal</th>
-                                        <th scope="col">Remove</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {{#each cart}}
-                                    <input type="hidden" value="{{this.product}}" name="cart_dataaa">
-                                    <tr id="row{{this.product._id}}" class="table_row">
-                                        <td class="image product-thumbnail">
-                                            <a href="/productview?id={{this.product._id}}">
-                                            <img src="/images/products/{{this.product.imageUrl.[0]}}" alt="#">
-                                            </a>
-                                        </td>
-                                        <td class="product-des product-name">
-                                            <h5 class="product-name"><a href="/productview?id={{this.product._id}}">{{this.product.name}}</a></h5>
-                                            <p class="font-xs">{{this.description}}
-                                            </p>
-                                        </td>
-                                        <td id="price" class="price" value="{{this.product.price}}"><span>{{this.product.price}}</span></td>
-                                        <input type="hidden" name="productprice" value="{{this.product.price}}">
-                                        <input type="hidden" name="productId" value="{{this.product._id}}">
+    </div>
+    <section class="mt-50 mb-50">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="table-responsive">
+                        <table class="table shopping-summery text-center clean">
+                            <thead>
+                                <tr class="main-heading">
+                                    <th scope="col">Image</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Price</th>
+                                    <th scope="col">Quantity</th>
+                                    <th scope="col">Subtotal</th>
+                                    <th scope="col">Remove</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{#each cartProd}}
+                                <tr>
+                                    <td class="image product-thumbnail"><img src="/images/products/{{productImage.[0]}}"
+                                            alt="#"></td>
+                                    <td class="product-des product-name">
+                                        <h5 class="product-name">
+                                                <a href="/productview?id={{this.productId}}">{{productName}}</a>
+                                        </h5>
+                                        {{!-- <p class="font-xs">{{productDescription}}
+                                        </p> --}}
+                                        {{#if outOfStock}}
+                                        <p class="font-xs text-danger">Out of Stock</p>
+                                        {{/if}}
+                                    </td>
+                                    <td class="price" data-title="Price"><span>₹{{productPrice}} </span></td>
 
-<td class="column-4" >
-										<div class="wrap-num-product flex-w m-l-auto m-r-0">
-
-                                    <div class="p-3 cl8 hov-btn3 trans-04 flex-c-m" 
-     onclick="totalPrice('{{this.product._id}}', 'inc', '{{this.product.stock}}'); stockCheck()">
-
-												<i class="fa-solid fa-plus"></i>
-											</div>
-											<input  disabled="" id="{{this.product._id}}"  class="mtext-104 cl3 txt-center num-product"  type="number" name="num-product" value="{{this.quantity}}">
-											<div class="p-3 cl8 hov-btn3 trans-04 flex-c-m"  onclick="totalPrice('{{this.product._id}}','dec')">
-												<i class="fa-solid fa-minus"></i>
-											</div>
-										</div>
-										
-									</td>
-
-                                        <td class="text-right" data-title="Cart">
-                                            <span id="total" name="productTotal" value="{{this.total}}">{{this.total}}</span>
-                                        </td>
-                                    <input type="hidden" id="product_id{{this.product._id}}" value="{{this.product._id}}">
-									
-									<input type="hidden" name="cart_id" value="{{this._id}}">
-                                        <td class="action" data-title="Remove"><a onclick="removeCartalert('{{this.product._id}}' , {{objectIdString}})" class="text-muted"><i class="fi-rs-trash"></i></a></td>
-                                    </tr>
-                                    {{/each}}
-                                    {{!-- <tr>
-                                        <td colspan="6" class="text-end">
-                                            <a onclick="//removeCartalert('{{this.product._id}}')" class="text-muted"> </a>
-                                        </td>
-                                    </tr> --}}
-                                </tbody>
-                            </table>
-                        </div>
-                        {{!-- <div class="cart-action text-end">
-                            <a class="btn  mr-10 mb-sm-15"><i class="fi-rs-shuffle mr-10"></i>Update Cart</a>
-                            <a class="btn "><i class="fi-rs-shopping-bag mr-10"></i>Continue Shopping</a>
-                        </div> --}}
-                        <div class="divider center_icon mt-50 mb-50"><i class="fi-rs-fingerprint"></i></div>
-                        <div class="row mb-50">
-                            <div class="col-lg-6 col-md-12">
-                                {{!-- <div class="heading_s1 mb-3">
-                                    <h4>Calculate Shipping</h4>
-                                </div> --}}
-                                {{!-- <p class="mt-15 mb-30">Flat rate: <span class="font-xl text-brand fw-900">5%</span></p> --}}
-                                {{!-- <form class="field_form shipping_calculator">
-                                    <div class="form-row">
-                                        <div class="form-group col-lg-12">
-                                            <div class="custom_select">
+                                    <td class="column-4">
+                                        <div class="wrap-num-product flex-w m-l-auto m-r-0" id="quantityContainer">
+                                            
+                                            <div id="incButton" data-offer="{{this.offerprice}}"
+                                                class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m">
+                                                <i class="fa-solid fa-plus"></i>
                                             </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-row row">
-                                        <div class="form-group col-lg-6">
-                                            <input required="required" placeholder="State / Country" name="name" type="text">
-                                        </div>
-                                        <div class="form-group col-lg-6">
-                                            <input required="required" placeholder="PostCode / ZIP" name="name" type="text">
-                                        </div>
-                                    </div>
-                                    <div class="form-row">
-                                        <div class="form-group col-lg-12">
-                                            <button class="btn  btn-sm"><i class="fi-rs-shuffle mr-10"></i>Update</button>
-                                        </div>
-                                    </div>
-                                </form> --}}
-                                {{!-- <div class="mb-30 mt-50">
-                                    <div class="heading_s1 mb-3">
-                                        <h4>Apply Coupon</h4>
-                                    </div>
-                                    <div class="total-amount">
-                                        <div class="left">
-                                            <div class="coupon">
-                                                <form action="#" >
-                                                    <div class="form-row row justify-content-center">
-                                                        <div class="form-group col-lg-6">
-                                                            <input class="font-medium" name="Coupon" placeholder="Enter Your Coupon">
-                                                        </div>
-                                                        <div class="form-group col-lg-6">
-                                                            <button class="btn  btn-sm"><i class="fi-rs-label mr-10"></i>Apply</button>
-                                                        </div>
-                                                    </div>
-                                                </form>
+
+                                            <input disabled class=" mtext-104 cl3 txt-center num-product" type="number"
+                                                name="num-product{{this._id}}" id="{{this._id}}"
+                                                value="{{this.quantity}}">
+                                            <div class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m">
+                                                <i class="fa-solid fa-minus"></i>
                                             </div>
+                                            
                                         </div>
-                                    </div>
-                                </div> --}}
-                            </div>
-                            <div class="col-lg-6 col-md-12">
-                                <div class="border p-md-4 p-30 border-radius cart-totals">
-                                    <div class="heading_s1 mb-3">
-                                        <h4>Cart Totals</h4>
-                                    </div>
-                                    <div class="table-responsive">
-                                        <table class="table">
-                                            <tbody>
-                                                <tr>
-                                                    <td class="cart_total_label">Cart Subtotal</td>
-                                                    <td class="cart_total_amount"><span class="font-lg fw-900 text-brand" id="subTotal">{{subTotal}}</span></td>
-                                                </tr>
-                                                {{!-- <tr>
-                                                    <td class="cart_total_label">Shipping</td>
-                                                    <td class="cart_total_amount"> <i class="ti-gift mr-5"></i> Free Shipping</td>
-                                                </tr> --}}
-                                                {{!-- <tr>
-                                                    <td class="cart_total_label">Total</td>
-                                                    <td class="cart_total_amount"><strong><span class="font-xl fw-900 text-brand" id="subTotal2">{{subTotal}}</span></strong></td>
-                                                </tr> --}}
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                    <a onclick="proceedToCheckout()" class="btn "> <i class="fi-rs-box-alt mr-10"></i> Proceed To CheckOut</a>
+                                    </td>
+                                    <td class="text-right" data-title="Cart">
+                                        <span id="totalPerItem-{{this._id}}">₹{{multiply this.quantity
+                                            this.productPrice}}</span>
+                                    </td>
+                                    <td class="action" data-product-id="{{_id}}" data-title="Remove"><a href="#"
+                                            class="text-muted"><i class="fi-rs-trash"></i></a></td>
+                                </tr>
+                                {{/each}}
+                             
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="cart-action text-end">
+                        {{!-- <a class="btn  mr-10 mb-sm-15"><i class="fi-rs-shuffle mr-10"></i>Update Cart</a> --}}
+                        <a class="btn " href="/shop"><i class="fi-rs-shopping-bag mr-10"></i>Continue Shopping</a>
+                    </div>
+                    <div class="divider center_icon mt-50 mb-50"><i class="fi-rs-fingerprint"></i></div>
+                    <div class="row mb-50">
+                        
+                        <div class="col-lg-12 col-md-12">
+                            <div class="border p-md-4 p-30 border-radius cart-totals">
+                                <div class="heading_s1 mb-3">
+                                    <h4>Cart Totals</h4>
                                 </div>
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <tbody>
+                                            <tr>
+                                                <td class="cart_total_label">Cart Subtotal</td>
+                                                <td class="cart_total_amount"><span id="Subtotal"
+                                                        class="font-lg fw-900 text-brand">₹{{subTotal}}</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="cart_total_label">Shipping</td>
+                                                <td class="cart_total_amount"><span 
+                                                        class="font-lg fw-900 text-brand">₹ 50</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="cart_total_label">Total</td>
+                                                <td class="cart_total_amount"><strong><span id="total"
+                                                            class="font-xl fw-900 text-brand">₹{{add Total 0}}</span></strong>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                {{!-- <a href="/cart/checkout" class="btn "> <i class="fi-rs-box-alt mr-10"></i> Proceed To
+                                    CheckOut</a> --}}
+                                    <a href="javascript:void(0)" class="btn" id="proceedToCheckoutBtn">
+                                    <i class="fi-rs-box-alt mr-10"></i> Proceed To Checkout
+                                    </a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </section>
-    </main>
+        </div>
+    </section>
+</main>
 
-   	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+
+
+    $(document).ready(function () {
+        $('.action').click(function () {
+            var id = $(this).data('product-id');
+            //var wishId = $(this).data('whishlist-id'); // Corrected variable name to wishId
+
+            // Store reference to $(this) in a variable for use inside AJAX success and error callbacks
+            var $this = $(this);
+
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#088178",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, delete it!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: 'POST',
+                        url: '/removeFromCart',
+                        contentType: 'application/json',
+                        data: JSON.stringify({ id: id }),
+                        success: function (productData) {
+                            console.log("Product removed from Cart successfully");
+                            // If you want to remove the row from the table upon successful removal
+                            $this.closest('tr').remove(); // Use $this instead of $(this)                        
+                            {
+                                Swal.fire({
+                                    title: 'Removed!',
+                                    text: 'Product Succesfully Removed from Cart!!!',
+                                    icon: 'success',
+                                    confirmButtonText: 'OK'
+                                }).then(()=> window.location.reload())
+                            }
+
+
+                        },
+                        error: function (xhr, status, error) {
+                            console.error("Error removing product from wishlist:", error);
+                            swal("Error", "Something went wrong. Please try again later.", "error");
+                        }
+                    });
+                }
+            });
+        });
+    });
+
+    // Increment and Decrement quantity
+  
+        $('.fa-plus, .fa-minus').click(function () {
+        const cartId = $(this).closest('tr').find('.num-product').prop('id');
+        const newValue = $(this).hasClass('fa-plus') ? parseInt($(`#${cartId}`).val()) + 1 : parseInt($(`#${cartId}`).val()) - 1;
+        if (newValue > 0) {
+            $(`#${cartId}`).val(newValue);
+            updateCartItemQuantity(cartId, newValue);
+        }
+    });
+
+    // Update cart item quantity
+    function updateCartItemQuantity(cartId, newValue) {
+        $.ajax({
+            url: '/updatecart',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({ cartIdForUpdate: cartId, newValue: newValue }),
+            success: function (data) {
+                console.log("received from javascript BROOOOOOOOO", data)
+                if (data.success) {
+
+
+                    console.log('Response from server:', data);
+                    // Update the total amount for the specific cart item
+                    $(`#totalPerItem-${cartId}`).text(data.items[0].totalAmount);
+                    // Update the subtotal and total in the UI
+                  //  $('#Subtotal').text(data.cartValue[0].total);
+                   // $('#total').text(data.cartValue[0].total);
+                    updateCartTotal();
+
+
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: data.message,
+                    }).then(() => window.location.reload())
+
+
+                }
+
+            },
+            error: function (error) {
+                console.log(error)
+            },
+
+        });
+    }
+
+    function updateCartTotal() {
+            let subtotal = 0;
+            $('.shopping-summery tbody tr').each(function () {
+                const itemTotal = parseFloat($(this).find('td[data-title="Cart"] span').text().replace('₹', ''));
+                subtotal += isNaN(itemTotal) ? 0 : itemTotal;
+            });
+            $('#Subtotal').text(`₹${subtotal}`);
+            const shipping = 50; 
+        const total = subtotal + shipping; 
+        $('#total').text(`₹${total}`);
+        }
+
+        // Initial cart total calculation
+        updateCartTotal();
     
 
-
-	<script>
-
-
-		
-
-
-		const totalPrice = async (id,act,stock)=>{
-			const elem= document.getElementById(id)
-			if( act == 'inc')
-			{{!-- stock > --}}
-				 elem.value <  4? elem.value=Number(elem.value)+1 : Swal.fire({
-                    title: 'Limit Reached',
-                    text: 'You cannot order more than 4 units of this product.',
-                    icon: 'info',
-                    confirmButtonText: 'OK'
+$('#proceedToCheckoutBtn').on('click', function() {
+    $.ajax({
+        url: '/checkOutOfStock',
+        method: 'POST',
+        contentType: 'application/json',
+        success: function(data) {
+            console.log("Response from server:", data);
+            
+            if (!data.success) {
+                // If out of stock, show the message in SweetAlert
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: data.message,
                 });
-			else if( act == 'dec' )
-				elem.value > 1 ? elem.value=Number(elem.value)-1 :''
-			
-			
-		let subTotal = 0
-		let datas = []
-			let length = document.getElementsByName('productTotal').length
-			for(let i = 0 ;i < length ;i++){
-				document.getElementsByName('productTotal')[i].innerText = Number(document.getElementsByName('num-product')[i].value) * Number(document.getElementsByName('productprice')[i].value)
-				subTotal = subTotal + Number( document.getElementsByName('productTotal')[i].innerText)
-				datas.push({
-				id : document.getElementsByName('productId')[i].value,
-					quantity : Number(document.getElementsByName('num-product')[i].value)
-				})
-			}
-		   document.getElementById('subTotal').innerText = subTotal
-     
-
-			let data = await fetch('/cart_updation',{
-				method:"POST",
-				headers : {
-					"Content-Type":"application/json"
-				},
-				body:JSON.stringify({
-					datas
-				})
-			})
-			let Data = await data.json()
-		}
+            } else {
+                // If all products are in stock, redirect to checkout page
+                window.location.href = "/cart/checkout";
+            }
+        },
+        error: function(error) {
+            console.log("Error:", error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Something went wrong, please try again.',
+            });
+        }
+    });
+});
 
 
- const removeCartalert = async(idd , userID)=>{
-	const proId = document.getElementById('product_id'+idd).value
-	const cartId = document.getElementsByName('cart_id')[0].value
-
-	console.log(proId, 'pro iddddddddddddd', cartId , 'cart idddddddddddd')
-
-	const id = {proId : proId, cartId : cartId , userID: userID}
-
-  const result = await Swal.fire({
-    title: 'Remove item from cart',
-    text: 'Do you want to add this item to your wishlist or remove it completely?',
-    icon: 'question',
-    showCancelButton: true,
-    confirmButtonText: 'Add to wishlist',
-    cancelButtonText: 'Remove'
-  });
-
-  // Handle the user's response
-  if (result.isConfirmed) {
-	addToWishlist(proId)
-    removeFromCart(proId, cartId , userID)
-  } else if (result.dismiss === Swal.DismissReason.cancel) {
-	removeFromCart(proId, cartId , userID) 
-    
-  }
-}
-
-
-
-
-
-		const removeFromCart = async (proId, cartId , userID)=>{
-        const response = await fetch (`/remove?proId=${proId}&cartId=${cartId}`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': "application/json",
-         },
-    })
-
-	const data = await response.json()
-	console.log(data)
-	swal.fire("Item Removed from cart!", "", "success")
-    console.log("I have reached Here")
-    document.getElementById('row'+proId).innerHTML = ''
-    location.reload();
-
-		}
-
-
-
-		const addToWishlist = async (id) => {
-		console.log('helooooooooooo from add to wishlist')		
-		let response = await fetch(`/add_to_wishlist?id=${id}`,{
-				headers : {
-					"Content-Type":"application/json"
-				},
-			})
-
-			let data = await response.json()
-			console.log(data)
-			if(data.message == 'Added'){
-				Swal.fire("AwwW 🥳!", "Item added to Wishlist!", "success");
-			}else{
-				swal.fire("Item alredy in whislist!", "", "info")
-			}
-	}
-
-    const stockCheck = async () => {
-
-		console.log('helooo from proceed to checkout...')
-		const response = await fetch ('/check_stock', {
-           headers : {
-					"Content-Type":"application/json"
-				},
-		}) 
-
-		const data = await response.json()
-
-		if(data == 'ok'){
-		   //window.location.href = '/checkout'
-		}else{
-           console.log(data)	
-		   data.forEach((pro) => {
-			alertify.set('notifier', 'position', 'bottom-center');
-            alertify.success(`${pro.name} out of stock..!!`)
-		   })
-		}
-	}
-
-
-	const proceedToCheckout = async () => {
-
-		console.log('helooo from proceed to checkout...')
-		const response = await fetch ('/check_stock', {
-           headers : {
-					"Content-Type":"application/json"
-				},
-		}) 
-
-		const data = await response.json()
-
-		if(data == 'ok'){
-		   window.location.href = '/checkout'
-		}else{
-           console.log(data)	
-		   data.forEach((pro) => {
-			alertify.set('notifier', 'position', 'bottom-center');
-            alertify.success(`${pro.name} out of stock..!!`)
-		   })
-		}
-	}
-
-
-	</script> 
+</script>

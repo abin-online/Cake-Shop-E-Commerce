@@ -107,9 +107,23 @@
                                     </div>
                                     <div class="clearfix product-price-cover">
                                         <div class="product-price primary-color float-left">
-                                            <ins><span class="text-brand">₹{{proData.price}}</span></ins>
-                                            <ins><span class="old-price font-md ml-15">₹{{proData.price}}</span></ins>
-                                            <span class="save-price  font-md color3 ml-15">25% Off</span>
+{{#if proData.productOffer}} <!-- Check if productOffer exists -->
+      {{#if proData.productOffer.discountPrice}} <!-- Check if discountPrice exists -->
+        <div class="product-price">
+          <span class="text-brand">₹{{proData.productOffer.discountPrice}}</span>
+          <ins><span class="old-price font-md ml-15">₹{{proData.price}}</span></ins>
+          <span class="save-price font-md color3 ml-15">{{proData.productOffer.productOfferPercentage}}% Off</span>
+        </div>
+      {{else}} <!-- If discountPrice does not exist -->
+        <div class="product-price">
+          <span class="text-brand">₹{{proData.price}}</span>
+        </div>
+      {{/if}}
+    {{else}} <!-- If productOffer does not exist -->
+      <div class="product-price">
+        <span class="text-brand">₹{{proData.price}}</span>
+      </div>
+    {{/if}}
                                         </div>
                                     </div>
                                     <div class="bt-1 border-color-1 mt-15 mb-15"></div>
@@ -132,12 +146,13 @@
                                          
 								  {{#if proData.stock}}
             {{#if productExistInCart}}
-                <button onclick="window.location.href='/cart/{{userData._id}}'" class="button button-add-to-cart">Go to cart</button>
+                <button onclick="window.location.href='/cart'" class="button button-add-to-cart">Go to cart</button>
             {{else}}
                 {{#if userData}}
-                <span id="cart_btn">
-                    <button onclick="addToCartBtn('{{proData._id}}')" id="add_to_cart_btn" class="button button-add-to-cart">Add to cart</button>
-                </span>
+                <span id="addcart">
+                                                <button id="addcart-btn" data-product-id="{{proData._id}}"
+                                                    class="button button-add-to-cart">Add to Cart</button>
+                                            </span>
                 {{else}}
 
                     <button onclick="window.location.href='/login'" id="add_to_cart_btn" class="button button-add-to-cart">Add to cart</button>
@@ -307,6 +322,71 @@
 
 
 <script>
+
+
+
+    $(document).ready(function () {
+        $('.button.button-add-to-cart').on('click', function (e) {
+
+            var prodId = $(this).data('product-id');
+            //Suppose Need Input Field before Add to Cart Button in the product detail Page Use this
+            //var quantity = $('.order__quantity--input').length ? $('.order__quantity--input').val() : 1;
+            var quantity = 1;
+
+            $.ajax({
+                url: '/addtocart/' + prodId,
+
+                method: 'POST',
+                // contentType: 'application/json',
+                data: { prodId: prodId, quantity: quantity },
+                success: function (result) {
+                    if (result.success) {
+
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Added to cart',
+                            text: result.message,
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
+                        $('#addcart').html('<button id="addcart-btn" onclick="window.location.href=\'/cart\'" class="button button-add-to-cart">Go to cart</button>');
+
+
+                    } else {
+                        if (result.message) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: result.message,
+
+                            })
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'Login Required',
+                                showCancelButton: true,
+                                confirmButtonText: 'Login',
+
+
+                                confirmButtonColor: "#088178",
+                                cancelButtonColor: "#d33",
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    window.location.href = '/login';
+                                }
+                            })
+                        }
+
+                    }
+                },
+                error: function (error) {
+                    console.log('Error adding to cart', error)
+                }
+            })
+        })
+    })
+
  
 const addToCartBtn = (proId) => {
     const productid = document.getElementById('add_to_cart_btn').value;

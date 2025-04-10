@@ -10,6 +10,7 @@ const Coupon = require('../../model/coupon')
 const { log } = require('handlebars')
 
 const mongoose = require('mongoose');
+const Cart = require('../../model/cart')
 const ObjectId = mongoose.Types.ObjectId;
 
 
@@ -83,10 +84,10 @@ const loadHome = async (req, res) => {
                 expiryDate: { $gte: new Date() },
                 usedBy: { $nin: [userData._id] }
             }).limit(6).lean();
-
+            console.log(banners)
             res.render('user/home', { userData, loadProData, loadCatData, banners, coupons, newProduct, popularCakes })
         } else {
-
+            console.log(banners)
             res.render('user/home', { userData, loadProData, loadCatData, banners, coupons, newProduct, popularCakes })
 
         }
@@ -224,11 +225,34 @@ const aboutPage = async (req, res) => {
 
 const ProductView = async (req, res) => {
     try {
-
+        console.log(req.url)
         let reviewed
         const proId = req.query.id
-        const proData = await Product.findById(proId).lean()
+        console.log(proId)
+        const products = await Product.aggregate([
+            { $match: { _id: new ObjectId(proId) } }, 
+            {
+              $lookup: {
+                from: "productoffers",  
+                localField: "_id",  
+                foreignField: "productId",  
+                as: "productOffer", 
+              },
+            },
+            {
+              $unwind: {
+                path: "$productOffer",  
+                preserveNullAndEmptyArrays: true,  
+              },
+            },
+          ]);
+
+console.log("agregated product ", products)
+        const proData = products[0];
         console.log(proData)
+        if(!proData.productOffer){
+            proData.productOffer = {}
+        }
         const userData = req.session.user
         let reviewExist = true //variable to check review exist or not
         const reviews = await Review.aggregate([
@@ -264,7 +288,9 @@ const ProductView = async (req, res) => {
 
 
             // query
-            productExist = await User.find({ _id: userId, "cart.product": new ObjectId(proId) }).lean();
+            productExist = await Cart.find({userId: userId,
+                product_Id: proId
+            })
 
             console.log(productExist)
             if (productExist.length === 0) productExistInCart = false

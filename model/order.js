@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
+const Schema = mongoose.Schema
 
-const orderSchema = new mongoose.Schema({
+const orderSchema = new Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
@@ -9,12 +10,21 @@ const orderSchema = new mongoose.Schema({
 
   product: [
     {
-      id: { type: mongoose.Schema.Types.ObjectId, ref: "Product" },
+      id: { type: mongoose.Schema.Types.ObjectId, ref: "products" },
       name: { type: String },
       price: { type: Number },
       quantity: { type: Number },
       image: { type: String },
-      address: { type: Object },
+      isCancelled: { type: Boolean, default: false },
+      isReturned: { type: Boolean, default: false },
+      cancelledReason: {
+        type: String,
+        default: null
+      },
+      returnedReason: {
+        type: String,
+        default: null
+      }
     },
   ],
 
@@ -39,11 +49,14 @@ const orderSchema = new mongoose.Schema({
 
   amountAfterDscnt: {
     type: Number,
-  
-  },
 
+  },
   coupon: {
     type: String,
+  },
+  couponUsed: {
+    type: Boolean,
+    default: false,
   },
 
   paymentMethod: {
@@ -51,25 +64,29 @@ const orderSchema = new mongoose.Schema({
     required: true,
   },
 
-  couponUsed: {
-    type: Boolean,
-    default: false,
-  },
-  deliveryCharge: {
-    type: Number,
-    default: 50
-  },
-
   status: {
     type: String,
-    enum: ["pending", "Payment Failed" , "Shipped", "Delivered", 'Cancelled', 'Returned'],
-    default: "pending",
+    enum: ["Pending", "Shipped", "Delivered", 'Cancelled', 'Returned', 'Payment Failed'],
+    default: "Pending",
   },
 
   date: {
     type: Date,
     default: Date.now,
   },
+
+  cancelledReason: {
+    type: String,
+    default: null
+  },
+  
+  returnedReason: {
+    type: String,
+    default: null
+  }
+
 });
 
-module.exports = mongoose.model("Order", orderSchema);
+const Order = mongoose.model("Order", orderSchema);
+
+module.exports = Order;

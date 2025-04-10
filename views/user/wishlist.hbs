@@ -14,72 +14,44 @@
                 <div class="col-12">
                     <div class="table-responsive">
                         <table class="table shopping-summery text-center">
-
-                                {{#if wishItem}}
-                                
                             <thead>
                                 <tr class="main-heading">
-                                    <th scope="col">Image</th>
-                                    <th scope="col" >Product</th>
+                                    <th scope="col" colspan="2">Product</th>
                                     <th scope="col">Price</th>
                                     <th scope="col">Action</th>
                                     <th scope="col">Remove</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {{#each wishItem}}
-                                <tr id="row{{this._id}}">
-                                    <td class="image product-thumbnail" id="pro_cont{{this._id}}"><a
-                                            href="/productview?id={{this._id}}"><img
-                                                src="/images/products/{{this.imageUrl.[0]}}" alt="#"></a></td>
+                                {{#each WishListProd}}
+                                <tr>
+                                    <td class="image product-thumbnail"><a href="productview?id={{this.productId}}"><img src="/images/products/{{this.productImage.[0]}}" alt="#"></a></td>
                                     <td class="product-des product-name">
-                                        <h5 class="product-name"><a
-                                                 href="/productview?id={{this._id}}">{{this.name}}</a></h5>
-                                                 <input name="product_name" value="{{this.name}}" type="hidden">
-                                                 <input type="hidden" id="name{{this._id}}" value="{{this.name}}">
-                                        {{!-- <p class="font-xs">Maboriosam in a tonto nesciung eget<br> distingy
-                                            magndapibus.
-                                        </p> --}}
+                                        
+                                        <h5 class="product-name"><a href="productview?id={{this.productId}}">{{this.productName}}</a></h5>
                                     </td>
-                                    <td class="price" data-title="Price"><span>₹{{this.price}} </span></td>
+                                    <td class="price" data-title="Price"><span>₹{{this.productPrice}} </span></td>
                                     <td class="text-right" data-title="Cart">
-                                        {{#if this.stock}}
-                                        {{#if this.productExistInCart}}
-                                        <button onclick="window.location.href='/cart/{{this.ID}}'" class="btn btn-sm"><i class=class="fi-rs-heart"></i>Go to cart</button>
+                                        {{#if this.outOfStock}}
+                                            <span id="outofstock">
+                                                <button id="outofstock-btn" class="btn btn-md" style="background-color: #dc3545;">Out of stock</button>
+                                            </span>
                                         {{else}}
-                                        <span id="cart_btn{{this._id}}">
-                                        <button onclick="addToCartBtn('{{this._id}}')" id="add_to_cart_btn" class="btn btn-sm">
-                                            <i class="fi-rs-shopping-bag mr-5"></i>
-                                            Add to cart
-                                        </button>
-                                        </span>
-                                        {{/if}}
-									    {{else}}
-                                                                                <button onclick="outofStock()" disabled id="add_to_cart_btn" class="btn btn-sm">
-                                            <i class="fi-rs-shopping-bag mr-5"></i>
-                                            Out of Stock
-                                        </button>
+                                            {{#if this.productExistCart}}
+                                            <span id="gocart">
+                                                <button id="addcart-btn" onclick="window.location.href='/cart'" class="button button-add-to-cart">Go to cart</button>
+                                            </span>
+                                            {{else}}
+                                            <span id="addcart">
+                                                <button id="addcart-btn" data-product-id="{{this.productId}}" class="button button-add-to-cart">Add to cart</button>
+                                            </span>
+                                            {{/if}}
                                         {{/if}}
                                     </td>
-                                    <td class="rem action" >
-                                        <button onclick="removeFromWishlist('{{this._id}}')" class="btn btn-sm">
-                                            <i class="fi-rs-trash"></i>
-                                        </button>
-                                    </td>
+                                    <td class="rem action" data-whishlist-id="{{this._id}}" data-product-id="{{this.productId}}" data-title="Remove"><a href="#"><i class="fi-rs-trash"></i></a></td>
                                 </tr>
-                                
                                 {{/each}}
-                                </tbody>
-                                {{else}}
-
-                                <div class="text-center">
-                                    <h1 class="mt-5">Your wishlist is empty..!</h1>
-
-                                    <a href="/product" class="btn btn-primary mt-4">Go to products</a>
-                                </div>
-                                {{/if}}
-
-                            
+                            </tbody>
                         </table>
                     </div>
                 </div>
@@ -87,69 +59,85 @@
         </div>
     </section>
 </main>
-<script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
 
-	<script>
- 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script>
+    $(document).ready(function () {
+        // Event delegation for remove button
+        $(document).on('click', '.rem', function () {
+            var id = $(this).data('product-id');
+            var wishId = $(this).data('whishlist-id');
+            var $this = $(this);
+            console.log(id, wishId)
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#088178",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, delete it!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: 'POST',
+                        url: '/removeFromWishList',
+                        contentType: 'application/json',
+                        data: JSON.stringify({ id: id, wishId: wishId }),
+                        success: function (productData) {
+                            console.log("Product removed from wishlist successfully");
+                            $this.closest('tr').remove(); 
 
-const addToCartBtn = async (proId) => {
+                            Swal.fire({
+                                title: 'Removed!',
+                                text: 'Product successfully removed from wishlist!',
+                                icon: 'success',
+                                confirmButtonText: 'OK'
+                            }).then((isConfirmed) => {
+                                window.location.reload();
+                            });
+                        },
+                        error: function (xhr, status, error) {
+                            console.error("Error removing product from wishlist:", error);
+                            Swal.fire("Error", "Something went wrong. Please try again later.", "error");
+                        }
+                    });
+                }
+            });
+        });
 
-const productid = document.getElementById('add_to_cart_btn').value
-const productName = document.getElementsByName('product_name')[0].value
+        // Event delegation for add to cart button
+        $(document).on('click', '.button-add-to-cart', function () {
+            let prodId = $(this).data('product-id');
+            let quantity = 1;
 
-console.log(productName)
- 
-const response = await fetch(`/add_to_cart?id=${proId}`, {
-method: 'GET',
-headers: {
-'Content-Type': "application/json",
-},
-})
-
-let data = await response.json()
-console.log(data, 'from add to cart btn....')
-
-document.getElementById(`cart_btn${proId}`).innerHTML = 
-`<button onclick="window.location.href='/cart/{{userData._id}}'" class="btn btn-sm"><i class=class="fi-rs-heart"></i>Go to cart</button>`
-
-
-if(data){
-  swal("Awww 🥳!", `${productName} added to Cart! `, "success");
-}
-
-}
-
-
-
-const outofStock = () => {
-	alertify.set('notifier', 'position', 'bottom-center');
-	alertify.success(`Item Out of stock`)
-}
-
-const removeFromWishlist = async (id) => {
-    const proName = document.getElementById('name' + id).value
-
-
-    let response = await fetch(`/remove_from_wishlist?id=${id}`, {
-        headers: {
-            "Content-Type": "application/json"
-        },
-    })
-    
-
-    let data = await response.json()
-    console.log(data)
-    if (data) {
-        alertify.set('notifier', 'position', 'bottom-center');
-        alertify.success(`${proName} Removed from wishlist`)
-    }
-    document.getElementById(`row${id}`).innerHTML = ''	
-    location.reload()   
-		
-}
-
-
-
-
-
+            $.ajax({
+                url: '/addtocart/' + prodId,
+                method: 'POST',
+                data: { prodId: prodId, quantity: quantity },
+                success: function (result) {
+                    if (result.success) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Added to cart',
+                            text: result.message,
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                        $('#addcart').html('<button id="addcart-btn" onclick="window.location.href=\'/cart\'" class="button button-add-to-cart">Go to cart</button>');
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: result.message,
+                        });
+                    }
+                },
+                error: function (error) {
+                    console.log('Error adding to cart', error);
+                }
+            });
+        });
+    });
 </script>

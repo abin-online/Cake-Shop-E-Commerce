@@ -49,10 +49,7 @@ const produtSchema = new mongoose.Schema({
         dafault: false
     },
 
-    isOnCart: {
-        type: Boolean,
-        default: false,
-    },
+ 
     popularity:{
         type:Number,
         default:0

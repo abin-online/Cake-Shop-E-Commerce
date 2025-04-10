@@ -92,9 +92,9 @@
                                                             <td>{{formatDate this.date}}</td>
                                                       <td>{{formatTime this.date}}</td> 
                                     <td class="text-center">
-                                        {{#ifeq this.status 'credit'}}
-                                        <span class="badge bg-success">CREDITED</span>
-                                        {{/ifeq}}
+                                        {{!-- {{#ifeq this.status 'credit'}} --}}
+                                        <span class="badge bg-primary">{{this.status}}</span>
+                                        {{!-- {{/ifeq}}
                                         {{#ifeq this.status 'refund'}}
                                         <span class="badge bg-primary">REFUNDED</span>
                                         {{/ifeq}}
@@ -103,7 +103,7 @@
                                         {{/ifeq}}
                                         {{#ifeq this.status 'Debited'}}
                                         <span class="badge bg-danger">DEBITED</span>
-                                        {{/ifeq}}
+                                        {{/ifeq}} --}}
                                     </td>
                                     
                     

@@ -518,20 +518,21 @@ const editProduct = async (req, res) => {
 
 const updateProduct = async (req, res) => {
   try {
+   
     const proId = req.params.id;
     const product = await Product.findById(proId);
     const exImage = product.imageUrl;
     const files = req.files;
     let updImages = [];
-
-    if (files && files.length > 0) {
+console.log("files", files)
+    if (files && files.length > 0) {  
       const newImages = req.files.map((file) => file.filename);
       updImages = [...exImage, ...newImages];
       product.imageUrl = updImages;
     } else {
       updImages = exImage;
     }
-
+console.log('checkingggg____!', updImages)
     const { name, price, description, category, stock, brand } = req.body;
     await Product.findByIdAndUpdate(
       proId,
@@ -562,17 +563,6 @@ const deleteProduct = async (req, res) => {
   const proId = req.params.id;
   await Product.findByIdAndDelete(proId)
   res.redirect('/admin/product')
-  // const prodData = await Product.findById(proId);
-  // const isBlocked = prodData.is_blocked;
-
-  // const proData = await Product.findByIdAndUpdate(
-  //   proId,
-  //   { $set: { is_blocked: !isBlocked } },
-  //   { new: true }
-  // );
-
-  // res.redirect("/admin/product");
-  // req.session.proDelete = true;
 };
 
 const blockProduct = async (req, res) => {
@@ -598,15 +588,13 @@ const loadCoupon = async (req, res) => {
       page = req.query.page
     }
     const limit = 5;
-    let coupon = await Coupon.find()
+    let coupon = await Coupon.find().sort({ _id: -1 })
       .skip((page - 1) * limit)
       .limit(limit * 1)
     const count = await Coupon.find({}).count();
     const totalPages = Math.ceil(count / limit)
     const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
-    console.log(coupon)
-
-
+    
     const now = moment();
 
     const couponData = coupon.map((cpn) => {
@@ -617,7 +605,7 @@ const loadCoupon = async (req, res) => {
         expiryDate: formattedDate,
       };
     });
-    console.log(couponData, "copondAtaaaaaaaaaaa")
+    
     res.render("admin/coupon", { couponData, pages, currentPage: page, layout: 'adminlayout' });
   } catch (error) {
     console.log(error);
@@ -644,32 +632,62 @@ const addCoupon = (req, res) => {
   }
 };
 
+
 const addCouponPost = async (req, res) => {
   try {
-    const { code, percent, expDate, max } = req.body;
+    const { code, percent, expDate, maxDiscount, minPurchase } = req.body;
 
-    const cpnExist = await Coupon.findOne({ code: code });
+    // Normalize and validate inputs
+    const couponCode = code.trim().toUpperCase();
+    const discount = parseFloat(percent);
+    const minPurchaseAmount = parseFloat(minPurchase);
+    const maxDiscountAmount = parseFloat(maxDiscount);
 
-    if (!cpnExist) {
-      const coupon = new Coupon({
-        code: code,
-        discount: percent,
-        expiryDate: expDate,
-        maxDiscountAmount: max
-      });
+    console.log('Received data:', req.body);
 
-      await coupon.save();
-      req.session.coupon = true;
-      res.redirect("/admin/coupons");
-
-    } else {
-      req.session.exCoupon = true;
-      res.redirect("/admin/add_coupon");
+    if (!couponCode || isNaN(discount) || isNaN(minPurchaseAmount) || isNaN(maxDiscountAmount) || !expDate) {
+      throw new Error('All fields are required and must be valid.');
     }
+
+    if (discount <= 0 || discount > 100) {
+      throw new Error('Discount must be between 1 and 100%.');
+    }
+
+    if (minPurchaseAmount < 0) {
+      throw new Error('Minimum purchase amount cannot be negative.');
+    }
+
+    if (maxDiscountAmount < 0) {
+      throw new Error('Maximum discount amount cannot be negative.');
+    }
+
+    const existingCoupon = await Coupon.findOne({ code: couponCode });
+
+    if (existingCoupon) {
+      console.log("Coupon already exists")
+      req.session.couponExMsg = 'Coupon already exists';
+      return res.redirect('/admin/coupons');
+    }
+
+    const newCoupon = new Coupon({
+      code: couponCode,
+      discount,
+      expiryDate: new Date(expDate),
+      minPurchase: minPurchaseAmount,
+      maxDiscount: maxDiscountAmount
+    });
+
+    await newCoupon.save();
+
+    req.session.couponMsg = 'Coupon added successfully';
+    res.redirect('/admin/coupons');
   } catch (error) {
-    console.log(error);
+    console.error('Error adding coupon:', error.message);
+    req.session.couponErrMsg = error.message || 'Internal Server Error';
+    res.redirect('/admin/coupons');
   }
 };
+
 
 // Adjust the path as necessary
 
@@ -722,20 +740,20 @@ const listBanner = async (req, res) => {
   try {
     const { id } = req.body;
     const banner = await Banner.findById(id);
-    
-   
+
+
 
     console.log(id, banner);
 
     const newStatus = banner.active; // Ensure 'active' is the correct field
     const updatedBanner = await Banner.findByIdAndUpdate(
-      id, 
-      { active: !newStatus }, 
+      id,
+      { active: !newStatus },
       { new: true } // Ensure it returns the updated document
     );
 
     console.log(updatedBanner);
-    
+
     return res.status(200).json({ message: "Banner updated", banner: updatedBanner }); // 🚨 Always return after sending response
   } catch (error) {
     console.error(error);
@@ -763,6 +781,7 @@ const orderDetails = async (req, res) => {
     const orderId = req.query.id;
 
     const myOrderDetails = await Orders.findById(orderId).lean();
+    console.log(req.url, "=>>", myOrderDetails)
     const orderedProDet = myOrderDetails.product;
     const addressId = myOrderDetails.address;
     console.log(orderedProDet)
@@ -798,6 +817,172 @@ const changeOrderStatus = async (req, res) => {
   }
 };
 
+
+const returnOrder = async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ error: 'Invalid order ID' });
+    }
+    const ID = new mongoose.Types.ObjectId(id);
+    let notCancelledAmt = 0;
+
+    let returnedOrder = await Orders.findOne({ _id: ID }).lean();
+    console.log(returnedOrder, "returnedOrder")
+
+    const returnedorder = await Orders.findByIdAndUpdate(ID, { $set: { status: 'Returned' } }, { new: true });
+    console.log("returnedOrder", returnedorder)
+    for (const product of returnedorder.product) {
+      if (!product.isCancelled) {
+        await Product.updateOne(
+          { _id: product._id },
+          { $inc: { stock: product.quantity } }
+        );
+
+        await Orders.updateOne(
+          { _id: ID, 'product._id': product._id },
+          { $set: { 'product.$.isReturned': true } }
+        );
+      }
+      console.log('for is working')
+
+    }
+    console.log('for is workied')
+    let order = await Orders.findById(id)
+    console.log("order", order)
+    let amountToReturned = order.amountAfterDscnt
+
+
+    let couponAmountEach = 0
+    if (returnedOrder.coupon) {
+      couponAmountEach = returnedOrder.discountAmt / returnedOrder.product.length
+
+    }
+
+    if (['wallet', 'razorpay'].includes(returnedOrder.paymentMethod)) {
+      for (const data of returnedOrder.product) {
+        //await Product.updateOne({ _id: data._id }, { $inc: { stock: data.quantity } });
+
+        const dataupdate = await User.updateOne(
+          { _id: order.userId },
+          { $inc: { wallet: (data.price * data.quantity) - couponAmountEach } }
+        );
+        console.log(dataupdate)
+        notCancelledAmt += data.price * data.quantity - couponAmountEach;
+      }
+      console.log('inside wallet chcek')
+      await User.updateOne(
+        { _id: order.userId },
+        {
+          $push: {
+            history: {
+              amount: notCancelledAmt,
+              status: 'Refund Amount for Order Return',
+              date: Date.now()
+            }
+          }
+        }
+      );
+    }
+
+    res.json({
+      success: true,
+      message: 'Successfully Returned Order'
+
+    });
+  } catch (error) {
+    console.log(error.message);
+    res.status(HttpStatus.InternalServerError).send('Internal Server Error');
+  }
+};
+
+
+
+const returnOneProduct = async (req, res) => {
+  try {
+    const { orderId, productId } = req.body;
+    console.log(req.body)
+
+    if (!mongoose.Types.ObjectId.isValid(orderId) || !mongoose.Types.ObjectId.isValid(productId)) {
+      return res.status(HttpStatus.BadRequest).json({ error: 'Invalid order or product ID' });
+    }
+
+    const ID = new mongoose.Types.ObjectId(orderId);
+    const PRODID = new mongoose.Types.ObjectId(productId);
+
+    const updatedOrder = await Orders.findOneAndUpdate(
+      { _id: ID, 'product._id': productId },
+      { $set: { 'product.$.isReturned': true } },
+      { new: true }
+    ).lean();
+
+    if (!updatedOrder) {
+      return res.status(HttpStatus.NotFound).json({ error: 'Order or product not found' });
+    }
+
+    const result = await Orders.findOne(
+      { _id: ID, 'product._id': PRODID },
+      { 'product.$': 1 }
+    ).lean();
+
+    const productQuantity = result.product[0].quantity;
+    const productprice = result.product[0].price * productQuantity
+
+    await Product.findOneAndUpdate(
+      { _id: PRODID },
+      { $inc: { stock: productQuantity } }
+    );
+    if (updatedOrder.couponUsed) {
+      const coupon = await Coupon.findOne({ code: updatedOrder.coupon });
+      const discountAmt = (productprice * coupon.discount) / 100;
+      const newTotal = productprice - discountAmt;
+      await User.updateOne(
+        { _id: result.userId },
+        { $inc: { wallet: newTotal } }
+      );
+
+      await User.updateOne(
+        { _id: result.userId },
+        {
+          $push: {
+            history: {
+              amount: newTotal,
+              status: `Refund Amount for Return ${result.product[0].name}`,
+              date: Date.now()
+            }
+          }
+        }
+      );
+
+    } else {
+      await User.updateOne(
+        { _id: result.userId },
+        { $inc: { wallet: productprice } }
+      );
+      await User.updateOne(
+        { _id: result.userId },
+        {
+          $push: {
+            history: {
+              amount: productprice,
+              status: `[return] ${result.product[0].name}`,
+              date: Date.now()
+            }
+          }
+        }
+      );
+    }
+
+    res.json({
+      success: true,
+      message: 'returned the product'
+    });
+  } catch (error) {
+    console.log(error.message);
+    res.status(HttpStatus.InternalServerError).send('Internal Server Error');
+  }
+}
 
 
 const deleteProdImage = async (req, res) => {
@@ -1170,6 +1355,8 @@ module.exports = {
 
   getOrders,
   orderDetails,
+  returnOrder,
+  returnOneProduct,
 
   loadCoupon,
   addCoupon,

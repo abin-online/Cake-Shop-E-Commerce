@@ -1,0 +1,673 @@
+<style>
+    .modal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+}
+
+</style>
+
+<main class="main">
+    <div class="page-header breadcrumb-wrap">
+        <div class="container">
+            <div class="breadcrumb">
+                <a href="/" rel="nofollow">Home</a>
+                <span></span> Pages
+                <span></span> Account
+            </div>
+        </div>
+    </div>
+    <section class="pt-50 pb-150">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 m-auto">
+                    <div class="row">
+                        {{> profileHeader}}
+                        
+                        <div class="col-md-9">
+                            <section class="content-body p-xl-4">
+                                <div class="content-header">
+                                    <div>
+                                        <h2 class="content-title card-title">Order detail</h2>
+                                        <p>Details for Order ID: {{myOrderDetails._id}}</p>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <header class="card-header">
+                                        <div class="row align-items-center">
+                                            <div class="col-lg-6 col-md-6 mb-lg-0 mb-15">
+                                                <span>
+                                                    <i class="material-icons md-calendar_today"></i>
+                                                    <b>{{myOrderDetails.date}}</b>
+                                                </span> <br>
+                                                <small class="text-muted">Order ID: {{myOrderDetails._id}}</small>
+                                            </div>
+                                            <div class="col-lg-6 col-md-6 ms-auto text-md-end">
+                                                <a onclick="getInvoice('{{myOrderDetails._id}}')"
+                                                    class="btn btn-secondary print ms-2" href="#"><i
+                                                        class="fa fa-print" style="font-size: 1rem;"></i></a>
+                                            </div>
+                                        </div>
+                                    </header>
+                                    <div class="card-body">
+                                        <div class="row mb-50 mt-20 order-info-wrap">
+                                            <div class="col-md-4">
+                                                <article class="icontext align-items-start">
+                                                    <span class="icon icon-sm rounded-circle bg-primary-light">
+                                                        <i class="text-primary material-icons md-person"></i>
+                                                    </span>
+                                                    <div class="text">
+                                                        <h6 class="mb-1">Customer</h6>
+                                                        <p class="mb-1">
+                                                            {{address.name}} <br> {{address.mobile}}
+                                                        </p>
+                                                    </div>
+                                                </article>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <article class="icontext align-items-start">
+                                                    <span class="icon icon-sm rounded-circle bg-primary-light">
+                                                        <i class="text-primary material-icons md-local_shipping"></i>
+                                                    </span>
+                                                    <div class="text">
+                                                        <h6 class="mb-1">Order info</h6>
+                                                        <p class="mb-1">
+                                                            Shipping: Fargo express <br> Pay method:
+                                                            {{myOrderDetails.paymentMethod}} <br> Status:
+                                                            {{myOrderDetails.status}}
+                                                        </p>
+                                                    </div>
+                                                </article>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <article class="icontext align-items-start">
+                                                    <span class="icon icon-sm rounded-circle bg-primary-light">
+                                                        <i class="text-primary material-icons md-place"></i>
+                                                    </span>
+                                                    <div class="text">
+                                                        <h6 class="mb-1">Deliver to</h6>
+                                                        <p class="mb-1">
+                                                            City: {{address.city}}, {{address.state}}
+                                                            <br>{{address.adressLine1}} 
+                                                            <br>Pin: {{address.pin}}
+                                                        </p>
+                                                    </div>
+                                                </article>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-8">
+                                                <div class="table-responsive">
+<table class="table">
+    <thead>
+        <tr>
+            <th width="40%">Product</th>
+            <th width="20%">Unit Price</th>
+            <th width="20%">Quantity</th>
+            <th width="20%">Total</th>
+            <th width="80%">Cancel/Return</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each orderedProDet}}
+        <tr>
+            <td>
+                <a class="itemside" href="#">
+                    <div class="left">
+                        <img src="/images/products/{{this.product.image}}" width="40" height="40" class="img-xs" alt="Item">
+                    </div>
+                    <div class="info">{{this.product.name}}</div>
+                </a>
+            </td>
+
+            <td>
+                {{#if this.product.discountPrice}}
+                    {{#unless (eq this.product.discountPrice this.product.originalPrice)}}
+                        <del>₹{{this.product.originalPrice}}</del>
+                        <span class="text-danger"> (Discounted Price: ₹{{this.product.discountPrice}})</span>
+                    {{else}}
+                        ₹{{this.product.originalPrice}}
+                    {{/unless}}
+                {{else}}
+                    ₹{{this.product.originalPrice}}
+                {{/if}}
+            </td>
+
+            <td>{{this.product.quantity}}</td>
+
+            <td>
+                ₹{{multiply this.product.quantity this.product.discountPrice}}
+            </td>
+
+{{!-- <td class="text-end">
+    {{#if (eq ../myOrderDetails.status "Delivered")}}
+        {{#unless this.product.isReturned}}
+            {{#unless this.product.isCancelled}} <!-- ⬅️ NEW CHECK -->
+                {{#if (eq ../orderedProDet.length 1)}}
+                    <button id="returnnow-btn" class="btn btn-primary btn-sm return-btn" disabled>Return</button>
+                {{else}}
+                    <button id="returnnow-btn" class="btn btn-primary btn-sm return-btn" data-order-id="{{../myOrderDetails._id}}" data-prod-id="{{this.product._id}}">Return</button>
+                {{/if}}
+            {{else}}
+                <p>This product was already cancelled.</p>
+            {{/unless}}
+        {{else}}
+            <p>The product has already been returned.</p>
+        {{/unless}}
+    {{else if (or (eq ../myOrderDetails.status "Pending") (eq ../myOrderDetails.status "pending"))}}
+        {{#unless this.product.isCancelled}}
+            {{#if (eq ../orderedProDet.length 1)}}
+                <button id="cancel-btn" class="btn btn-danger btn-sm cancel-btn" disabled>Cancel</button>
+            {{else}}
+                <button id="cancel-btn" class="btn btn-danger btn-sm cancel-btn" data-order-id="{{../myOrderDetails._id}}" data-prod-id="{{this.product._id}}">Cancel</button>
+            {{/if}}
+        {{else}}
+            <p>The order has already been cancelled.</p>
+        {{/unless}}
+    {{else}}
+        <p>No actions available for this order status.</p>
+    {{/if}}
+</td> --}}/
+
+
+<td class="text-end">
+    {{#if (eq ../myOrderDetails.status "Delivered")}}
+        {{#if this.product.isReturned}}
+            <p class="text-success">This product has been returned.</p>
+        {{else if this.product.isCancelled}}
+            <p class="text-warning">This product was cancelled.</p>
+        {{else}}
+            {{#if (eq ../orderedProDet.length 1)}}
+                <button class="btn btn-primary btn-sm return-btn" disabled>Return</button>
+            {{else}}
+                <button class="btn btn-primary btn-sm return-btn"
+                        data-order-id="{{../myOrderDetails._id}}"
+                        data-prod-id="{{this.product._id}}">
+                    Return
+                </button>
+            {{/if}}
+        {{/if}}
+
+    {{else if (or (eq ../myOrderDetails.status "Pending") (eq ../myOrderDetails.status "pending"))}}
+        {{#if this.product.isCancelled}}
+            <p class="text-warning">This product has already been cancelled.</p>
+        {{else}}
+            {{#if (eq ../orderedProDet.length 1)}}
+                <button class="btn btn-danger btn-sm cancel-btn" disabled>Cancel</button>
+            {{else}}
+                <button class="btn btn-danger btn-sm cancel-btn"
+                        data-order-id="{{../myOrderDetails._id}}"
+                        data-prod-id="{{this.product._id}}">
+                    Cancel
+                </button>
+            {{/if}}
+        {{/if}}
+
+    {{else}}
+        {{#if this.product.isCancelled}}
+            <p class="text-warning">This product was cancelled.</p>
+        {{else if this.product.isReturned}}
+            <p class="text-success">This product was returned.</p>
+        {{else}}
+            <p class="text-muted">No actions available for this product.</p>
+        {{/if}}
+    {{/if}}
+</td>
+
+
+        </tr>
+        {{/each}}
+
+        <!-- Summary Row -->
+        <tr>
+            <td colspan="5">
+                <article class="float-end">
+                    <dl class="dlist">
+                        <dt>Delivery:</dt>
+                        <dd><span class="text-danger">+₹50</span></dd>
+                    </dl>
+
+                    <dl class="dlist">
+                        <dt>Discount:</dt>
+                        <dd>{{#if myOrderDetails.discountAmt}}
+                            <span class="text-success">-₹{{myOrderDetails.discountAmt}}</span>
+                            {{else}}
+                            <span class="text-success">-₹ 0</span>
+                            {{/if}}
+                        </dd>
+                    </dl>
+
+                    <dl class="dlist">
+                        <dt>Grand Total:</dt>
+                        {{#if myOrderDetails.discountAmt}}
+                            <dd><b id="grandTotal" class="h5">₹{{myOrderDetails.amountAfterDscnt}}</b></dd>
+                        {{else}}
+                            <dd><b id="grandTotal" class="h5">₹{{add myOrderDetails.total 0}}</b></dd>
+                        {{/if}}
+                    </dl>
+
+                    <dl class="dlist">
+                        <dt class="text-muted">Status:</dt>
+                        <dd><span class="badge rounded-pill alert-success text-success">{{myOrderDetails.status}}</span></dd>
+                    </dl>
+
+                    {{#statuchecker myOrderDetails}}
+                    {{else}}
+                    {{/statuchecker}}
+
+                </article>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-1"></div>
+                                            <div class="col-lg-5">
+                                                <div class="box shadow-sm bg-light">
+                                                    <!-- Optional: any other information you want to show -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+<script>
+var grandTotalText = document.getElementById("grandTotal").innerText;
+
+// Remove the ₹ symbol and any commas (if applicable) from the string
+const amount = parseInt(grandTotalText.replace(/[^\d]/g, '')) * 100;
+
+// Log the amount to check if the parsing works
+console.log('Grand Total:', amount);
+
+//below function generate the invoice
+
+    const getInvoice = async (id) => {
+  try {
+    const response = await fetch(`/get_invoice?id=${id}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/pdf'
+      }//expecting the response in the pdf format
+    });
+    
+    if (!response.ok) {
+      throw new Error('Failed to fetch invoice');
+    }
+    
+    const blob = await response.blob();//This method converts the response body into a blob object.Blob represent binary data.It represents the pdf file.
+
+    // Create a URL for the downloaded file
+    const url = URL.createObjectURL(blob);//create a temporary url which used to access the file and download it.
+
+    // Create a link element to trigger the download
+    const link = document.createElement('a');//it create anchor tag programatically.
+    link.href = url;//href attribute set to the url
+    link.download = 'invoice.pdf';//the file download as invoice.pdf
+
+    link.click();//simulates click on anchor tag,trigerring the download.It essentially tells the browser to start downloading the file.
+
+    // Clean up the URL object
+    URL.revokeObjectURL(url);//after the file is downloaded.cleanup step to prevent the memory leaks.
+  } catch (error) {
+    console.error('Error fetching invoice:', error);    
+  }
+};
+    $(document).ready(function () {
+        function areAllProductsCancelled() {
+            let allCancelled = true;
+            $('.product-row').each(function () {
+                if (!$(this).data('is-cancelled')) {
+                    allCancelled = false;
+                    return false; // Exit the loop early if any product is not cancelled
+                }
+            });
+            return allCancelled;
+        }
+
+        // Event listener for cancelling entire orders
+    $('#cancelOrder').on('click', function () {
+        const orderId = $(this).data('order-id');
+
+        if (orderId) {
+            Swal.fire({
+                title: 'Reason for Cancellation',
+                input: 'text',
+                inputPlaceholder: 'Enter your reason...',
+                showCancelButton: true,
+                confirmButtonText: 'Cancel Order',
+                cancelButtonText: 'Cancel',
+            }).then((result) => {
+                if (result.isConfirmed && result.value) {
+                    $.ajax({
+                        type: 'PUT',
+                        url: `/cancel-order/${orderId}`,
+                        contentType: 'application/json',
+                        data: JSON.stringify({ reason: result.value }), // Send reason to server
+                        success: function (response) {
+                            if (response.success) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Cancelled Order',
+                                    text: response.message,
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                }).then(() => { window.location.reload(); });
+                            } else {
+                                alert(response.message);
+                            }
+                        },
+                        error: function (error) {
+                            console.error('Error:', error);
+                            alert('An error occurred. Please try again.');
+                        }
+                    });
+                } else if (result.isConfirmed) {
+                    Swal.fire('Cancelled', 'You need to provide a reason.', 'info');
+                }
+            });
+        } else {
+            alert('Invalid order ID.');
+        }
+    });
+
+    // Event listener for returning entire orders
+    $('#returnOrder').on('click', function () {
+        const orderId = $(this).data('order-id');
+
+        if (orderId) {
+            Swal.fire({
+                title: 'Reason for Return',
+                input: 'text',
+                inputPlaceholder: 'Enter your reason...',
+                showCancelButton: true,
+                confirmButtonText: 'Return Order',
+                cancelButtonText: 'Cancel',
+            }).then((result) => {
+                if (result.isConfirmed && result.value) {
+                    $.ajax({
+                        type: 'PUT',
+                        url: `/return-order/${orderId}`,
+                        contentType: 'application/json',
+                        data: JSON.stringify({ reason: result.value }), // Send reason to server
+                        success: function (response) {
+                            if (response.success) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Returned Order',
+                                    text: response.message,
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                }).then(() => { window.location.reload(); });
+                            } else {
+                                alert(response.message);
+                            }
+                        },
+                        error: function (error) {
+                            console.error('Error:', error);
+                            alert('An error occurred. Please try again.');
+                        }
+                    });
+                } else if (result.isConfirmed) {
+                    Swal.fire('Cancelled', 'You need to provide a reason.', 'info');
+                }
+            });
+        } else {
+            alert('Invalid order ID.');
+        }
+    });
+
+    // Event listener for canceling individual products
+    $('body').on('click', '.cancel-btn', function () {
+        const orderId = $(this).data('order-id');
+        const productId = $(this).data('prod-id');
+
+        if (orderId && productId) {
+            Swal.fire({
+                title: 'Reason for Cancellation',
+                input: 'text',
+                inputPlaceholder: 'Enter your reason...',
+                showCancelButton: true,
+                confirmButtonText: 'Cancel Product',
+                cancelButtonText: 'Cancel',
+            }).then((result) => {
+                if (result.isConfirmed && result.value) {
+                    $.ajax({
+                        type: 'PUT',
+                        url: '/cancel-one-product',
+                        contentType: 'application/json',
+                        data: JSON.stringify({ id: orderId, prodId: productId, reason: result.value }), // Send reason to server
+                        success: function (response) {
+                            if (response.success) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Cancelled Product',
+                                    text: response.message,
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                }).then(() => { window.location.reload(); });
+                            }
+                        },
+                        error: function (error) {
+                            console.error('Error:', error);
+                            alert('An error occurred. Please try again.');
+                        }
+                    });
+                } else if (result.isConfirmed) {
+                    Swal.fire('Cancelled', 'You need to provide a reason.', 'info');
+                }
+            });
+        } else {
+            alert('Invalid order or product ID.');
+        }
+    });
+
+    // Event listener for returning individual products
+    $('body').on('click', '.return-btn', function () {
+        const orderId = $(this).data('order-id');
+        const productId = $(this).data('prod-id');
+
+        if (orderId && productId) {
+            Swal.fire({
+                title: 'Reason for Return',
+                input: 'text',
+                inputPlaceholder: 'Enter your reason...',
+                showCancelButton: true,
+                confirmButtonText: 'Return Product',
+                cancelButtonText: 'Cancel',
+            }).then((result) => {
+                if (result.isConfirmed && result.value) {
+                    $.ajax({
+                        type: 'PUT',
+                        url: '/return-one-product',
+                        contentType: 'application/json',
+                        data: JSON.stringify({ id: orderId, prodId: productId, reason: result.value }), // Send reason to server
+                        success: function (response) {
+                            if (response.success) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Returned Product',
+                                    text: response.message,
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                }).then(() => { window.location.reload(); });
+                            }
+                        },
+                        error: function (error) {
+                            console.error('Error:', error);
+                            alert('An error occurred. Please try again.');
+                        }
+                    });
+                } else if (result.isConfirmed) {
+                    Swal.fire('Cancelled', 'You need to provide a reason.', 'info');
+                }
+            });
+        } else {
+            alert('Invalid order or product ID.');
+        }
+    });
+});
+
+    // Event listener for retrying payment when the order's status is "Payment Failed"
+
+   $('body').on('click', '#retryPayment', function () {
+    const orderId = $(this).data('order-id');
+    console.log("orderId ", orderId);
+
+    if (orderId) {       
+        console.log("amount ", amount);
+        payment(orderId);
+    } else {
+        alert('Invalid order ID.');
+    }
+});
+
+// Payment function
+const payment = (orderId) => {
+    // For demonstration purposes, let's assume the amount is passed directly to the payment function.
+    // You may hardcode or calculate the amount as needed.
+
+    
+
+    var options = {
+        "key": "rzp_test_QhDPSiMt8ea6IF", 
+        "amount": amount, // Amount in currency subunits (paise)
+        "currency": "INR",
+        "name": "Cake Shop",
+        "order_id": undefined, // Pass the actual order ID
+        "handler": async function (response) {
+            // On successful payment, invoke the retryPayment function with the 'Pending' status
+            try{
+                await retryPayment(orderId, 'Pending');
+            }catch (error) {
+            console.error("Error during retryPayment:", error);
+        }
+    },
+            
+    //This is an event handler when razorpay modal is dismissed when the user closes the payment popup without completing the payment.
+        "modal": {
+            "ondismiss": function() {
+                console.log('Payment modal dismissed');
+            }
+        }
+    };
+
+
+
+
+    var options = {
+      "key": "rzp_test_QhDPSiMt8ea6IF", // Enter the Key ID generated from the Dashboard
+      "amount": parseInt(amount), // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+      "currency": "INR",
+        
+      "name" : "Basha Book",
+      /*"name": "Acme Corp", //your business name
+      "description": "Test Transaction",
+      "image": "https://example.com/your_logo",*/
+
+      "order_id": undefined, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+      "handler": function (response) {
+        retryPayment(orderId, 'Pending');
+      },
+
+    };
+
+
+
+    var rzp1 = new Razorpay(options);
+
+    rzp1.on('payment.failed', function (response) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Payment Failed',
+            text: 'Your payment could not be processed. Please try again later.',
+            confirmButtonText: 'OK'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                location.reload(); // Reload page after payment failure
+            }
+        });
+    });
+
+    rzp1.open();
+};
+
+// Retry Payment function (update payment status)
+
+const retryPayment = async (orderId, status) => {
+    try {
+        const response = await fetch(`/retry-payment/${orderId}`, {
+            method: 'POST', 
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ status: status }) 
+        });
+
+        
+        if (!response.ok) {
+            throw new Error('Failed to update payment status');
+        }
+
+        const data = await response.json();
+       
+        if (data.success) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Payment Retry Successful',
+                text: data.message, 
+                showConfirmButton: false,
+                timer: 1500
+            }).then(() => {
+                window.location.reload(); 
+            });
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Payment Retry Failed',
+                text: data.message, 
+                showConfirmButton: false,
+                timer: 1500
+            });
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'An error occurred while retrying payment. Please try again.',
+            showConfirmButton: false,
+            timer: 1500
+        });
+    }
+};
+
+    
+</script>
+

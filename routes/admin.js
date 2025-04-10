@@ -62,6 +62,10 @@ router.get('/order_details', isLogin, adminController.orderDetails)
 
 router.post('/change_status', adminController.changeOrderStatus)
 
+router.put('/return-order/:id', isLogin, adminController.returnOrder);
+
+router.put('/return-one-product', isLogin, adminController.returnOneProduct)
+
 router.get('/banners', adminController.loadBanner)
 router.get('/add_banner', adminController.addBanner)
 router.post('/add_banner', store.single('image'), adminController.addBannerPost)

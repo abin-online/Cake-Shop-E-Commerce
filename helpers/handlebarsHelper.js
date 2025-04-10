@@ -77,6 +77,12 @@ Handlebars.registerHelper('ifeq', function (a, b, options) {
     return a === b;
   });
 
+  Handlebars.registerHelper('neq', function (a, b) {
+    console.log('Comparing:', a, 'with', b); // <-- Debug log
+    return a !== b;
+  });
+  
+
   Handlebars.registerHelper('gt', function (a, b) {
     return a > b;
 });
@@ -91,6 +97,61 @@ Handlebars.registerHelper('lt', function (a, b) {
   Handlebars.registerHelper('formatTime', function (timestamp) {
     return moment(timestamp).format(' h:mm A');
   });
+
+  Handlebars.registerHelper('statuchecker',  function (value) {
+    let ct=0
+    let ct2=0
+    let returnct= value.product.forEach((elem)=>{
+        if(elem.isReturned)ct++
+    })
+    let returnct2= value.product.forEach((elem)=>{
+        if(elem.isCancelled)ct2++
+    })
+
+    let allCancelled = value.product.every(product => product.isCancelled);
+    let allReturned = value.product.every(product => product.isReturned);
+    // if(ct>0 && value.status!=="Returned"){
+    //    let change=   Order.findByIdAndUpdate(value._id, { $set: { status: 'Returned' } }, { new: true });
+    // }
+
+    if (value.status === "Delivered") {
+        return new Handlebars.SafeString(`
+            <button id="returnOrder" data-order-id="${value._id}" class="btn btn-sm btn-primary">Return Entire Order</button>
+        `);
+    } else if (value.status == "Returned") {
+        return new Handlebars.SafeString('<span class="badge rounded-pill alert-info text-info">Order Returned</span>');
+    } else if (value.status === "Payment Failed") {       
+      return new Handlebars.SafeString(`
+        <button id="retryPayment" data-order-id="${value._id}" class="btn btn-sm btn-warning">Retry Payment</button>
+      `);
+    } 
+    else {
+        if (allCancelled || value.status === 'Cancelled') {
+            return new Handlebars.SafeString('<span class="badge rounded-pill alert-danger text-danger">Order Cancelled</span>');
+        } else if (ct>0 ) {
+            return new Handlebars.SafeString('<span class="badge rounded-pill alert-info text-info">Order Returned</span>');
+        } else {
+            return new Handlebars.SafeString(`
+                <button id="cancelOrder" data-order-id="${value._id}" class="btn btn-sm btn-primary">Cancel Entire Order</button>
+            `);
+        }
+    }
+});
+
+Handlebars.registerHelper('singlestatuchecker', function (product, options) {
+  if (product.isReturned) {
+      return new Handlebars.SafeString('<span class="badge rounded-pill alert-info text-info">Returned</span>');
+  } else if (product.isCancelled) {
+      return new Handlebars.SafeString('<span class="badge rounded-pill alert-danger text-danger">Cancelled</span>');
+  } else {
+      return options.fn(this);
+  }
+});
+
+Handlebars.registerHelper('or', function (a, b) {
+  return a || b;
+});
+
 
   
 module.exports = Handlebars;

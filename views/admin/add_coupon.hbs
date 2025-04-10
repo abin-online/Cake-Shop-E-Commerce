@@ -9,39 +9,47 @@
         <div class="card">
             <div class="card-body">
                 <form action="/admin/add_coupon" method="post">
-                    <div class="mb-4">
-                        <label for="coupon-code" class="form-label">Coupon Code:</label>
-                        <input type="text" class="form-control" id="coupon-code" placeholder="Enter coupon code" name="code" required>
-                    </div>
+  <div class="mb-4">
+    <label for="coupon-code" class="form-label">Coupon Code:</label>
+    <input type="text" class="form-control" id="coupon-code" placeholder="Enter coupon code" name="code" required>
+  </div>
 
-                    <div class="mb-4">
-                        <label for="discount" class="form-label">Discount (%):</label>
-                        <div class="input-group">
-                            <input type="number" class="form-control" id="discount" placeholder="Enter discount percentage" name="percent" max="99" required>
-                            <span class="input-group-text">%</span>
-                        </div>
-                        <div class="form-text">Please enter a valid discount percentage (0-99).</div>
-                    </div>
+  <div class="mb-4">
+    <label for="discount" class="form-label">Discount (%):</label>
+    <div class="input-group">
+      <input type="number" class="form-control" id="discount" placeholder="Enter discount percentage" name="percent" max="99" required>
+      <span class="input-group-text">%</span>
+    </div>
+    <div class="form-text">Please enter a valid discount percentage (0-99).</div>
+  </div>
 
-                    <div class="mb-4">
-                        <label for="max" class="form-label">Discount Limit:</label>
-                        <input type="number" class="form-control" id="max" placeholder="Enter maximum amount" name="max" required>
-                    </div>
+  <div class="mb-4">
+    <label for="max" class="form-label">Discount Limit:</label>
+    <!-- ✅ name should be maxDiscount -->
+    <input type="number" class="form-control" id="max" placeholder="Enter maximum amount" name="maxDiscount" required>
+  </div>
 
-                    <div class="mb-4">
-                        <label for="expiry-date" class="form-label">Expiry Date:</label>
-                        <input type="date" class="form-control" id="expiry-date" name="expDate" required>
-                    </div>
+  <div class="mb-4">
+    <label for="min-purchase" class="form-label">Minimum Purchase Amount:</label>
+    <!-- ✅ name should be minPurchase -->
+    <input type="number" class="form-control" id="min-purchase" placeholder="Enter minimum purchase amount" name="minPurchase" required>
+  </div>
 
-                    <div class="d-flex g-2">
-                        <div class="m-2">
-                            <button type="submit" class="btn btn-primary">Add Coupon</button>
-                        </div>
-                        <div class="m-2">
-                            <a href="/admin/coupons" type="button" class="btn btn-primary">Back</a>
-                        </div>
-                    </div>
-                </form>
+  <div class="mb-4">
+    <label for="expiry-date" class="form-label">Expiry Date:</label>
+    <input type="date" class="form-control" id="expiry-date" name="expDate" required>
+  </div>
+
+  <div class="d-flex g-2">
+    <div class="m-2">
+      <button type="submit" class="btn btn-primary">Add Coupon</button>
+    </div>
+    <div class="m-2">
+      <a href="/admin/coupons" type="button" class="btn btn-primary">Back</a>
+    </div>
+  </div>
+</form>
+
             </div>
         </div>
     </section>

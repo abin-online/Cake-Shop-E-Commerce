@@ -1,58 +1,4 @@
 
-       {{!-- <header class="main-header navbar">
-            <div class="col-search">
-                <form class="searchform">
-                    <div class="input-group">
-                        <input list="search_terms" type="text" class="form-control" placeholder="Search term">
-                        <button class="btn btn-light bg" type="button"> <i class="material-icons md-search"></i></button>
-                    </div>
-                    <datalist id="search_terms">
-                        <option value="Products">
-                        <option value="New orders">
-                        <option value="Apple iphone">
-                        <option value="Ahmed Hassan">
-                    </datalist>
-                </form>
-            </div>
-            <div class="col-nav">
-                <button class="btn btn-icon btn-mobile me-auto" data-trigger="#offcanvas_aside"> <i class="material-icons md-apps"></i> </button>
-                <ul class="nav">
-                    <li class="nav-item">
-                        <a class="nav-link btn-icon" href="#">
-                            <i class="material-icons md-notifications animation-shake"></i>
-                            <span class="badge rounded-pill">3</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link btn-icon darkmode" href="#"> <i class="material-icons md-nights_stay"></i> </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="requestfullscreen nav-link btn-icon"><i class="material-icons md-cast"></i></a>
-                    </li>
-                    <li class="dropdown nav-item">
-                        <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownLanguage" aria-expanded="false"><i class="material-icons md-public"></i></a>
-                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownLanguage">
-                            <a class="dropdown-item text-brand" href="#"><img src="assets/imgs/theme/flag-us.png" alt="English">English</a>
-                            <a class="dropdown-item" href="#"><img src="assets/imgs/theme/flag-fr.png" alt="Français">Français</a>
-                            <a class="dropdown-item" href="#"><img src="assets/imgs/theme/flag-jp.png" alt="Français">日本語</a>
-                            <a class="dropdown-item" href="#"><img src="assets/imgs/theme/flag-cn.png" alt="Français">中国人</a>
-                        </div>
-                    </li>
-                    <li class="dropdown nav-item">
-                        <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownAccount" aria-expanded="false"> <img class="img-xs rounded-circle" src="assets/imgs/people/avatar2.jpg" alt="User"></a>
-                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownAccount">
-                            <a class="dropdown-item" href="#"><i class="material-icons md-perm_identity"></i>Edit Profile</a>
-                            <a class="dropdown-item" href="#"><i class="material-icons md-settings"></i>Account Settings</a>
-                            <a class="dropdown-item" href="#"><i class="material-icons md-account_balance_wallet"></i>Wallet</a>
-                            <a class="dropdown-item" href="#"><i class="material-icons md-receipt"></i>Billing</a>
-                            <a class="dropdown-item" href="#"><i class="material-icons md-help_outline"></i>Help center</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item text-danger" href="#"><i class="material-icons md-exit_to_app"></i>Logout</a>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </header> --}}
 <main class="main-wrap">
 
     <section class="content-main">
@@ -60,10 +6,7 @@
             <div class="col-9">
                 <div class="content-header">
                     <h2 class="content-title">Edit Product</h2>
-                    {{!-- <div>
-                        <button class="btn btn-light rounded font-sm mr-5 text-body hover-up">Save to draft</button>
-                        <button class="btn btn-md rounded font-sm hover-up">Publich</button>
-                    </div> --}}
+                 
                 </div>
             </div>
             <div class="col-lg-12">
@@ -72,8 +15,8 @@
                         <h4>Basic</h4>
                     </div>
                     <div class="card-body">
-                        <form method="post" class="form-add-product" action="/admin/update_product/{{proData._id}}"
-                            enctype="multipart/form-data" onsubmit="return Validation()">
+<form onSubmit = "return Validation()" method="post" class="form-add-product" action="/admin/update_product/{{proData._id}}" onsubmit="return Validation()" enctype="multipart/form-data">
+                            
                             <div class="mb-4">
                                 <label for="product_name" class="form-label">Product Name</label>
                                 <input type="text" value="{{proData.name}}" placeholder="Type here" name="name"
@@ -129,35 +72,26 @@
                                 </div>
 
 
-                                {{!-- <div class="col-lg-3">
-                                    <div class="form-element m-2">
-                                        <input type="file" id="file-1" name="image" accept="image/*">
-                                        <label for="file-1" id="file-1-preview">
-                                            <img src="/assetsAdmin/imgs/theme/upload.svg" alt="">
-                                            <div>
-                                                <span>+</span>
-                                            </div>
-                                        </label>
-                                    </div> <!-- card end// -->
-
-                                </div> --}}
+                          
 
                             </div>
                             <div class="form-group">
         <label for="productImage">Product Image:</label>
         <div class="d-flex border p-10 m-tb-10">
           <input name="product-id" type="hidden" value="{{proData._id}}">
-          {{#each proData.imageUrl}}
-          <div class="image-container" onclick="deleteProImg()">
-            <div  class="badge rounded-pill alert-danger "><p  class="close-button" data-image-index="{{@index}}"
-              style="text-decoration: none;">×</p></div>
-            <img src="/images/products/{{this}}" alt="images" style="width: 80px; height: auto;" class="m-2 pro-image"
-              data-image-index="{{@index}}">
-          </div>
+         {{#each proData.imageUrl}}
+  <div class="image-container">
+    <div class="badge rounded-pill alert-danger">
+<p title="Delete image ?" class="close-button" title="Delete image?" data-image-index="{{@index}}" style="text-decoration: none; cursor: pointer;">×</p>
+    </div>
+    <img src="/images/products/{{this}}" alt="images" style="width: 80px; height: auto;" class="m-2 pro-image" data-image-index="{{@index}}">
+  </div>
+{{/each}}
+<div id="new-image-preview" class="d-flex flex-wrap"></div>
 
-          {{/each}}
         </div>
-        <input type="file" class="form-control-file" id="productImage" multiple name="image">
+<input type="file" class="form-control-file" id="productImage" multiple name="image">
+
       </div> <h6 id="imgAlert" class=" mt-2" style="color: red;"></h6>
 
 
@@ -174,14 +108,7 @@
 
 
                             </div>
-                            {{!-- <div class="mb-4">
-                                <label class="form-label">Tax rate</label>
-                                <input type="text" placeholder="%" class="form-control" id="product_name">
-                            </div>
-                            <label class="form-check mb-4">
-                                <input class="form-check-input" type="checkbox" value="">
-                                <span class="form-check-label"> Make a template </span>
-                            </label> --}}
+                   
                         </form>
                     </div>
                 </div> <!-- card end// -->
@@ -206,238 +133,182 @@
     </footer>
 </main>
 
+
+<!-- Include SweetAlert2 if not already -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script>
+  const productImageInput = document.getElementById('productImage');
+  const previewContainer = document.getElementById('new-image-preview');
+  const imgAlert = document.getElementById('imgAlert');
 
-function Validation() {
-        var errors = []; // Array to store validation errors
-
-        var fileInput = document.getElementById('file-1');
-        var previewImage = document.getElementById('file-1-preview').querySelector('img');
-
-        let productName = document.getElementById("productName").value;
-
-        let longdescription = document.getElementById("longdescription").value;
-        let Qty = document.getElementById("Qty").value;
-        let price = document.getElementById("price").value;
-
-
-
-        let productNameRegex = /^\s*.\S.\s*$/;
-        let number = /^[1-9]\d*$/;
-        let descriptionRegex = /^(?!\s*$)[\s\S]{1,100}$/
-
-
-
-
-        let productNameAlert = document.getElementById("productNameAlert");
-        let qtyAlert = document.getElementById("qtyAlert");
-        let priceAlert = document.getElementById("priceAlert");
-
-
-        let longAlert = document.getElementById("longAlert");
-        let imgAlert = document.getElementById('imgAlert')
-
-       if (!productName.match(productNameRegex)) {
-        errors.push("Name Not Valid");
-    }
-
-    if (!Qty.match(number)) {
-        errors.push("Please Check Qty Again");
-    }
-
-    if (!price.match(number)) {
-        errors.push("Please Check Price Again");
-    }
-
-    if (!longdescription.match(descriptionRegex)) {
-        errors.push("Please Check about Again");
-    }
-
-    if (fileInput.files.length === 0) {
-        errors.push("Please choose an image");
-    }
-
-    // Display all error messages
-    if (errors.length > 0) {
-        productNameAlert.innerHTML = errors.includes("Name Not Valid") ? "Name Not Valid" : "";
-        qtyAlert.innerHTML = errors.includes("Please Check Qty Again") ? "Please Check Qty Again" : "";
-        priceAlert.innerHTML = errors.includes("Please Check Price Again") ? "Please Check Price Again" : "";
-        longAlert.innerHTML = errors.includes("Please Check about Again") ? "Please Check about Again" : "";
-        imgAlert.innerHTML = errors.includes("Please choose an image") ? "Please choose an image" : "";
-
-        return false; // Prevent form submission
-    }
-
-    return true; // Allow form submission if no errors
-    }
-
-
-
-
- const deleteImage = async (productId, imageIndex) => {
+  // 🧨 Existing image delete
+  const deleteImage = async (productId, imageIndex) => {
     try {
-      const response = await fetch(`/admin/product_img_delete?id=${productId}&?image=${imageIndex}`, {
+      const response = await fetch(`/admin/product_img_delete?id=${productId}&image=${imageIndex}`, {
         method: 'DELETE'
       });
 
       const data = await response.json();
-      console.log(data.message);
-
       if (data) {
         const imageElem = document.querySelector(`.pro-image[data-image-index="${imageIndex}"]`);
-        if (imageElem) {
-
-          console.log(imageElem, 'htttttttttttttttttttttt')
-          // or
-          imageElem.remove(); // remove the image element completely
-        }
+        const closeBtn = document.querySelector(`.close-button[data-image-index="${imageIndex}"]`);
+        if (imageElem) imageElem.remove();
+        if (closeBtn) closeBtn.closest('.image-container').remove();
+        Swal.fire('Deleted!', 'Image removed successfully.', 'success');
       }
-
     } catch (error) {
       console.error(error);
+      Swal.fire('Error!', 'Something went wrong while deleting.', 'error');
     }
   };
 
+  // 🚀 Attach delete handler for existing images
+  document.addEventListener('DOMContentLoaded', () => {
+    const deleteButtons = document.querySelectorAll('.close-button');
+    const productId = document.getElementsByName('product-id')[0].value;
 
-  const deleteProImg = () => {
-
-    const deleteButtons = document.querySelectorAll('.close-button')
-    const productId = document.getElementsByName('product-id')[0].value
-
-    deleteButtons.forEach((button )=> {
-      button.addEventListener('click', async (event) => {
+    deleteButtons.forEach(button => {
+      button.addEventListener('click', (event) => {
         const imageIndex = event.target.dataset.imageIndex;
         deleteImage(productId, imageIndex);
       });
     });
+  });
 
-  }
-
-
-
-
-
-
-
+  // 📸 Preview selected new images
+  productImageInput.addEventListener('change', () => {
+    const existingImages = document.querySelectorAll('.pro-image').length;
+    const selectedFiles = productImageInput.files;
+    const totalImages = existingImages + selectedFiles.length;
 
 
-
-
-
- 
-
-
-
-
-
-
-
-    function Validation() {
-
-       
-        let productName = document.getElementById("productName").value;
-
-        let longdescription = document.getElementById("longdescription").value;
-        let Qty = document.getElementById("Qty").value;
-        let price = document.getElementById("price").value;
-
-
-
-        let productNameRegex = /^\s*.*\S.*\s*$/;
-        let number = /^[1-9]\d*$/;
-        let descriptionRegex = /^(?!\s*$)[\s\S]{1,100}$/
-
-
-
-
-        let productNameAlert = document.getElementById("productNameAlert");
-        let qtyAlert = document.getElementById("qtyAlert");
-        let priceAlert = document.getElementById("priceAlert");
-
-
-        let longAlert = document.getElementById("longAlert");
-        let imgAlert = document.getElementById('imgAlert')
-
-        if (!productName.match(productNameRegex)) {
-            productNameAlert.innerHTML = "Name Not Valid";
-            return false;
-        } else if (!Qty.match(number)) {
-            qtyAlert.innerHTML = "Please Check Qty Again";
-            return false;
-        } else if (!price.match(number)) {
-            priceAlert.innerHTML = "Please Check Price Again";
-            return false;
-        }
-
-        else if (!longdescription.match(descriptionRegex)) {
-            longAlert.innerHTML = "Please Check about Again";
-            return false;
-        }
-
-        else {
-            return true;
-        }
-
+    if (totalImages > 5) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Whoa there!',
+        text: `You can only have 5 images max. You already got ${existingImages}.`,
+      });
+      //productImageInput.value = '';
+      return;
     }
 
-    function validate_productName() {
-        var productNameInput = document.getElementById("productName");
-        var product = productNameInput.value.trim();
-        var pattern = /^[a-zA-Z0-9\s]{3,}$/;
+    // Clear old previews
+    previewContainer.innerHTML = '';
 
-        if (!pattern.test(product)) {
-            alert("Invalid product name. Please try again.");
-            productNameInput.value = ''; // Clear the input field
-            productNameInput.focus();    // Set focus back to the input field
-            return false;
-        } else {
-            return true;
-        }
+    Array.from(selectedFiles).forEach((file, index) => {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        const previewDiv = document.createElement('div');
+        previewDiv.classList.add('image-container');
 
+        const badge = document.createElement('div');
+        badge.classList.add('badge', 'rounded-pill', 'alert-danger');
 
-    }
+        const closeBtn = document.createElement('p');
+        closeBtn.innerHTML = '×';
+        closeBtn.classList.add('close-button');
+        closeBtn.title = 'Remove this image';
+        closeBtn.style.cursor = 'pointer';
 
+        closeBtn.addEventListener('click', () => {
+          previewDiv.remove();
+          Swal.fire('Removed!', 'Preview image deleted.', 'info');
+        });
 
-    
-    function validate_productName() {
-        var productNameInput = document.getElementById("productName");
-        var product = productNameInput.value.trim();
-        var pattern = /^[a-zA-Z0-9\s]{3,}$/;
+        const img = document.createElement('img');
+        img.src = e.target.result;
+        img.style.width = '80px';
+        img.classList.add('m-2', 'pro-image');
 
-        if (!pattern.test(product)) {
-            alert("Invalid product name. Please try again.");
-            productNameInput.value = ''; // Clear the input field
-            productNameInput.focus();    // Set focus back to the input field
-            return false;
-        } else {
-            return true;
-        }
+        badge.appendChild(closeBtn);
+        previewDiv.appendChild(badge);
+        previewDiv.appendChild(img);
 
-
-    }
-
-
-    function validate_description() {
-
-        var longdescriptionInput = document.getElementById("longdescription");
-        var longdescription = longdescriptionInput.value.trim();
-
-
-        if (longdescription === "") {
-            alert("Invalid description . Please try again.");
-            longdescriptionInput.value = ''; // Clear the input field
-            longdescriptionInput.focus();    // Set focus back to the input field
-            return false;
-        } else {
-            return true;
-        }
-
-    }
-
-    
-
-   
+        previewContainer.appendChild(previewDiv);
+      };
+      reader.readAsDataURL(file);
+    });
+  });
 </script>
+
+
+<script>
+  function Validation() {
+    const errors = []; // Store errors
+
+    const fileInput = document.getElementById('file-1');
+    const newSelected = fileInput?.files?.length || 0;
+    const existingImages = document.querySelectorAll('.pro-image').length;
+    const totalImages = newSelected + existingImages;
+
+    const productName = document.getElementById("productName").value.trim();
+    const longdescription = document.getElementById("longdescription").value.trim();
+    const Qty = document.getElementById("Qty").value.trim();
+    const price = document.getElementById("price").value.trim();
+
+    // Regex checks
+    const productNameRegex = /^.{3,}$/; // At least 3 chars
+    const number = /^[1-9]\d*$/;
+    const descriptionRegex = /^.{1,100}$/;
+
+    // Error element refs
+    const productNameAlert = document.getElementById("productNameAlert");
+    const qtyAlert = document.getElementById("qtyAlert");
+    const priceAlert = document.getElementById("priceAlert");
+    const longAlert = document.getElementById("longAlert");
+    const imgAlert = document.getElementById("imgAlert");
+
+    // Clear all alerts first
+    productNameAlert.innerHTML = "";
+    qtyAlert.innerHTML = "";
+    priceAlert.innerHTML = "";
+    longAlert.innerHTML = "";
+    imgAlert.innerHTML = "";
+
+    // Validations
+    if (!productName.match(productNameRegex)) {
+      errors.push({ field: productNameAlert, msg: "Name must be at least 3 characters" });
+    }
+
+    if (!Qty.match(number)) {
+      errors.push({ field: qtyAlert, msg: "Enter a valid quantity greater than 0" });
+    }
+
+    if (!price.match(number)) {
+      errors.push({ field: priceAlert, msg: "Enter a valid price greater than 0" });
+    }
+
+    if (!longdescription.match(descriptionRegex)) {
+      errors.push({ field: longAlert, msg: "Description must be 1 to 100 characters" });
+    }
+
+    if (totalImages < 3) {
+        errors.push({
+        field: imgAlert,
+        msg: `Please make sure you have at least 3 images. Currently, total is ${totalImages}.`,
+    });
+}
+
+    if (errors.length > 0) {
+      errors.forEach(error => {
+        error.field.innerHTML = error.msg;
+      });
+
+      // Optional Sweet Alert for overview error
+      Swal.fire({
+        icon: 'warning',
+        title: 'Oops!',
+        text: 'Please fix the errors before submitting the form.',
+      });
+
+      return false; // Prevent form submission
+    }
+
+    return true; // All validations passed
+  }
+</script>
+
 
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -469,3 +340,15 @@ function Validation() {
         });
     });
 </script>
+
+<style>
+    .close-button {
+  text-decoration: none;
+  cursor: pointer;
+}
+
+  .image-container {
+    position: relative;
+    display: inline-block;
+  }
+</style>
