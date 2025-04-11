@@ -75,7 +75,7 @@ module.exports = {
             });
 
             await address.save();
-            res.redirect('/checkout');
+            res.redirect('/adresses');
         } catch (error) {
             res.status(500).send('Internal Server Error');
         }

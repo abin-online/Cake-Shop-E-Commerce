@@ -834,7 +834,7 @@ const returnOrder = async (req, res) => {
     const returnedorder = await Orders.findByIdAndUpdate(ID, { $set: { status: 'Returned' } }, { new: true });
     console.log("returnedOrder", returnedorder)
     for (const product of returnedorder.product) {
-      if (!product.isCancelled) {
+      if (!product.isCancelled && !product.isReturned) {
         await Product.updateOne(
           { _id: product._id },
           { $inc: { stock: product.quantity } }
@@ -903,7 +903,7 @@ const returnOneProduct = async (req, res) => {
   try {
     const { orderId, productId } = req.body;
     console.log(req.body)
-
+    const user_id = req.session.user._id;
     if (!mongoose.Types.ObjectId.isValid(orderId) || !mongoose.Types.ObjectId.isValid(productId)) {
       return res.status(HttpStatus.BadRequest).json({ error: 'Invalid order or product ID' });
     }
@@ -956,12 +956,13 @@ const returnOneProduct = async (req, res) => {
       );
 
     } else {
-      await User.updateOne(
-        { _id: result.userId },
+      const userWallet = await User.updateOne(
+        { _id: user_id },
         { $inc: { wallet: productprice } }
       );
-      await User.updateOne(
-        { _id: result.userId },
+      console.log("user wallet ", userWallet )
+      const walletHistory = await User.updateOne(
+        { _id:  user_id },
         {
           $push: {
             history: {
@@ -972,6 +973,7 @@ const returnOneProduct = async (req, res) => {
           }
         }
       );
+      console.log("wallet History  ", walletHistory)
     }
 
     res.json({
