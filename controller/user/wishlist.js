@@ -118,7 +118,7 @@ const showWishlistPage = async (req, res) => {
     ]);
     
 
-    console.log(WishListProd, "WishListProd");
+    
 
     if (WishListProd.length > 0) {
       res.render('user/wishlist', { userData, WishListProd, wishCt: wishlistCount });
@@ -126,7 +126,7 @@ const showWishlistPage = async (req, res) => {
       res.render('user/emptyWishlist', { userData });
     }
   } catch (error) {
-    console.log(error.message);
+    
     res.status(HttpStatus.InternalServerError).send("Internal Server Error");
   }
 };
@@ -168,7 +168,7 @@ const addToWishList = async (req, res) => {
 
     console.log(wishlistData)
   } catch (error) {
-    console.log(error.message);
+    
     res.status(HttpStatus.InternalServerError).send("Internal Server Error");
   }
 
@@ -198,7 +198,7 @@ const removeFromWishList = async (req, res) => {
 
 
   } catch (error) {
-    console.log(error.message);
+    
     res.status(HttpStatus.InternalServerError).send("Internal Server Error");
   }
 

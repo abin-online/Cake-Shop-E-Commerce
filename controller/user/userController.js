@@ -38,10 +38,23 @@ const loadHome = async (req, res) => {
             banners,
             popularCakes
         ] = await Promise.all([
-            Product.find().limit(8).lean(),
-            Product.find({ is_blocked: false }).sort({ _id: -1 }).limit(8).lean(),
+            Product.aggregate([
+                { $lookup: { from: "productoffers", localField: "_id", foreignField: "productId", as: "offer" } },
+                { $unwind: { path: "$offer", preserveNullAndEmptyArrays: true } },
+                { $lookup: { from: "categories", localField: "category", foreignField: "_id", as: "categoryDetails" } },
+                { $unwind: "$categoryDetails" },
+                { $limit: 8 }
+            ]),
+            Product.aggregate([
+                { $lookup: { from: "productoffers", localField: "_id", foreignField: "productId", as: "offer" } },
+                { $unwind: { path: "$offer", preserveNullAndEmptyArrays: true } },
+                { $lookup: { from: "categories", localField: "category", foreignField: "_id", as: "categoryDetails" } },
+                { $unwind: "$categoryDetails" },
+                { $limit: 8 },
+                { $sort: { _id: -1 } }
+            ]),
             Category.find({ isListed: true }).lean(),
-            Banners.find({active: true}).lean(),
+            Banners.find({ active: true }).lean(),
             Order.aggregate([
                 { $match: { status: "Delivered" } },
                 { $unwind: "$product" },
@@ -51,27 +64,14 @@ const loadHome = async (req, res) => {
                 { $sort: { totalQuantityDelivered: -1 } },
                 { $lookup: { from: "categories", localField: "productDetails.category", foreignField: "_id", as: "categoryDetails" } },
                 { $unwind: "$categoryDetails" },
+                { $lookup: { from: "productoffers", localField: "productDetails._id", foreignField: "productId", as: "offer" } },
+                { $unwind: { path: "$offer", preserveNullAndEmptyArrays: true } },
                 { $limit: 8 }
             ])
         ]);
 
-        // work with the results
-        console.log(loadProData);
-        console.log(newProduct);
-        console.log(loadCatData);
-        console.log(banners);
-        console.log(popularCakes);
-
-
-
-        console.log(popularCakes)
-
-        //const coupons      = await Coupon.find().limit(6).lean()
-        // const userData = req.session.user
 
         const userData = req.session.user
-
-        console.log(userData)
         let coupons = await Coupon.find({
             status: true,
             expiryDate: { $gte: new Date() }
@@ -84,16 +84,16 @@ const loadHome = async (req, res) => {
                 expiryDate: { $gte: new Date() },
                 usedBy: { $nin: [userData._id] }
             }).limit(6).lean();
-            console.log(banners)
+            //console.log(banners)
             res.render('user/home', { userData, loadProData, loadCatData, banners, coupons, newProduct, popularCakes })
         } else {
-            console.log(banners)
+            //console.log(banners)
             res.render('user/home', { userData, loadProData, loadCatData, banners, coupons, newProduct, popularCakes })
 
         }
 
     } catch (error) {
-        console.log(error);
+        
     }
 }
 
@@ -143,7 +143,7 @@ const getProduct = async (req, res) => {
 
         });
     } catch (error) {
-        console.log(error);
+        
     }
 };
 
@@ -151,14 +151,14 @@ const getProduct = async (req, res) => {
 
 const searchSortFilter = async (req, res) => {
     const { searchQuery, sortOption, categoryFilter, page, limit } = req.body;
-    console.log(req.body);
+    
 
     // Construct the query object
     const query = {};
     if (searchQuery) {
-        console.log('searching...');
+        
         query.name = { $regex: searchQuery, $options: 'i' };
-        console.log(query.name);
+        
     }
     if (categoryFilter) {
         query.category = new mongoose.Types.ObjectId(categoryFilter);
@@ -201,8 +201,8 @@ const searchSortFilter = async (req, res) => {
     ]);
 
     // Now you can work with products and totalProducts
-    // console.log(products);
-    // console.log(totalProducts);
+    // 
+    // 
 
 
     res.json({ products, totalProducts });
@@ -230,27 +230,27 @@ const ProductView = async (req, res) => {
         const proId = req.query.id
         console.log(proId)
         const products = await Product.aggregate([
-            { $match: { _id: new ObjectId(proId) } }, 
+            { $match: { _id: new ObjectId(proId) } },
             {
-              $lookup: {
-                from: "productoffers",  
-                localField: "_id",  
-                foreignField: "productId",  
-                as: "productOffer", 
-              },
+                $lookup: {
+                    from: "productoffers",
+                    localField: "_id",
+                    foreignField: "productId",
+                    as: "productOffer",
+                },
             },
             {
-              $unwind: {
-                path: "$productOffer",  
-                preserveNullAndEmptyArrays: true,  
-              },
+                $unwind: {
+                    path: "$productOffer",
+                    preserveNullAndEmptyArrays: true,
+                },
             },
-          ]);
+        ]);
 
-console.log("agregated product ", products)
+        console.log("agregated product ", products)
         const proData = products[0];
         console.log(proData)
-        if(!proData.productOffer){
+        if (!proData.productOffer) {
             proData.productOffer = {}
         }
         const userData = req.session.user
@@ -261,7 +261,7 @@ console.log("agregated product ", products)
             }
 
         ]);
-        console.log("Reviewsssssssss",reviews)
+        console.log("Reviewsssssssss", reviews)
 
         if (reviews.length == 0) {
             reviewExist = false
@@ -274,7 +274,7 @@ console.log("agregated product ", products)
         let productExistInCart //
 
         let totalRating = 0
-        reviews.forEach((rev)=>{
+        reviews.forEach((rev) => {
             totalRating = totalRating + rev.rating;
         })
 
@@ -288,7 +288,8 @@ console.log("agregated product ", products)
 
 
             // query
-            productExist = await Cart.find({userId: userId,
+            productExist = await Cart.find({
+                userId: userId,
                 product_Id: proId
             })
 
@@ -321,19 +322,19 @@ console.log("agregated product ", products)
                     }
                 }
             ]);
-            console.log("Orders:", orders);
+            
 
             reviewed = await Review.find({
-                userId: userData._id, 
-                productId : new ObjectId(proId)
+                userId: userData._id,
+                productId: new ObjectId(proId)
             })
 
-            console.log("..................",reviewed)
+            console.log("..................", reviewed)
 
 
-            if (orders.length > 0 && reviewed.length != 1 ) {
+            if (orders.length > 0 && reviewed.length != 1) {
                 userCanReview = true;
-                // console.log("I found", orders[0].product.name);
+                // 
             }
 
             console.log(userCanReview)
@@ -344,12 +345,12 @@ console.log("agregated product ", products)
 
         if (userData) {
             console.log(userCanReview)
-            res.render('user/productview', {avgRating , proData, userData, productExistInCart, reviews, userCanReview, reviewExist , reviewed   })
+            res.render('user/productview', { avgRating, proData, userData, productExistInCart, reviews, userCanReview, reviewExist, reviewed })
         } else {
-            res.render('user/productview', {avgRating , proData, reviews, reviewExist  })
+            res.render('user/productview', { avgRating, proData, reviews, reviewExist })
         }
     } catch (error) {
-        console.log(error);
+        
     }
 }
 
@@ -398,7 +399,7 @@ const usersignup = (req, res) => {
     try {
         res.render('user/signup')
     } catch (error) {
-        console.log(error);
+        
     }
 }
 
@@ -433,7 +434,7 @@ const getOtp = (req, res) => {
     try {
         res.render('user/submitOtp')
     } catch (error) {
-        console.log(error);
+        
     }
 }
 
@@ -469,7 +470,7 @@ const submitOtp = async (req, res) => {
             res.json({ error: otpError });
         }
     } catch (error) {
-        console.log(error);
+        
 
         // Send JSON response with error message
         res.json({ error: 'An error occurred while submitting the OTP.' });
@@ -483,7 +484,7 @@ const resendOtp = async (req, res) => {
         res.redirect('/get_otp')
         otp = await userHelper.verifyEmail(userEmail)
     } catch (error) {
-        console.log(error);
+        
     }
 }
 
@@ -536,7 +537,7 @@ const doLogin = async (req, res) => {
             res.redirect('/login')
         }
     } catch (error) {
-        console.log(error);
+        
     }
 }
 
@@ -551,7 +552,7 @@ const doLogout = async (req, res) => {
         res.redirect('/login')
 
     } catch (error) {
-        console.log(error.message);
+        
     }
 }
 
@@ -580,7 +581,7 @@ const doSignup = async (req, res) => {
         }
 
     } catch (error) {
-        console.log(error);
+        
     }
 }
 

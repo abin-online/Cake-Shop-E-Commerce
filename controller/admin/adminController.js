@@ -49,7 +49,7 @@ const adminDoLogin = async (req, res) => {
       res.render("admin/login", { message: "incorrect email or password", layout: 'loginlayout' });
     }
   } catch (error) {
-    console.log(error);
+    
   }
 };
 
@@ -61,7 +61,7 @@ const adminLogout = async (req, res) => {
     adminData = null
     res.redirect("/admin/login");
   } catch (error) {
-    console.log(error.message);
+    
   }
 };
 
@@ -73,7 +73,7 @@ const loadHome = (req, res) => {
   try {
     res.render("admin/home", { layout: 'adminlayout' });
   } catch (error) {
-    console.log(error);
+    
   }
 };
 
@@ -157,7 +157,7 @@ const blockUser = async (req, res) => {
 
     res.redirect("/admin/manage_users");
   } catch (error) {
-    console.log(error);
+    
   }
 };
 
@@ -187,7 +187,7 @@ const getCategory = async (req, res) => {
       res.render("admin/category", { allCtegoryData, pages, currentPage: page, layout: 'adminlayout' });
     }
   } catch (error) {
-    console.log(error);
+    
   }
 };
 
@@ -207,7 +207,7 @@ const addCategory = (req, res) => {
       res.render("admin/add_category", { layout: 'adminlayout' });
     }
   } catch (error) {
-    console.log(error);
+    
   }
 };
 
@@ -251,7 +251,7 @@ const editCategory = async (req, res) => {
       res.render("admin/edit_category", { catData, layout: 'adminlayout' });
     }
   } catch (error) {
-    console.log(error);
+    
   }
 };
 
@@ -357,13 +357,13 @@ const getProduct = async (req, res) => {
     const count = await Product.find({}).count();
     console.log(count)
 
-    // console.log(products);
+    // 
     const totalPages = Math.ceil(count / limit)  // Example value
     const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
 
     res.render("admin/products", { productData, pages, currentPage: page, layout: 'adminlayout' });
   } catch (error) {
-    console.log(error);
+    
   }
 };
 
@@ -382,7 +382,7 @@ const newProduct = async (req, res) => {
       }
     ]);
 
-    console.log(catogories);
+    
 
     const brandData = await Brand.aggregate([
       {
@@ -391,7 +391,7 @@ const newProduct = async (req, res) => {
         }
       }
     ])
-    console.log(brandData);
+    
 
     console.log(catogories)
     if (req.session.productSave) {
@@ -401,7 +401,7 @@ const newProduct = async (req, res) => {
       res.render("admin/addproduct", { brandData, catogories, layout: 'adminlayout' });
     }
   } catch (error) {
-    console.log(error);
+    
   }
 };
 
@@ -490,7 +490,7 @@ const addNewProduct = async (req, res) => {
     req.session.productSave = true;
     res.redirect("/admin/product");
   } catch (error) {
-    console.log(error);
+    
   }
 };
 
@@ -504,13 +504,13 @@ const editProduct = async (req, res) => {
     const catogories = await Category.find({ isListed: true }).lean()
     const brandData = await Brand.find({ isListed: true }).lean()
 
-    console.log(".........................................................oo", proData);
-    console.log(catogories);
+    
+    
 
 
     res.render("admin/edit_product", { brandData, proData, catogories, layout: 'adminlayout' })
   } catch (error) {
-    console.log(error);
+    
   }
 };
 
@@ -518,21 +518,21 @@ const editProduct = async (req, res) => {
 
 const updateProduct = async (req, res) => {
   try {
-   
+
     const proId = req.params.id;
     const product = await Product.findById(proId);
     const exImage = product.imageUrl;
     const files = req.files;
     let updImages = [];
-console.log("files", files)
-    if (files && files.length > 0) {  
+    console.log("files", files)
+    if (files && files.length > 0) {
       const newImages = req.files.map((file) => file.filename);
       updImages = [...exImage, ...newImages];
       product.imageUrl = updImages;
     } else {
       updImages = exImage;
     }
-console.log('checkingggg____!', updImages)
+    console.log('checkingggg____!', updImages)
     const { name, price, description, category, stock, brand } = req.body;
     await Product.findByIdAndUpdate(
       proId,
@@ -553,7 +553,7 @@ console.log('checkingggg____!', updImages)
     // req.session.productSave = true
     res.redirect("/admin/product");
   } catch (error) {
-    console.log(error);
+    
   }
 };
 
@@ -594,7 +594,7 @@ const loadCoupon = async (req, res) => {
     const count = await Coupon.find({}).count();
     const totalPages = Math.ceil(count / limit)
     const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
-    
+
     const now = moment();
 
     const couponData = coupon.map((cpn) => {
@@ -605,10 +605,10 @@ const loadCoupon = async (req, res) => {
         expiryDate: formattedDate,
       };
     });
-    
+
     res.render("admin/coupon", { couponData, pages, currentPage: page, layout: 'adminlayout' });
   } catch (error) {
-    console.log(error);
+    
   }
 };
 
@@ -628,7 +628,7 @@ const addCoupon = (req, res) => {
     }
 
   } catch (error) {
-    console.log(error);
+    
   }
 };
 
@@ -643,7 +643,7 @@ const addCouponPost = async (req, res) => {
     const minPurchaseAmount = parseFloat(minPurchase);
     const maxDiscountAmount = parseFloat(maxDiscount);
 
-    console.log('Received data:', req.body);
+    
 
     if (!couponCode || isNaN(discount) || isNaN(minPurchaseAmount) || isNaN(maxDiscountAmount) || !expDate) {
       throw new Error('All fields are required and must be valid.');
@@ -743,7 +743,7 @@ const listBanner = async (req, res) => {
 
 
 
-    console.log(id, banner);
+    
 
     const newStatus = banner.active; // Ensure 'active' is the correct field
     const updatedBanner = await Banner.findByIdAndUpdate(
@@ -752,7 +752,7 @@ const listBanner = async (req, res) => {
       { new: true } // Ensure it returns the updated document
     );
 
-    console.log(updatedBanner);
+    
 
     return res.status(200).json({ message: "Banner updated", banner: updatedBanner }); // 🚨 Always return after sending response
   } catch (error) {
@@ -771,7 +771,7 @@ const deleteCoupon = async (req, res) => {
 
     res.redirect("/admin/coupons");
   } catch (error) {
-    console.log(error);
+    
   }
 };
 
@@ -795,12 +795,12 @@ const orderDetails = async (req, res) => {
       layout: 'adminlayout'
     });
   } catch (error) {
-    console.log(error);
+    
   }
 };
 
 const changeOrderStatus = async (req, res) => {
-  console.log(req.body);
+  
 
   try {
     const id = req.query.id;
@@ -813,7 +813,7 @@ const changeOrderStatus = async (req, res) => {
     );
     res.redirect("/admin/orders");
   } catch (error) {
-    console.log(error);
+    
   }
 };
 
@@ -863,13 +863,14 @@ const returnOrder = async (req, res) => {
     if (['wallet', 'razorpay'].includes(returnedOrder.paymentMethod)) {
       for (const data of returnedOrder.product) {
         //await Product.updateOne({ _id: data._id }, { $inc: { stock: data.quantity } });
-
-        const dataupdate = await User.updateOne(
-          { _id: order.userId },
-          { $inc: { wallet: (data.price * data.quantity) - couponAmountEach } }
-        );
-        console.log(dataupdate)
-        notCancelledAmt += data.price * data.quantity - couponAmountEach;
+        if (!data.isCancelled && !data.isReturned) {
+          const dataupdate = await User.updateOne(
+            { _id: order.userId },
+            { $inc: { wallet: (data.price * data.quantity) - couponAmountEach } }
+          );
+          console.log(dataupdate)
+          notCancelledAmt += data.price * data.quantity - couponAmountEach;
+        }
       }
       console.log('inside wallet chcek')
       await User.updateOne(
@@ -892,7 +893,7 @@ const returnOrder = async (req, res) => {
 
     });
   } catch (error) {
-    console.log(error.message);
+    
     res.status(HttpStatus.InternalServerError).send('Internal Server Error');
   }
 };
@@ -960,9 +961,9 @@ const returnOneProduct = async (req, res) => {
         { _id: user_id },
         { $inc: { wallet: productprice } }
       );
-      console.log("user wallet ", userWallet )
+      console.log("user wallet ", userWallet)
       const walletHistory = await User.updateOne(
-        { _id:  user_id },
+        { _id: user_id },
         {
           $push: {
             history: {
@@ -981,7 +982,7 @@ const returnOneProduct = async (req, res) => {
       message: 'returned the product'
     });
   } catch (error) {
-    console.log(error.message);
+    
     res.status(HttpStatus.InternalServerError).send('Internal Server Error');
   }
 }
@@ -1053,7 +1054,7 @@ const addBanner = (req, res) => {
 
     res.render('admin/add_banner', { layout: 'adminlayout' })
   } catch (error) {
-    console.log(error);
+    
   }
 }
 
@@ -1100,7 +1101,7 @@ const deleteBanner = async (req, res) => {
 
     res.redirect("/admin/banners");
   } catch (error) {
-    console.log(error);
+    
   }
 };
 
@@ -1182,7 +1183,7 @@ const loadBrands = async (req, res) => {
       }
     ])
 
-    console.log(brandData);
+    
 
 
 
@@ -1212,7 +1213,7 @@ const addBrandPage = (req, res) => {
       res.render("admin/add_brand", { layout: 'adminlayout' });
     }
   } catch (error) {
-    console.log(error);
+    
   }
 };
 
@@ -1239,7 +1240,7 @@ const addNewBrand = async (req, res) => {
       res.redirect("/admin/add_brands");
     }
   } catch (error) {
-    console.log(error);
+    
     res.redirect("/admin/add_brands");
   }
 };
@@ -1260,7 +1261,7 @@ const editBrandPage = async (req, res) => {
       res.render("admin/edit_brand", { brandData, layout: 'adminlayout' });
     }
   } catch (error) {
-    console.log(error);
+    
   }
 };
 
@@ -1299,7 +1300,7 @@ const updateBrand = async (req, res) => {
       res.redirect("/admin/brands");
     }
   } catch (error) {
-    console.log(error);
+    
     res.redirect("/admin/brands");
   }
 };
@@ -1322,7 +1323,7 @@ const deleteBrand = async (req, res) => {
     );
     res.redirect('/admin/brands');
   } catch (error) {
-    console.log(error);
+    
     res.redirect('/admin/brands');
   }
 };

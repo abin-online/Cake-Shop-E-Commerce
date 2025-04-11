@@ -28,7 +28,7 @@ addNewReviewPost: async(req, res) => {
         res.redirect(`/productview?id=${req.body.proId}`)
        
     } catch (error) {
-        console.log(error);
+        
     }
 },
 
@@ -44,7 +44,7 @@ editReview : async (req, res) => {
 
         res.render('/',{ res: reviewObject })
     } catch (error) {
-        console.log(error);
+        
     }
 },
 
@@ -69,7 +69,7 @@ editReviewPost : async (req, res) => {
         // const userAddresses = await Address.find({ userId: id }).lean();
         // res.render('user/editAddress')
     } catch (error) {
-        console.log(error);
+        
     }
 }
 

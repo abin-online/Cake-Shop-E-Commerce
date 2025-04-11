@@ -36,17 +36,17 @@ let addMoneyToWallet = async (req, res) => {
             currency: "INR",
             receipt: "" + Date.now(),
         }
-        console.log("Creating Razorpay order with options:", options);
+        
 
         instance.orders.create(options, async function (error, order) {
             if (error) {
-                console.log("Error while creating order : ", error);
+                
 
             }
             else {
 
                 var amount = order.amount / 100
-                console.log(amount);
+                
                 await User.updateOne(
                     {
                         _id: req.session.user._id
@@ -71,7 +71,7 @@ let addMoneyToWallet = async (req, res) => {
 
 
     } catch (error) {
-        console.log("Something went wrong", error);
+        
         res.status(500).send("Internal Server Error");
 
     }
@@ -80,7 +80,7 @@ let addMoneyToWallet = async (req, res) => {
 const verifyPayment = async (req, res) => {
     try {
         let details = req.body
-        console.log(".................................detail",details);
+        
         
         // let amount = parseInt(details['order[order][amount]']) / 100
         var amount = parseInt((details.order.order.amount)/100)
@@ -100,7 +100,7 @@ const verifyPayment = async (req, res) => {
             success: true
         })
     } catch (error) {
-        console.log("Something went wrong", error);
+        
         res.status(500).send("Internal Server Error");
 
 

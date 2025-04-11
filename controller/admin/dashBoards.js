@@ -155,7 +155,7 @@ const loadDashboard = async(req, res) => {
         return;
       }
     
-      // console.log(sales,'salessssssssssssssssss');
+      // 
       
       const salesByMonth = {};
       
@@ -182,7 +182,7 @@ const loadDashboard = async(req, res) => {
         });
       });
       
-      //console.log(chartData);
+      //
       
        months        = []
        odersByMonth  = []
@@ -204,15 +204,15 @@ const loadDashboard = async(req, res) => {
       const thisMonthSales = revnueByMonth[revnueByMonth.length-1]
 
   
-      //console.log(thisMonthOrder, thisMonthSales);
+      //
 
      
 
-      // console.log(months);
-      // console.log(odersByMonth);
-      // console.log(revnueByMonth);
-      // console.log(totalRevnue);
-      // console.log(totalSales);
+      // 
+      // 
+      // 
+      // 
+      // 
 
 
       
@@ -257,7 +257,7 @@ const loadDashboard = async(req, res) => {
         ...order
     }))
     
-    console.log(formattedOrders);
+    
     
     let salesData = []
     
@@ -279,7 +279,7 @@ const loadDashboard = async(req, res) => {
         grandTotal += element.total
     })
     
-    console.log(grandTotal);
+    
     
     res.json({
         grandTotal: grandTotal,
@@ -293,11 +293,11 @@ const loadDashboard = async(req, res) => {
 
  const getChartData = (req, res) => {
     try {
-      console.log("Months:", months);
-      console.log("Revenue By Month:", revnueByMonth);
-      console.log("Orders By Month:", odersByMonth);
-      console.log("Categories:", categories);
-      console.log("Revenues:", revenues);
+      
+      
+      
+      
+      
         res.json({
             months: months,
             revnueByMonth: revnueByMonth,

@@ -23,7 +23,7 @@ let email
             res.render('user/forgetPassword/mailSubmit')
         }
     } catch (error) {
-        console.log(error);
+        
     }
 }
 
@@ -33,7 +33,7 @@ let email
 
  const submitMailPost = async(req, res) => {
     try {
-        console.log(req.body);
+        
         email  = req.body.email 
         const userDetails  = await User.findOne({email:email})
 
@@ -64,7 +64,7 @@ const submitOtp = (req, res) => {
             res.render('user/forgetPassword/submitOtp')        
         }
     } catch (error) {
-        console.log(error);
+        
     }
 }
 
@@ -99,7 +99,7 @@ const resetPassword = (req, res) => {
     try {
         res.render('user/forgetPassword/resetPassword')
     } catch (error) {
-        console.log(error);
+        
     }
 }
 
@@ -116,7 +116,7 @@ const resetPasswordPost = async (req, res) => {
         req.session.newPas = true
         res.redirect('/login')
     } catch (error) {
-        console.log(error);
+        
     }
 }
 

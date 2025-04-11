@@ -78,7 +78,7 @@ Handlebars.registerHelper('ifeq', function (a, b, options) {
   });
 
   Handlebars.registerHelper('neq', function (a, b) {
-    console.log('Comparing:', a, 'with', b); // <-- Debug log
+     // <-- Debug log
     return a !== b;
   });
   

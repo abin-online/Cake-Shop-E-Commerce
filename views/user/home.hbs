@@ -146,17 +146,22 @@
                                     </div>
                                     <div class="product-content-wrap">
                                         <div class="product-category">
-                                            <a >{{this.category.category}}</a>
+                                            <div class="product-category">
+                    <a href="#">{{this.categoryDetails.category}}</a>
+                </div>
+                
                                         </div>
-                                        <h2><a href="/productDetails/{{this._id}}">{{name}}</a></h2>
-                                        <div class="rating-result" title="90%">
+                                        <h2><a href="/productview?id={{this._id}}">{{name}}</a></h2>
+                                        {{!-- <div class="rating-result" title="0%">
                                             <span>
                                                 <span>90%</span>
                                             </span>
-                                        </div>
+                                        </div> --}}
                                         <div class="product-price">
                                             <span>₹{{price}}</span>
-                                            <span class="old-price">₹{{price}}</span>
+                                            {{#if offer.discountPrice}}
+                                            <span class="old-price">₹{{offer.discountPrice}}</span>
+                                            {{/if}}
                                         </div>
                                         <div class="product-action-1 show">
                                         </div>
@@ -191,14 +196,16 @@
                                             <a >{{this.categoryDetails.category}} </a>
                                         </div>
                                         <h2><a >{{this.productDetails.name}}</a></h2>
-                                        <div class="rating-result" title="90%">
+                                        {{!-- <div class="rating-result" title="90%">
                                             <span>
                                                 <span>90%</span>
                                             </span>
-                                        </div>
+                                        </div> --}}
                                         <div class="product-price">
-                                            <span>{{this.productDetails.name}} </span>
-                                            <span class="old-price">₹245.8</span>
+                                            <span>{{this.productDetails.price}} </span>
+                                            {{#if this.offer.discountPrice}}
+                                            <span class="old-price">₹{{offer.discountPrice}}</span>
+                                            {{/if}}
                                         </div>
                                         <div class="product-action-1 show">
                                         </div>
@@ -213,7 +220,7 @@
                     <div class="tab-pane fade" id="tab-three" role="tabpanel" aria-labelledby="tab-three">
                         <div class="row product-grid-4">
                             {{#each newProduct}}
-                            <div class="col-lg-3 col-md-4 col-12 col-sm-6">
+                             <div class="col-lg-3 col-md-4 col-12 col-sm-6">
                                 <div class="product-cart-wrap mb-30">
                                     <div class="product-img-action-wrap">
                                         <div class="product-img product-img-zoom">
@@ -229,17 +236,22 @@
                                     </div>
                                     <div class="product-content-wrap">
                                         <div class="product-category">
-                                            <a href="shop-grid-right.html">{{this.category.category}}</a>
+                                            <div class="product-category">
+                    <a href="#">{{this.categoryDetails.category}}</a>
+                </div>
+                
                                         </div>
-                                        <h2><a href="/productDetails/{{this._id}}">{{name}}</a></h2>
-                                        <div class="rating-result" title="90%">
+                                        <h2><a href="/productview?id={{this._id}}">{{name}}</a></h2>
+                                        {{!-- <div class="rating-result" title="0%">
                                             <span>
                                                 <span>90%</span>
                                             </span>
-                                        </div>
+                                        </div> --}}
                                         <div class="product-price">
                                             <span>₹{{price}}</span>
-                                            <span class="old-price">₹{{price}}</span>
+                                            {{#if offer.discountPrice}}
+                                            <span class="old-price">₹{{offer.discountPrice}}</span>
+                                            {{/if}}
                                         </div>
                                         <div class="product-action-1 show">
                                         </div>

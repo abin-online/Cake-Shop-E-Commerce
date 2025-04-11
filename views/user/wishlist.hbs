@@ -86,7 +86,7 @@
                         contentType: 'application/json',
                         data: JSON.stringify({ id: id, wishId: wishId }),
                         success: function (productData) {
-                            console.log("Product removed from wishlist successfully");
+                            
                             $this.closest('tr').remove(); 
 
                             Swal.fire({
@@ -135,7 +135,7 @@
                     }
                 },
                 error: function (error) {
-                    console.log('Error adding to cart', error);
+                    
                 }
             });
         });

@@ -74,7 +74,7 @@ const addProductOfferPage = async (req, res) => {
 const addProductOffer = async (req, res) => {
     try {
         const { productName, productOfferPercentage, startDate, endDate } = req.body;
-        console.log(req.body);
+        
 
         const product = await Product.findOne({ name: productName });
 
@@ -111,7 +111,7 @@ const addProductOffer = async (req, res) => {
         });
 
         await proOffer.save();
-        console.log("Product offer saved:", proOffer);
+        
 
 
         //await product.save();
@@ -300,7 +300,7 @@ const addCategoryOffer = async (req, res) => {
 
 
         await catOffer.save();
-        console.log("Category Offer saved:", catOffer);
+        
 
         // Fetch all products in this category
         const productsInCategory = await Product.find({ category: category._id });
@@ -398,7 +398,7 @@ const editCategoryOffer = async (req, res) => {
         catOffer.currentStatus =
             new Date(categoryOfferEndDate) >= new Date() && new Date(categoryOfferStartDate) <= new Date();
         await catOffer.save();
-        console.log("Category Offer Updated:", catOffer);
+        
 
         const productsInCategory = await Product.find({ category: category._id });
 

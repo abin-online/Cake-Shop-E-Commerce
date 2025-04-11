@@ -392,7 +392,7 @@ const addToCartBtn = (proId) => {
     const productid = document.getElementById('add_to_cart_btn').value;
     const productName = document.getElementsByName('product_name')[0].value;
     
-    console.log(productName);
+    
 
     const xhr = new XMLHttpRequest();
     xhr.open('GET', `/add_to_cart?id=${proId}`, true);
@@ -401,7 +401,7 @@ const addToCartBtn = (proId) => {
     xhr.onreadystatechange = () => {
         if (xhr.readyState === 4 && xhr.status === 200) {
             const data = JSON.parse(xhr.responseText);
-            console.log(data, 'from add to cart btn....');
+            
 
             document.getElementById('cart_btn').innerHTML = 
                 `<button onclick="window.location.href='/cart/{{userData._id}}'" class="button button-add-to-cart">Go to cart</button>`;

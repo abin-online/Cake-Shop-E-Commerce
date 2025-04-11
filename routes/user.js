@@ -145,7 +145,7 @@ router.put('/return-one-product', logedin, isBlocked, orders.returnOneProduct);
 
 
 
-router.post('/retry_payment' ,logedin , isBlocked , orders.retryPayment)
+router.post('/retry-payment/:id' ,logedin , isBlocked , orders.retryPayment)
 
 router.get('/filter_orders', logedin, isBlocked, orders.filterOrders)
 

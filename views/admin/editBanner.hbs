@@ -259,7 +259,7 @@ function Validation() {
       });
 
       const data = await response.json();
-      console.log(data.message);
+      
 
       if (data) {
         const imageElem = document.querySelector(`.pro-image[data-image-index="${imageIndex}"]`);

@@ -182,7 +182,7 @@ const productHtml = `
                 </div>
                 <div class="product-action-1">
                     <a aria-label="Quick view" class="action-btn hover-up"
-                       href="/productDetails/${product._id}" data-bs-target="#quickViewModal">
+                       href="/productview?id=${product._id}" data-bs-target="#quickViewModal">
                         <i class="fi-rs-search"></i></a>
                     <a data-id="${product._id}" aria-label="Add To Wishlist"
                                             class="wish action-btn hover-up" href="#"><i
@@ -195,9 +195,9 @@ const productHtml = `
             </div>
             <div class="product-content-wrap">
                 <div class="product-category">
-                    <a href="shop-grid-right.html">${product.category.category}</a>
+                    <a href="#">${product.category.category}</a>
                 </div>
-                <h2><a href="/productDetails/${product._id}">${product.name}</a></h2>
+                <h2><a href="/productview?id=${product._id}">${product.name}</a></h2>
                 <div class="rating-result" title="90%">
                     <span><span>90%</span></span>
                 </div>

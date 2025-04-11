@@ -262,7 +262,7 @@ const getChartData = async () => {
         });
 
         const data = await response.json();
-        console.log('Data received:', data);
+        
 
         // Assign data to variables
          months = data.months;
@@ -372,8 +372,8 @@ function revenue(months,revenueByMonth){
 
 
 function categoryRevenue(categories, revenues) {
-    console.log("Categories:", categories);
-    console.log("Revenues:", revenues);
+    
+    
 
     const ctx = document.getElementById('revenueChart').getContext('2d');
     new Chart(ctx, {

@@ -57,20 +57,20 @@ const forgotOtppageProfile=async(req,res)=>{
         let otpErr = 'Incorrect otp..!!';
 
         if (req.session.otpErr) {
-            console.log("OTP Error:", req.session.otpErr); // Debugging statement
+             // Debugging statement
             res.render('user/userResetPassword/submitOtp', { otpErr });
         } else {
             res.render('user/userResetPassword/submitOtp');
         }
     } catch (error) {
-        console.log(error);
+        
     }
 }
 const forgotOtpSubmitProfile=async(req,res)=>{
     let enteredOtp = req.body.otp;
 
-    console.log("Entered OTP:", enteredOtp); // Debugging statement
-    console.log("Stored OTP:", otp); // Debugging statement
+     // Debugging statement
+     // Debugging statement
 
     if (enteredOtp === otp) {
         res.json({ success: true, redirectUrl: '/profileResetPassword' });
@@ -91,7 +91,7 @@ const resetPasswordPageProfile=async(req,res)=>{
     try {
         res.render('user/userResetPassword/resetPassword');
     } catch (error) {
-        console.log(error);
+        
     }
 
 
@@ -108,7 +108,7 @@ const resetPasswordProfile=async(req,res)=>{
         req.session.newPas = true;
         res.redirect('/login');
     } catch (error) {
-        console.log(error);
+        
     }
 
 }

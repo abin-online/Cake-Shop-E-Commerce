@@ -31,16 +31,16 @@ const verifyEmail = async(email)=>{
 
         trasporter.sendMail(mailoptions, (error, info)=>{
           if(error){
-            console.log(error);
+            
           }else{
-            console.log("Email has been sent");
+            
           }
         })
 
         return otp
         
     } catch (error) {
-        console.log(error);
+        
     }
 }
 
@@ -60,7 +60,7 @@ const hashPassword = async (pasword) => {
         const passwordHash = await argon2.hash(pasword)
         return passwordHash
     } catch (error) {
-        console.log(error);
+        
         
     }
 }

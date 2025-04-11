@@ -117,7 +117,7 @@ function renderSalesReport(data) {
    console.log(data)
 
    if (data) {
-    console.log(data.orders);
+    
     
     renderSalesReport(data);
   }

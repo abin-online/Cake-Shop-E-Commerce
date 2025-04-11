@@ -10,7 +10,7 @@ module.exports = {
             const userData = await User.findById(id).lean();
             res.render('user/about_me', { userData });
         } catch (error) {
-            console.log(error);
+            
             res.status(500).send('Internal Server Error');
         }
     },
@@ -41,7 +41,7 @@ module.exports = {
                 userData
             });
         } catch (error) {
-            console.log(error);
+            
             res.status(500).send('Internal Server Error');
         }
     },
@@ -51,7 +51,7 @@ module.exports = {
         try {
             res.render('user/add_new_address');
         } catch (error) {
-            console.log(error);
+            
             res.status(500).send('Internal Server Error');
         }
     },
@@ -88,7 +88,7 @@ module.exports = {
             const address = await Address.findById(id).lean();
             res.render('user/editAddress', { address });
         } catch (error) {
-            console.log(error);
+            
             res.status(500).send('Internal Server Error');
         }
     },
@@ -111,7 +111,7 @@ module.exports = {
             });
             res.redirect('/addresses');
         } catch (error) {
-            console.log(error);
+            
             res.status(500).send('Internal Server Error');
         }
     },
@@ -122,7 +122,7 @@ module.exports = {
             const userData = req.session.user;
             res.render('user/edit_user', { userData });
         } catch (error) {
-            console.log(error);
+            
             res.status(500).send('Internal Server Error');
         }
     },
@@ -140,7 +140,7 @@ module.exports = {
             });
             res.redirect('/profile');
         } catch (error) {
-            console.log(error);
+            
             res.status(500).send('Internal Server Error');
         }
     },
@@ -152,7 +152,7 @@ module.exports = {
             await Address.findByIdAndDelete(id);
             res.redirect('/adresses');
         } catch (error) {
-            console.log(error);
+            
             res.status(500).send('Internal Server Error');
         }
     }

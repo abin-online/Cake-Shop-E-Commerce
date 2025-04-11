@@ -139,7 +139,7 @@
                         contentType: 'application/json',
                         data: JSON.stringify({ id: id }),
                         success: function (productData) {
-                            console.log("Product removed from Cart successfully");
+                            
                             // If you want to remove the row from the table upon successful removal
                             $this.closest('tr').remove(); // Use $this instead of $(this)
                             // swal("Removed from wishlist", "The product has been removed from your wishlist.", "success");
@@ -199,7 +199,7 @@
                         contentType: 'application/json',
                         data: JSON.stringify({ id: id }),
                         success: function (productData) {
-                            console.log("ProductBlocked");
+                            
                  
                            
                             {
@@ -255,7 +255,7 @@
                         contentType: 'application/json',
                         data: JSON.stringify({ id: id }),
                         success: function (productData) {
-                            console.log("ProductBlocked");
+                            
                  
                            
                             {

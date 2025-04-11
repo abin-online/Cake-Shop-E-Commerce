@@ -11,16 +11,16 @@ const addToCart = async (req, res) => {
   try {
     let userData = req.session.user;
     if (!userData) {
-      console.log("User data not found...");
+      
       return res
         .status(HttpStatus.Unauthorized)
         .json({ success: false, message: "Login Required" });
     }
 
     const data = req.body;
-    console.log("Request Body:", data);
+    
     const quantity = parseInt(req.body.quantity, 10);
-    console.log("Quantity:", quantity);
+    
 
     if (!data.prodId) {
       return res
@@ -58,17 +58,17 @@ const addToCart = async (req, res) => {
     }
 
     let productToCart = productToLookup[0];
-    console.log("Product Data:", productToCart);
+    
 
     const priceToUse = productToCart.productOffer?.discountPrice || productToCart.price;
-    console.log("priceToUse => ", priceToUse);
+    
 
     const ProductExist = await Cart.find({
       userId: userData._id,
       product_Id: data.prodId,
     }).lean();
 
-    console.log("Product Exist in Cart:", ProductExist);
+    
 
     if (ProductExist.length > 0) {
       return res.json({
@@ -90,7 +90,7 @@ const addToCart = async (req, res) => {
       { new: true, upsert: true }
     );
 
-    console.log("Cart Data:.........>", cartData);
+    
 
     if (cartData) {
       res.json({
@@ -102,7 +102,7 @@ const addToCart = async (req, res) => {
       res.status(HttpStatus.InternalServerError).json({ success: false, message: "Failed to add product to cart" });
     }
   } catch (error) {
-    console.log("Error:", error.message);
+    
     res.status(HttpStatus.InternalServerError).send("Internal Server Error");
   }
 };
@@ -198,9 +198,9 @@ const loadCartPage = async (req, res) => {
         },
       },
     ]);
-    console.log(subTotal, "SUBTOTAL");
+    
 
-    console.log("products in cart",cartProd);
+    
   
     if (cartProd.length > 0) {
       res.render("user/cart", {
@@ -212,7 +212,7 @@ const loadCartPage = async (req, res) => {
       res.render("user/emptyCart", { userData });
     }
   } catch (error) {
-    console.log(error.message);
+    
     res.status(HttpStatus.InternalServerError).send("Internal Server Error");
   }
 };
@@ -230,7 +230,7 @@ const removeFromCart = async (req, res) => {
       res.json({ success: false });
     }
   } catch (error) {
-    console.log(error.message);
+    
     res.status(HttpStatus.InternalServerError).send("Internal Server Error");
   }
 };
@@ -246,7 +246,7 @@ const updateCart = async (req, res) => {
 
     // fetch the cart item
     const oldCart = await Cart.findOne({ _id: cartIdForUpdate });
-    console.log(cartIdForUpdate, oldCart);
+    
 
     const product = await Product.findOne({ _id: oldCart.product_Id }, { price: 1, stock: 1 }).lean();
 
@@ -292,13 +292,13 @@ const updateCart = async (req, res) => {
 
     // Calculate the new total value for the cart item based on the new quantity
       const updatedValue = newValue * finalPrice;
-      console.log(cartIdForUpdate, updatedValue);
+      
 
     const updatedcartvalue = await Cart.updateOne(
       { _id: cartIdForUpdate },
       { $set: { quantity: newValue, value: updatedValue } }
     );
-    console.log(updatedcartvalue);
+    
 
     // Fetch the updated cart data
     const updatedCart = await Cart.find({
@@ -325,7 +325,7 @@ const updateCart = async (req, res) => {
         },
       },
     ]);
-    console.log(subTotal, "SUBTOTAL");
+    
 
     // Prepare the updated cart data to return to the user
     const newData = [];
@@ -343,10 +343,10 @@ const updateCart = async (req, res) => {
       newDataItem.currentStock = latestStock;
       newData.push(newDataItem);
     });
-    console.log(newData, "itemsitemssss");
+    
 
     const cartValue = newData.reduce((acc, item) => acc + item.totalAmount, 0);
-    console.log(cartValue);
+    
     res.json({
       success: true,
       message: "Cart Updated",
@@ -355,9 +355,9 @@ const updateCart = async (req, res) => {
       cartValue: subTotal,
     });
 
-    console.log(newData[0].totalAmount);
+    
   } catch (error) {
-    console.log(error.message);
+    
     res.status(HttpStatus.InternalServerError).send("Internal Server Error");
   }
 };
@@ -418,7 +418,7 @@ const checkOutOfStock = async (req, res) => {
   
 
   } catch (error) {
-    console.log(error.message);
+    
     res.status(HttpStatus.InternalServerError).send("Internal Server Error");
   }
 };

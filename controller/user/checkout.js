@@ -139,7 +139,7 @@
 
 //             // Check if couponData exists in the request body
 //             if (req.body.couponData) {
-//                 console.log("BODY REQ........................", req.body);
+//                 
 //                 // If couponData exists, add coupon-related properties
 //                 orderData = {
 //                     ...orderData,
@@ -184,7 +184,7 @@
 
 //             userDetails.cart = []
 //             await userDetails.save()
-//             console.log("___________", userDetails.cart);
+//             
 //         }
 
 
@@ -246,7 +246,7 @@
 
 
 //     } catch (error) {
-//         console.log(error);
+//         
 //     }
 // }
 
@@ -291,7 +291,7 @@
 //             });
 //         }
 //     } catch (error) {
-//         console.log(error);
+//         
 //         res.status(500).json({ status: 'error', error });
 //     }
 // };
@@ -324,7 +324,7 @@
 //             });
 //         }
 //     } catch (error) {
-//         console.log(error);
+//         
 //         res.status(500).json({ status: 'error', error });
 //     }
 // };
@@ -442,10 +442,10 @@ const ObjectId = require("mongoose");
 //       },
 //     ]);
 
-//     console.log("final->.......",cart);
-//     console.log("Subtotal:", subTotal);
+//     
+//     
 //     const cartData = await Cart.find({ userId: ID }).lean();
-//     console.log("Cart Data:", cartData);~
+//     ~
 //     res.render("user/checkout", {
 //       userData,
 //       addressData,
@@ -454,7 +454,7 @@ const ObjectId = require("mongoose");
 //       coupon,
 //     });
 //   } catch (error) {
-//     console.log(error.message);
+//     
 //     res.status(HttpStatus.InternalServerError).send("Internal Server Error");
 //   }
 // };
@@ -550,8 +550,8 @@ const loadCheckoutPage = async (req, res) => {
     // Calculate the subtotal
     const subTotal = cart.reduce((total, item) => total + item.value, 0);
 
-    console.log("Final Cart:", cart);
-    console.log("Subtotal:", subTotal);
+    
+    
 
         // Fetch available coupons
         const coupon = await Coupon.find({minPurchase: {$lte: subTotal} , usedBy: {$nin : [userId]} }).lean();
@@ -564,7 +564,7 @@ const loadCheckoutPage = async (req, res) => {
       coupon,
     });
   } catch (error) {
-    console.log("Error loading checkout page:", error.message);
+    
     res.status(HttpStatus.InternalServerError).send("Internal Server Error");
   }
 };
@@ -573,16 +573,16 @@ const loadCheckoutPage = async (req, res) => {
 
 const placeorder = async (req, res) => {
   try {
-    console.log("place order ", req.body);
+    
     let userData = req.session.user;
     const ID = new mongoose.Types.ObjectId(userData._id);
     const addressId = req.body.selectedAddress;
     const payMethod = req.body.selectedPayment;
     const totalamount = req.body.amount;
-    console.log("Request dot body  ", addressId, payMethod, totalamount);
+    
 
-    console.log('Coupon data:', req.body.couponData); 
-    console.log('Coupon Name:', req.body.couponName); 
+     
+     
 
     const result = Math.random().toString(36).substring(2, 7);
     const id = Math.floor(100000 + Math.random() * 900000);
@@ -646,7 +646,7 @@ const placeorder = async (req, res) => {
  
     
     
-    console.log("product in cart =======>",productInCart);
+    
 
     let productDet = productInCart.map((item) => {
       return {
@@ -661,7 +661,7 @@ const placeorder = async (req, res) => {
 
 
 
-    console.log("aggregated cart prods-------->",productDet);
+    
 
     for (let product of productDet) {
       if (product.quantity > product.stock) {
@@ -707,7 +707,7 @@ const placeorder = async (req, res) => {
     }
 
       const ordered = await order.save();
-      console.log(ordered, "ordersaved DATAAAA");
+      
 
       productDet.forEach(async (product) => {
         await Product.updateMany(
@@ -734,12 +734,12 @@ const placeorder = async (req, res) => {
         userId: ID,
       }).lean();
 
-      console.log(deletedCart, "deletedCart");
+      
     };
 //save order ends
     if (addressId) {
       if (payMethod === "cash-on-delivery") {
-        console.log("CASH ON DELIVERY");
+        
         await saveOrder();
         res.json({ COD: true });
       } else if (payMethod === "razorpay") {
@@ -751,7 +751,7 @@ const placeorder = async (req, res) => {
         const order = await instance.orders.create({
           amount: amount * 100,
           currency: "INR",
-          receipt: "Manikandan",
+          receipt: "abin__babu",
         });
         await saveOrder();
 
@@ -795,7 +795,7 @@ const placeorder = async (req, res) => {
       }
     }
   } catch (error) {
-    console.log(error.message);
+    
     res.status(HttpStatus.InternalServerError).send("Internal Server Error");
   }
 };
@@ -811,7 +811,7 @@ const orderSuccess = async (req, res) => {
       userData: req.session.user,
     });
   } catch (error) {
-    console.log(error.message);
+    
     res.status(HttpStatus.InternalServerError).send("Internal Server Error");
   }
 };
@@ -821,7 +821,7 @@ const orderSuccess = async (req, res) => {
 const validateCoupon = async (req, res) => {
   try {
     const { couponVal, subTotal } = req.body;
-    console.log(couponVal, subTotal);
+    
     const coupon = await Coupon.findOne({ code: couponVal });
 
     if (!coupon) {
@@ -859,7 +859,7 @@ const validateCoupon = async (req, res) => {
       }
     }
   } catch (error) {
-    console.log(error.message);
+    
     res.status(HttpStatus.InternalServerError).send("Internal Server Error");
   }
 };
@@ -903,7 +903,7 @@ const applyCoupon = async (req, res) => {
       });
     }
   } catch (error) {
-    console.log(error);
+    
     res.status(HttpStatus.InternalServerError).json({ status: "error", error });
   }
 };
@@ -937,7 +937,7 @@ const removeCoupon = async (req, res) => {
       });
     }
   } catch (error) {
-    console.log(error);
+    
     res.status(HttpStatus.InternalServerError).json({ status: "error", error });
   }
 };

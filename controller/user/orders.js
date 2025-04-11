@@ -39,7 +39,7 @@ const Coupon = require('../../model/coupon')
 //           return { ...order.toObject(), date: formattedDate }
 //       })
 
-//       console.log(formattedOrders);
+//       
 
 //       res.render('user/my_orders', {
 //           userData,
@@ -47,7 +47,7 @@ const Coupon = require('../../model/coupon')
 //       })
 
 //   } catch (error) {
-//       console.log(error);
+//       
 //   }
 // }
 
@@ -93,7 +93,7 @@ const myOrders = async (req, res) => {
     });
 
   } catch (error) {
-    console.log(error);
+    
     res.status(500).send('An error occurred while fetching orders');
   }
 };
@@ -115,12 +115,12 @@ const filterOrders = async (req, res) => {
       return { ...order.toObject(), date: formattedDate }
     })
 
-    console.log(formattedOrders);
+    
 
     res.json(formattedOrders)
 
   } catch (error) {
-    console.log(error);
+    
   }
 }
 
@@ -136,11 +136,11 @@ const filterOrders = async (req, res) => {
 
 //     const address = await Address.findById(addressId).lean()
 
-//     console.log("mAYYII", myOrderDetails);
+//     
 
 //     res.render('user/order_Details', { myOrderDetails, orderedProDet, userData, address })
 //   } catch (error) {
-//     console.log(error);
+//     
 //   }
 // }
 
@@ -222,9 +222,9 @@ const orderDetails = async (req, res) => {
       }
     });
 
-    console.log("Address:", address);
-    console.log("Order Details:", myOrderDetails);
-    console.log("Ordered Product Details:", enhancedOrderedProDet);
+    
+    
+    
 
     // Render the order details page for the correct user
     res.render("user/orderDetails", {
@@ -235,7 +235,7 @@ const orderDetails = async (req, res) => {
       userData
     });
   } catch (error) {
-    console.log(error);
+    
     res.status(500).send("Internal Server Error");
   }
 };
@@ -248,7 +248,7 @@ const orderSuccess = (req, res) => {
     const userData = req.session.user
     res.render('user/order_sucess', { userData })
   } catch (error) {
-    console.log(error);
+    
   }
 }
 
@@ -257,7 +257,7 @@ const payment_failed = (req, res) => {
     const userData = req.session.user
     res.render('user/paymentFailed', { userData })
   } catch (error) {
-    console.log(error);
+    
   }
 }
 
@@ -279,7 +279,7 @@ const payment_failed = (req, res) => {
 //       }
 //     ).lean()
 
-//     console.log("myOrderDetails", myOrderDetails, "myOrderDetails");
+//     
 //     let refundAmount
 //     if (myOrderDetails.amountAfterDscnt) {
 //       refundAmount = myOrderDetails.amountAfterDscnt - 50
@@ -325,7 +325,7 @@ const payment_failed = (req, res) => {
 
 //     res.json('sucess')
 //   } catch (error) {
-//     console.log(error);
+//     
 //   }
 // }
 
@@ -349,7 +349,7 @@ const payment_failed = (req, res) => {
 
 //     res.json('sucess')
 //   } catch (error) {
-//     console.log(error);
+//     
 //   }
 // }
 
@@ -358,7 +358,7 @@ const payment_failed = (req, res) => {
 const cancelOrder = async (req, res) => {
   try {
     const id = req.params.id;
-    console.log(id);
+    
     console.log(req.body)
     const { reason } = req.body
     if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -402,11 +402,13 @@ const cancelOrder = async (req, res) => {
     if (['wallet', 'razorpay'].includes(canceledOrder.paymentMethod)) {
       for (const data of canceledOrder.product) {
         //await Product.updateOne({ _id: data._id }, { $inc: { stock: data.quantity } });
-        await User.updateOne(
-          { _id: req.session.user._id },
-          { $inc: { wallet: (data.price * data.quantity) - couponAmountEach } }
-        );
-        notCancelledAmt += (data.price * data.quantity) - couponAmountEach;
+        if(!data.isCancelled && !data.isReturned) {
+          await User.updateOne(
+            { _id: req.session.user._id },
+            { $inc: { wallet: (data.price * data.quantity) - couponAmountEach } }
+          );
+          notCancelledAmt += (data.price * data.quantity) - couponAmountEach;
+        }
       }
 
 
@@ -429,7 +431,7 @@ const cancelOrder = async (req, res) => {
       message: 'Successfully cancelled Order'
     });
   } catch (error) {
-    console.log(error.message);
+    
     res.status(HttpStatus.InternalServerError).send('Internal Server Error');
   }
 };
@@ -446,7 +448,7 @@ const returnOrder = async (req, res) => {
       return res.status(400).json({ error: 'Invalid order ID' });
     }
     const ID = new mongoose.Types.ObjectId(id);
-  
+
 
     const returnedOrder = await Orders.findByIdAndUpdate(ID, { $set: { returnedReason: reason } }, { new: true });
 
@@ -457,7 +459,7 @@ const returnOrder = async (req, res) => {
     });
 
   } catch (error) {
-    console.log(error.message);
+    
     res.status(HttpStatus.InternalServerError).send('Internal Server Error');
   }
 };
@@ -546,7 +548,7 @@ const cancelOneProduct = async (req, res) => {
       message: 'Successfully removed product'
     });
   } catch (error) {
-    console.log(error.message);
+    
     res.status(HttpStatus.InternalServerError).send('Internal Server Error');
   }
 };
@@ -557,7 +559,7 @@ const cancelOneProduct = async (req, res) => {
 
 const returnOneProduct = async (req, res) => {
   try {
-    const { id, prodId , reason} = req.body;
+    const { id, prodId, reason } = req.body;
     console.log(id, prodId)
 
     if (!mongoose.Types.ObjectId.isValid(id) || !mongoose.Types.ObjectId.isValid(prodId)) {
@@ -583,7 +585,7 @@ const returnOneProduct = async (req, res) => {
       message: 'Requested to return the product'
     });
   } catch (error) {
-    console.log(error.message);
+    
     res.status(HttpStatus.InternalServerError).send('Internal Server Error');
   }
 }
@@ -591,18 +593,25 @@ const returnOneProduct = async (req, res) => {
 
 const retryPayment = async (req, res) => {
   try {
+    const id = req.params.id
+    console.log("Retry Payment for order ID:", id)
 
-    const id = req.query.id
+    const updatedOrder = await Orders.findByIdAndUpdate(id, { $set: { status: 'pending' } })
 
-    await Orders.findByIdAndUpdate(id, { $set: { status: 'pending' } }, { new: true });
+    if (!updatedOrder) {
+      return res.status(404).json({
+        success: false,
+        message: "Order not found"
+      })
+    }
 
     res.json({
-      razorPaySucess: true,
-      order
+      success: true,
+      message: "Payment status has been set to 'pending'.you can retry the payment",
+      order: updatedOrder
     })
-
   } catch (error) {
-
+    console.log(error)
   }
 }
 
@@ -699,7 +708,7 @@ const getInvoice = async (req, res) => {
         res.setHeader('Content-Disposition', 'attachment; filename=' + fileName);
         res.send(pdfBuffer);
       })
-      console.log('PDF base64 string: ');
+      
     });
   }
 

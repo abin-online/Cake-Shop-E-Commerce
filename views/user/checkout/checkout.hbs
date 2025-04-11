@@ -366,10 +366,10 @@
         checkbox.addEventListener('change', () => {
             if (checkbox.checked) {
                 paymentMethod = checkbox.value
-                console.log("User selected " + checkbox.value);
+                
                 console.log(paymentMethod, 'payment method..........')
             } else {
-                console.log("User unchecked " + checkbox.value);
+                
             }
         });
     });
@@ -429,7 +429,7 @@
                 } else if (paymentMethod === 'wallet') {
                     useWallet();
                 } else {
-                    console.log('Invalid payment method.');
+                    
                 }
             }
         });
@@ -447,9 +447,9 @@
         }
         const totalAmount = subTotal + deliveryCharge;
 
-        console.log(wallet, 'wallet balance');
-        console.log(subTotal, 'discounted subTotal');
-        console.log(totalAmount, 'totalAmount (subTotal + delivery charge)');
+        
+        
+        
 
         if (wallet >= totalAmount) {
             updateWallet = wallet - totalAmount
@@ -504,7 +504,7 @@
             const placeOrderData = await datas.json()        
             console.log('response json_______________', placeOrderData)
             if (placeOrderData) {
-            console.log('Received placeOrderData:', placeOrderData);
+            
             if (paymentStatus) {            
             window.location.href = '/orderPlaced'
             }
@@ -546,9 +546,9 @@
             /*"description": "Test Transaction",
             "image": "https://example.com/your_logo",*/
 
-            "order_id":  undefined, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+            "order_id":  undefined, 
             "handler": function (response) {
-                //console.log(response.razorpayOrder, status);
+                //
               //  verifyPayment(response.razorpayOrder, status, response.razorpayOrder.id, response.orderId);
                 Cod()
             },
@@ -583,8 +583,8 @@ const validateCoupon = async () => {
     couponEl = document.getElementById('copon').value;
     subTotal = Number(document.getElementsByName('subTotal')[0].value);
 
-    console.log(couponEl);
-    console.log('heloooo from validate coupon...............');
+    
+    
     const response = await fetch('/validate_coupon', {
         method: 'POST',
         headers: {
@@ -596,9 +596,9 @@ const validateCoupon = async () => {
         })
     });
 
-    console.log('hiiiii from coupon status........;;;;;;');
+    
     couponData = await response.json();
-    console.log(couponData);
+    
 
     
 };

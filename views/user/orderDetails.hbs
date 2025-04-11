@@ -304,7 +304,7 @@ var grandTotalText = document.getElementById("grandTotal").innerText;
 const amount = parseInt(grandTotalText.replace(/[^\d]/g, '')) * 100;
 
 // Log the amount to check if the parsing works
-console.log('Grand Total:', amount);
+
 
 //below function generate the invoice
 
@@ -538,10 +538,10 @@ console.log('Grand Total:', amount);
 
    $('body').on('click', '#retryPayment', function () {
     const orderId = $(this).data('order-id');
-    console.log("orderId ", orderId);
+    
 
     if (orderId) {       
-        console.log("amount ", amount);
+        
         payment(orderId);
     } else {
         alert('Invalid order ID.');
@@ -573,7 +573,7 @@ const payment = (orderId) => {
     //This is an event handler when razorpay modal is dismissed when the user closes the payment popup without completing the payment.
         "modal": {
             "ondismiss": function() {
-                console.log('Payment modal dismissed');
+                
             }
         }
     };
@@ -582,11 +582,11 @@ const payment = (orderId) => {
 
 
     var options = {
-      "key": "rzp_test_QhDPSiMt8ea6IF", // Enter the Key ID generated from the Dashboard
+      "key": "rzp_test_RgbHBDrROekluj", // Enter the Key ID generated from the Dashboard
       "amount": parseInt(amount), // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
       "currency": "INR",
-        
-      "name" : "Basha Book",
+      "image": "/images/products/1718596347650_Batter Bazaar.png",
+      "name" : "Cake Shop",
       /*"name": "Acme Corp", //your business name
       "description": "Test Transaction",
       "image": "https://example.com/your_logo",*/
@@ -636,7 +636,7 @@ const retryPayment = async (orderId, status) => {
         }
 
         const data = await response.json();
-       
+       console.log(data)
         if (data.success) {
             Swal.fire({
                 icon: 'success',
