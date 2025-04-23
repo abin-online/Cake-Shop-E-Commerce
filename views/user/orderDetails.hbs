@@ -233,11 +233,15 @@
         <!-- Summary Row -->
         <tr>
             <td colspan="5">
-                <article class="float-end">
+                <article class="float-start">
+                    
+
+                    {{#if myOrderDetails.couponUsed}}
                     <dl class="dlist">
-                        <dt>Delivery:</dt>
-                        <dd><span class="text-danger">+₹50</span></dd>
+                        <dt>Coupon :  <span class="text-success"> {{myOrderDetails.coupon}}</span>
+                        </dt>
                     </dl>
+                    {{/if}}
 
                     <dl class="dlist">
                         <dt>Discount:</dt>
@@ -248,7 +252,12 @@
                             {{/if}}
                         </dd>
                     </dl>
-
+                    
+                    <dl class="dlist">
+                        <dt>Delivery:</dt>
+                        <dd><span class="text-danger">+₹50</span></dd>
+                    </dl>
+                    
                     <dl class="dlist">
                         <dt>Grand Total:</dt>
                         {{#if myOrderDetails.discountAmt}}

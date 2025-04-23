@@ -580,9 +580,7 @@ const placeorder = async (req, res) => {
     const payMethod = req.body.selectedPayment;
     const totalamount = req.body.amount;
     
-
-     
-     
+     console.log('place order request body ', req.body)
 
     const result = Math.random().toString(36).substring(2, 7);
     const id = Math.floor(100000 + Math.random() * 900000);
@@ -678,7 +676,7 @@ const placeorder = async (req, res) => {
     let discountAmt = 0;
 
     if (req.body.couponData) {
-      console.log(req.body.couponData)
+      console.log("COPON", req.body.couponData)
       finalTotal = req.body.couponData.newTotal;
       discountAmt = req.body.couponData.discountAmt;
     }
@@ -881,7 +879,9 @@ const applyCoupon = async (req, res) => {
     } else if (subTotal < coupon.minPurchase) {
       return res.json({ status: "min_purchase_not_met" });
     } else {
-  
+      
+      // req.session.couponCode = coupon.code;
+
       await Coupon.updateOne(
         { _id: coupon._id },
         { $addToSet: { usedBy: userId } }
@@ -925,6 +925,7 @@ const removeCoupon = async (req, res) => {
         { _id: coupon._id },
         { $pull: { usedBy: userId } }
       );
+      // req.session.couponCode = null;
       const discountAmt = 0;
       const newTotal = subTotal;
 

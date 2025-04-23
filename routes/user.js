@@ -79,10 +79,7 @@ router.get('/reset_password', isLogout, forgetPassword.resetPassword)
 router.post('/reset_password', forgetPassword.resetPasswordPost)
 
 
-//profile reset password
-// router.get('/profileSubmit_otp', logedin, userController.getOtp)
-// router.post('/profileSubmit_otp', logedin, userController.submitOtp)
-// router.get('/profileResend_otp', logedin, userController.resendOtp)
+
 router.get('/changePassword', logedin, resetProfile.submitMailPostProfile)
 router.get('/profileOtp', logedin, resetProfile.forgotOtppageProfile)
 router.post('/profileOtp', logedin, resetProfile.forgotOtpSubmitProfile)
@@ -90,12 +87,7 @@ router.get('/profileResetPassword', logedin, resetProfile.resetPasswordPageProfi
 router.post('/profileResetPassword', logedin, resetProfile.resetPasswordProfile)
 
 
-
 //cart
-// router.get('/cart/:userId', logedin, isBlocked, cart.loadCart)
-// router.get('/add_to_cart', logedin, isBlocked, cart.addToCart)
-// router.get('/remove', isLogin, isBlocked, cart.removeCart)
-// router.post('/cart_updation', logedin, isBlocked, cart.updateCart)
 
 router.get('/cart', logedin, isBlocked, cart.loadCartPage)
 router.post('/addtocart/:id', logedin, isBlocked, cart.addToCart)
@@ -103,15 +95,6 @@ router.post('/removeFromCart', logedin, isBlocked, cart.removeFromCart)
 router.post('/updatecart', logedin, isBlocked, cart.updateCart)
 router.post('/checkOutOfStock', logedin, isBlocked, cart.checkOutOfStock);
 
-//checkout
-// router.get('/checkout', logedin, isBlocked, checkout.loadCheckout)
-// router.get('/check_stock', logedin, isBlocked, checkout.checkStock)
-// router.post('/place_order', logedin, isBlocked, checkout.placeOrder)
-
-//checkout
-// router.post('/validate_coupon', logedin, isBlocked, checkout.validateCoupon)
-// router.post('/apply_coupon', logedin, isBlocked, checkout.applyCoupon);
-// router.post('/remove_coupon', logedin, isBlocked, checkout.removeCoupon);
 
 // Checkout Page
 

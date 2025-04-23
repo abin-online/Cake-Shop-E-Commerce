@@ -93,7 +93,7 @@ const myOrders = async (req, res) => {
     });
 
   } catch (error) {
-    
+
     res.status(500).send('An error occurred while fetching orders');
   }
 };
@@ -115,12 +115,12 @@ const filterOrders = async (req, res) => {
       return { ...order.toObject(), date: formattedDate }
     })
 
-    
+
 
     res.json(formattedOrders)
 
   } catch (error) {
-    
+
   }
 }
 
@@ -222,9 +222,9 @@ const orderDetails = async (req, res) => {
       }
     });
 
-    
-    
-    
+
+
+
 
     // Render the order details page for the correct user
     res.render("user/orderDetails", {
@@ -235,7 +235,7 @@ const orderDetails = async (req, res) => {
       userData
     });
   } catch (error) {
-    
+
     res.status(500).send("Internal Server Error");
   }
 };
@@ -248,7 +248,7 @@ const orderSuccess = (req, res) => {
     const userData = req.session.user
     res.render('user/order_sucess', { userData })
   } catch (error) {
-    
+
   }
 }
 
@@ -257,108 +257,16 @@ const payment_failed = (req, res) => {
     const userData = req.session.user
     res.render('user/paymentFailed', { userData })
   } catch (error) {
-    
+
   }
 }
-
-
-
-// const cancelOrder = async (req, res) => {
-//   try {
-//     const id = req.query.id
-//     const userData = req.session.user
-//     const userId = userData._id
-
-//     const { updateWallet, payMethod } = req.body
-
-//     const myOrderDetails = await Orders.findOne({ _id: id },
-//       {
-//         total: 1,
-//         amountAfterDscnt: 1,
-//         _id: 0
-//       }
-//     ).lean()
-
-//     
-//     let refundAmount
-//     if (myOrderDetails.amountAfterDscnt) {
-//       refundAmount = myOrderDetails.amountAfterDscnt - 50
-//     } else {
-//       refundAmount = myOrderDetails.total - 50
-//     }
-
-//     if (payMethod === 'wallet' || payMethod === 'razorpay') {
-//       await User.findByIdAndUpdate(userId, { $set: { wallet: updateWallet } }, { new: true })
-
-//       await User.updateOne(
-//         { _id: req.session.user._id },
-//         {
-//           $push: {
-//             history: {
-//               amount: refundAmount,
-//               status: 'Refunded',
-//               date: Date.now()
-//             }
-//           }
-//         }
-//       );
-//     }
-
-//     let canceledOrder = await Orders.findOne({ _id: id });
-
-//     for (const product of canceledOrder.product) {
-//       await Product.updateOne(
-//         { _id: product.id },
-//         { $inc: { stock: product.quantity } }
-//       );
-//     }
-
-
-//     for (const product of canceledOrder.product) {
-//       await Product.updateOne(
-//         { _id: product.id },
-//         { $inc: { stock: product.quantity } }
-//       );
-//     }
-
-//     await Orders.findByIdAndUpdate(id, { $set: { status: 'Cancelled' } }, { new: true });
-
-//     res.json('sucess')
-//   } catch (error) {
-//     
-//   }
-// }
-
-
-// const returnOrder = async (req, res) => {
-//   try {
-//     const id = req.query.id
-
-//     console.log("order id", id)
-//     await Orders.findByIdAndUpdate(id, { $set: { status: 'Returned' } }, { new: true });
-
-//     let returnedOrder = await Orders.findOne({ _id: id });
-//     console.log(returnedOrder)
-
-//     for (const product of returnedOrder.product) {
-//       await Product.updateOne(
-//         { _id: product.id },
-//         { $inc: { stock: product.quantity } }
-//       );
-//     }
-
-//     res.json('sucess')
-//   } catch (error) {
-//     
-//   }
-// }
 
 
 
 const cancelOrder = async (req, res) => {
   try {
     const id = req.params.id;
-    
+
     console.log(req.body)
     const { reason } = req.body
     if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -402,7 +310,7 @@ const cancelOrder = async (req, res) => {
     if (['wallet', 'razorpay'].includes(canceledOrder.paymentMethod)) {
       for (const data of canceledOrder.product) {
         //await Product.updateOne({ _id: data._id }, { $inc: { stock: data.quantity } });
-        if(!data.isCancelled && !data.isReturned) {
+        if (!data.isCancelled && !data.isReturned) {
           await User.updateOne(
             { _id: req.session.user._id },
             { $inc: { wallet: (data.price * data.quantity) - couponAmountEach } }
@@ -431,7 +339,7 @@ const cancelOrder = async (req, res) => {
       message: 'Successfully cancelled Order'
     });
   } catch (error) {
-    
+
     res.status(HttpStatus.InternalServerError).send('Internal Server Error');
   }
 };
@@ -459,7 +367,7 @@ const returnOrder = async (req, res) => {
     });
 
   } catch (error) {
-    
+
     res.status(HttpStatus.InternalServerError).send('Internal Server Error');
   }
 };
@@ -548,7 +456,7 @@ const cancelOneProduct = async (req, res) => {
       message: 'Successfully removed product'
     });
   } catch (error) {
-    
+
     res.status(HttpStatus.InternalServerError).send('Internal Server Error');
   }
 };
@@ -585,7 +493,7 @@ const returnOneProduct = async (req, res) => {
       message: 'Requested to return the product'
     });
   } catch (error) {
-    
+
     res.status(HttpStatus.InternalServerError).send('Internal Server Error');
   }
 }
@@ -668,7 +576,7 @@ const getInvoice = async (req, res) => {
       marginBottom: 25,
       background: 'https://public.easyinvoice.cloud/img/watermark-draft.jpg',
       sender: {
-        company: 'Coke Shop',
+        company: 'C@ke Shop',
         address: 'Chennai Central ',
         zip: '600020',
         city: 'Chennai',
@@ -708,7 +616,7 @@ const getInvoice = async (req, res) => {
         res.setHeader('Content-Disposition', 'attachment; filename=' + fileName);
         res.send(pdfBuffer);
       })
-      
+
     });
   }
 
